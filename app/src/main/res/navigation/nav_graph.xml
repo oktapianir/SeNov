@@ -1,0 +1,46 @@
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@id/homeFragment">
+
+    <!-- Definisi Fragment Home -->
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.okta.senov.fragment.HomeFragment"
+        android:label="Home"
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_home_to_detail"
+            app:destination="@id/detailFragment">
+            <argument
+                android:name="bookTitle"
+                app:argType="string" />
+        </action>
+        <action
+            android:id="@+id/action_home_to_profile"
+            app:destination="@id/profileFragment" />
+    </fragment>
+
+    <!-- Definisi Fragment Detail -->
+    <fragment
+        android:id="@+id/detailFragment"
+        android:name="com.okta.senov.fragment.DetailFragment"
+        android:label="Detail"
+        tools:layout="@layout/fragment_detail">
+        <!-- Menerima argument bookTitle -->
+        <argument
+            android:name="bookTitle"
+            app:argType="string" />
+        <!-- Aksi ke ProfileFragment -->
+        <action
+            android:id="@+id/action_home_to_profile"
+            app:destination="@id/profileFragment" />
+    </fragment>
+
+    <!-- Definisi Fragment Profile -->
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.okta.senov.fragment.ProfileFragment"
+        android:label="Profile"
+        tools:layout="@layout/fragment_profile" />
+</navigation>

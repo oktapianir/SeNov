@@ -1,0 +1,40 @@
+<resources>
+    <string name="app_name">SeNov</string>
+    <string name="book_cover">cover book</string>
+    <string name="profile_image">profile image</string>
+    <string name="book_title_example">Book Title Example</string>
+    <string name="author_name">Author Name</string>
+    <string name="category">Category</string>
+    <string name="_19_99">$19.99</string>
+    <string name="_12_99">$12.99</string>
+    <string name="buy_now">Buy Now</string>
+    <string name="nov24">Nov 2024</string>
+    <string name="DigiNov">Digital Novel</string>
+    <string name="search_icon">Search Icon</string>
+    <string name="popular">Popular</string>
+    <string name="all_books">All Books</string>
+    <string name="home">Home</string>
+    <string name="books">Books</string>
+    <string name="audio">Audio</string>
+    <string name="profile">Profile</string>
+    <string name="go_to_detail">Go to Detail</string>
+    <string name="name_develop">Oktapiani</string>
+    <string name="email">Ramadhanioktapinian@gmail.com</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="back">Back</string>
+    <string name="grid">Grid</string>
+    <string name="name_book">Bulan</string>
+    <string name="name_book_to">Karya</string>
+    <string name="author">Tere Liye</string>
+    <string name="listen_now">Listen Now</string>
+    <string name="synopsis">Synopsis</string>
+    <string name="description_book">Bulan adalah sebuah cerita tentang seorang gadis bernama Binar yang menjalani perjalanan hidup penuh tantangan. Dengan latar belakang keluarga yang sederhana, Binar memiliki mimpi besar untuk menjadi seseorang yang dapat diandalkan dan memiliki makna dalam hidupnya. Sepanjang perjalanan, ia menemukan arti persahabatan sejati, menghadapi konflik batin, dan menjalani berbagai pengalaman yang mengajarkannya untuk menjadi lebih kuat. Bulan adalah kisah inspiratif tentang ketekunan, persahabatan, dan menemukan jati diri di tengah kesulitan hidup.</string>
+    <string name="read_now">read now</string>
+    <string name="nomer">+62 812 1063 2253</string>
+    <string name="alamat">Bandung, Indonesia</string>
+    <string name="tanggal">Created November 2024</string>
+    <string name="oktapiani_r">Oktapiani R.</string>
+    <string name="ramdhanioktapiani_gmail_com">ramdhanioktapiani@gmail.com</string>
+    <string name="genre">Fantasi Petulangan</string>
+
+</resources>
