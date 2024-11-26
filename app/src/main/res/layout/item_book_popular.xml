@@ -16,6 +16,7 @@
             android:id="@+id/ivBookCover"
             android:layout_width="match_parent"
             android:layout_height="210dp"
+            android:importantForAccessibility="no"
             android:scaleType="centerCrop"
             app:layout_constraintTop_toTopOf="parent" />
 

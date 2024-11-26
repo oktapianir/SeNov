@@ -23,7 +23,7 @@ class SplashActivity : AppCompatActivity() {
         val splashDuration = 3000L // 3 detik
 
         // Handler untuk mengarahkan ke MainActivity setelah splash screen selesai
-        Handler().postDelayed({
+        Handler(mainLooper).postDelayed({
             // Arahkan ke MainActivity setelah splash
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)

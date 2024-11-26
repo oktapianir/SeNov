@@ -5,7 +5,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.okta.senov.databinding.ItemBookAllbooksBinding
 import com.okta.senov.model.Book
-import com.okta.senov.databinding.ItemBookBinding
 
 class AllBooksAdapter(
     private val books: List<Book>,
