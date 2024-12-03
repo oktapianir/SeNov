@@ -11,11 +11,7 @@
         tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_home_to_detail"
-            app:destination="@id/detailFragment">
-            <argument
-                android:name="bookTitle"
-                app:argType="string" />
-        </action>
+            app:destination="@id/detailFragment"/>
         <action
             android:id="@+id/action_home_to_profile"
             app:destination="@id/profileFragment" />
@@ -29,13 +25,37 @@
         tools:layout="@layout/fragment_detail">
         <!-- Menerima argument bookTitle -->
         <argument
-            android:name="bookTitle"
-            app:argType="string" />
+            android:name="bookArg"
+            app:argType="com.okta.senov.model.Book" />
         <!-- Aksi ke ProfileFragment -->
         <action
             android:id="@+id/action_home_to_profile"
             app:destination="@id/profileFragment" />
     </fragment>
+
+    <!--nested nav graph for books-->
+    <navigation
+        android:id="@+id/booksNavGraph"
+        app:startDestination="@id/bookListFragment">
+
+        <!-- Fragment Daftar Buku -->
+        <fragment
+            android:id="@+id/bookListFragment"
+            android:name="com.okta.senov.fragment.BookListFragment"
+            android:label="Book List"
+            tools:layout="@layout/fragment_list_category">
+            <action
+                android:id="@+id/action_bookList_to_bookDetail"
+                app:destination="@id/bookDetailFragment" />
+        </fragment>
+
+        <!-- Fragment Detail Buku -->
+        <fragment
+            android:id="@+id/bookDetailFragment"
+            android:name="com.okta.senov.fragment.DetailFragment"
+            android:label="Book Detail"
+            tools:layout="@layout/fragment_detail" />
+    </navigation>
 
     <!-- Definisi Fragment Profile -->
     <fragment

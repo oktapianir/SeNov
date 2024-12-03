@@ -33,28 +33,33 @@ class MainActivity : AppCompatActivity() {
         setupBottomNavigation()
     }
 
-    // Jika Anda ingin menghandle logika khusus ketika item bottom navigation dipilih, Anda bisa menggunakan listener ini
     private fun setupBottomNavigation() {
         binding.bottomNavigation.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_home -> {
-                    // Handle nav_home, jika ingin menambahkan logika custom
+                    if (navController.currentDestination?.id != R.id.homeFragment) {
+                        navController.navigate(R.id.homeFragment)
+                    }
                     true
                 }
                 R.id.nav_books -> {
-                    // Handle nav_books
+                    if (navController.currentDestination?.id != R.id.booksNavGraph) {
+                        navController.navigate(R.id.booksNavGraph)
+                    }
                     true
                 }
                 R.id.nav_audio -> {
-                    // Handle nav_audio
                     true
                 }
                 R.id.nav_profile -> {
-                    navController.navigate(R.id.profileFragment)
+                    if (navController.currentDestination?.id != R.id.profileFragment) {
+                        navController.navigate(R.id.profileFragment)
+                    }
                     true
                 }
                 else -> false
             }
         }
     }
+
 }

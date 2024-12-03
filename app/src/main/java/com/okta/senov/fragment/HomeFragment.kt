@@ -3,17 +3,20 @@ package com.okta.senov.fragment
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.okta.senov.R
-import com.okta.senov.adapter.AllBooksAdapter
 import com.okta.senov.adapter.BookAdapter
 import com.okta.senov.databinding.FragmentHomeBinding
-import com.okta.senov.model.Book
+import com.okta.senov.viewmodel.BookViewModel
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private lateinit var binding: FragmentHomeBinding
+
+    // Gunakan by viewModels() untuk inisialisasi ViewModel
+    private val bookViewModel: BookViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -23,7 +26,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         // Setup RecyclerViews
         setupRecyclerViews()
-
 
         // Tambahkan click listener untuk ikon profil
         binding.profileImage.setOnClickListener {
@@ -40,32 +42,19 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             false
         )
         binding.popularBooksRecyclerView.layoutManager = popularBooksLayoutManager
-        binding.popularBooksRecyclerView.adapter = BookAdapter(getPopularBooks())
+
+        // Observasi data buku populer dari ViewModel
+        bookViewModel.popularBooks.observe(viewLifecycleOwner) { popularBooks ->
+            binding.popularBooksRecyclerView.adapter = BookAdapter(popularBooks, isPopular = true)
+        }
 
         // All Books RecyclerView
         val allBooksLayoutManager = LinearLayoutManager(requireContext())
         binding.allBooksRecyclerView.layoutManager = allBooksLayoutManager
-        binding.allBooksRecyclerView.adapter = AllBooksAdapter(getAllBooks()) { book ->
-            // Handle click on a book
-            val action = HomeFragmentDirections.actionHomeToDetail(book.title)
-            findNavController().navigate(action)
+
+        // Observasi semua buku dari ViewModel
+        bookViewModel.allBooks.observe(viewLifecycleOwner) { allBooks ->
+            binding.allBooksRecyclerView.adapter = BookAdapter(allBooks, isPopular = false)
         }
-    }
-
-    // Dummy data for example (Replace with actual data)
-    private fun getPopularBooks(): List<Book> {
-        return listOf(
-            Book("Bulan", "Tere Liye", "Fantasi Petualangan", 4.5f, "$10.99", R.drawable.img_book_cover1),
-            Book("Si Putih", "Tere Liye", "Fantasi Petualangan", 4.5f, "$10.99", R.drawable.img_book_cover2),
-            Book("Bumi", "Tere Liye", "Fantasi Petualangan", 4.5f, "$10.99", R.drawable.img_book_cover3)
-        )
-    }
-
-    private fun getAllBooks(): List<Book> {
-        return listOf(
-            Book("Nebula", "Tere Liye", "Fantasi Petualangan", 4.5f, "$10.99", R.drawable.img_book_cover4),
-            Book("Selena", "Tere Liye", "Fantasi Petualangan", 4.5f, "$10.99", R.drawable.img_book_cover5),
-            Book("Ceroz & Batozar", "Tere Liye", "Fantasi Petualangan", 4.5f, "$10.99", R.drawable.img_book_cover6),
-        )
     }
 }

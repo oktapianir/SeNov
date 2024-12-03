@@ -6,51 +6,73 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
-import com.okta.senov.databinding.FragmentDetailBinding // Import ViewBinding
+import com.okta.senov.R
+import com.okta.senov.databinding.FragmentDetailBinding
+import com.okta.senov.model.Book
 
+@Suppress("DEPRECATION")
 class DetailFragment : Fragment() {
-
-    // Deklarasikan binding
     private var _binding: FragmentDetailBinding? = null
-    private val binding get() = _binding!! // Mendapatkan referensi binding yang aman
+    private val binding get() = _binding!!
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Inisialisasi binding
         _binding = FragmentDetailBinding.inflate(inflater, container, false)
 
-        // Setup aksi ketika tombol back ditekan
+        // Retrieve the passed book argument
+        val book = arguments?.getParcelable<Book>("bookArg")
+
+        // Setup the UI with book details
+        book?.let { setupBookDetails(it) }
+
+        // Setup back button
         setupBackButton()
 
         return binding.root
     }
 
+    private fun setupBookDetails(book: Book) {
+        binding.apply {
+            // Set book cover
+            bookCoverImageView.setImageResource(book.coverResourceId)
+
+            // Set book title
+            bookTitle.text = book.title
+
+            // Set book subtitle (you might want to customize this)
+            bookSubtitle.text = getString(R.string.karya)
+
+            // Set author name
+            authorName.text = book.author
+
+            // Set synopsis
+            synopsisText.text = book.synopsis
+
+            // Optional: Set up listen/read button
+            listenButton.text = getString(R.string.read, book.price)
+        }
+    }
 
     private fun setupBackButton() {
-        // Menggunakan OnBackPressedDispatcher
         requireActivity().onBackPressedDispatcher.addCallback(
             viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    // Lakukan sesuatu ketika tombol back ditekan
-                    // Contoh: kembali ke fragment sebelumnya
                     requireActivity().supportFragmentManager.popBackStack()
                 }
             }
         )
 
-        // Menambahkan aksi pada tombol di fragment
         binding.backButton.setOnClickListener {
-            // Trigger back pressed
             requireActivity().supportFragmentManager.popBackStack()
         }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        // Set binding ke null setelah view dihancurkan untuk menghindari memory leak
         _binding = null
     }
 }

@@ -12,21 +12,41 @@
         android:layout_height="wrap_content"
         android:padding="8dp">
 
-        <!-- Gambar Buku -->
-        <ImageView
-            android:id="@+id/bookCoverImageView"
+        <!-- FrameLayout untuk gambar dan tombol -->
+        <FrameLayout
+            android:id="@+id/bookImageContainer"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:importantForAccessibility="no"
-            android:scaleType="centerCrop"
-            android:src="@drawable/img_book_cover1" />
+            android:layout_height="200dp">
+
+            <!-- Gambar Buku -->
+            <ImageView
+                android:id="@+id/bookCoverImageView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:importantForAccessibility="no"
+                android:scaleType="centerCrop"
+                android:src="@drawable/img_book_cover1" />
+
+            <!-- Tombol Go to Detail -->
+            <Button
+                android:id="@+id/buttonGoToDetail"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_gravity="bottom"
+                android:background="@drawable/button_background"
+                android:text="@string/go_to_detail"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                android:textAllCaps="false"
+                android:gravity="center"/>
+        </FrameLayout>
 
         <!-- Judul Buku -->
         <TextView
             android:id="@+id/bookTitleTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/bookCoverImageView"
+            android:layout_below="@id/bookImageContainer"
             android:layout_marginTop="8dp"
             android:text="@string/name_book"
             android:textColor="@color/black"
@@ -89,17 +109,5 @@
                 android:textSize="14sp"
                 android:textStyle="bold" />
         </RelativeLayout>
-
-        <!-- Tombol Go to Detail -->
-        <Button
-            android:id="@+id/buttonGoToDetail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:backgroundTint="@color/primary"
-            android:elevation="4dp"
-            android:text="@string/go_to_detail"
-            android:textColor="@android:color/white"
-            android:textStyle="bold" />
     </RelativeLayout>
 </androidx.cardview.widget.CardView>

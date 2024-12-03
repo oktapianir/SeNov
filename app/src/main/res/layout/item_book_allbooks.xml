@@ -2,53 +2,55 @@
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="4dp">
+    app:cardCornerRadius="16dp"
+    app:cardElevation="8dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp">
+        android:padding="16dp"
+        android:background="@drawable/bg_gradient_card">
 
         <!-- Cover Image -->
         <ImageView
             android:id="@+id/bookCoverImageView"
-            android:layout_width="100dp"
-            android:layout_height="150dp"
+            android:layout_width="80dp"
+            android:layout_height="120dp"
             android:contentDescription="@string/book_cover"
             android:scaleType="centerCrop"
             android:src="@drawable/img_book_cover1"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
         <!-- Title -->
         <TextView
             android:id="@+id/bookTitleTextView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/book_title_example"
+            android:text="@string/name_book"
             android:textSize="18sp"
             android:textStyle="bold"
             android:textColor="@android:color/black"
             android:layout_marginStart="16dp"
             app:layout_constraintStart_toEndOf="@id/bookCoverImageView"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@id/bookCoverImageView"
+            app:layout_constraintEnd_toStartOf="@id/bookRatingBar" />
 
         <!-- Author -->
         <TextView
             android:id="@+id/bookAuthorTextView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/author_name"
+            android:text="@string/author"
             android:textSize="14sp"
             android:textColor="@android:color/darker_gray"
-            android:layout_marginTop="4dp"
             app:layout_constraintStart_toStartOf="@id/bookTitleTextView"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/bookTitleTextView"
             app:layout_constraintTop_toBottomOf="@id/bookTitleTextView" />
 
         <!-- Category -->
@@ -56,59 +58,56 @@
             android:id="@+id/bookCategoryTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/category"
+            android:text="@string/genre"
             android:textSize="12sp"
-            android:textColor="@android:color/black"
-            android:layout_marginTop="8dp"
+            android:textColor="@android:color/darker_gray"
+            android:layout_marginTop="4dp"
             app:layout_constraintStart_toStartOf="@id/bookAuthorTextView"
             app:layout_constraintTop_toBottomOf="@id/bookAuthorTextView" />
 
-        <TextView
-            android:id="@+id/bookPriceTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="176dp"
-            android:layout_marginBottom="24dp"
-            android:text="@string/_19_99"
-            android:textColor="@android:color/black"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@id/bookCategoryTextView" />
-
+        <!-- RatingBar (Vertical Orientation) -->
         <RatingBar
             android:id="@+id/bookRatingBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:numStars="5"
-            android:stepSize="0.5"
+            android:stepSize="1.0"
             android:isIndicator="true"
+            android:rotation="-90"
+            android:layout_marginEnd="8dp"
             style="?android:attr/ratingBarStyleSmall"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
-        <!-- Button Go To Detail -->
+        <!-- Price -->
+        <TextView
+            android:id="@+id/bookPriceTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/_12_99"
+            android:textColor="@android:color/black"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toStartOf="@id/bookCategoryTextView"
+            app:layout_constraintTop_toBottomOf="@id/bookCategoryTextView" />
+
+        <!-- Go to Detail Button -->
         <Button
             android:id="@+id/buttonGoToDetail"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="16dp"
-            android:paddingHorizontal="24dp"
-            android:paddingVertical="12dp"
-            android:backgroundTint="#000000"
+            android:layout_height="32dp"
+            android:layout_marginStart="16dp"
+            android:padding="4dp"
             android:text="@string/go_to_detail"
-            android:textColor="#FFFFFF"
-            android:textStyle="bold"
-            android:textSize="14sp"
-            android:elevation="4dp"
-            android:layout_gravity="center"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-
+            android:textSize="10sp"
+            android:background="@drawable/button_background"
+            app:layout_constraintBottom_toBottomOf="@id/bookPriceTextView"
+            app:layout_constraintStart_toEndOf="@id/bookPriceTextView"
+            app:layout_constraintTop_toTopOf="@id/bookPriceTextView"
+            app:layout_constraintVertical_bias="0.307"
+            tools:ignore="SmallSp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 </androidx.cardview.widget.CardView>

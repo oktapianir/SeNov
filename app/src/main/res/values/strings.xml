@@ -36,5 +36,10 @@
     <string name="oktapiani_r">Oktapiani R.</string>
     <string name="ramdhanioktapiani_gmail_com">ramdhanioktapiani@gmail.com</string>
     <string name="genre">Fantasi Petulangan</string>
+    <string name="karya">Karya</string>
+    <string name="read">Read Now - %1$s</string>
+    <string name="nomor_telepon">Nomor Telepon</string>
+    <string name="alamat_develop">Alamat</string>
+    <string name="tanggal_bergabung">Tanggal Bergabung</string>
 
 </resources>
