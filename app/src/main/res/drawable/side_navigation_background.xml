@@ -1,0 +1,19 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+
+    <!-- Gradient for a softer look -->
+    <gradient
+        android:startColor="#000000"
+        android:endColor="#000000"
+        android:angle="270" />
+
+    <!-- Path for the wave shape on the left side -->
+    <path
+        android:fillColor="#000000"
+        android:pathData="M0,0 C40,80 120,200 200,100 C280,0 360,80 440,20 C520,-40 600,100 680,40 C760,-20 840,120 920,60 L920,160 L0,160 Z" />
+
+    <!-- Path for the wave shape on the right side -->
+    <path
+        android:fillColor="#ffffff"
+        android:pathData="M920,0 C960,80 1040,200 1120,100 C1200,0 1280,80 1360,20 C1440,-40 1520,100 1600,40 C1680,-20 1760,120 1840,60 L1840,160 L920,160 Z" />
+</shape>
