@@ -7,4 +7,8 @@ class BookRepository(private val bookDao: BookDao) {
     suspend fun getBooks(): List<Book> {
         return bookDao.getAllBooks()
     }
+
+    suspend fun insertBooks(books: List<Book>) {
+        bookDao.insertBooks(books)
+    }
 }

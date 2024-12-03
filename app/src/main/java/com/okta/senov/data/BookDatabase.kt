@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.okta.senov.model.Book
 
-@Database(entities = [Book::class], version = 1, exportSchema = false)
+@Database(entities = [Book::class], version = 2, exportSchema = false)
 abstract class BookDatabase : RoomDatabase() {
     abstract fun bookDao(): BookDao
 
@@ -20,7 +20,9 @@ abstract class BookDatabase : RoomDatabase() {
                     context.applicationContext,
                     BookDatabase::class.java,
                     "book_database"
-                ).build()
+                )
+                    .fallbackToDestructiveMigration()
+                    .build()
                 INSTANCE = instance
                 instance
             }
