@@ -3,6 +3,7 @@ package com.okta.senov.model
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import android.os.Parcelable
+import androidx.annotation.DrawableRes
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -15,5 +16,5 @@ data class Book(
     val rating: Float,
     val price: String,
     val synopsis: String,
-    val coverResourceId: Int
+    @DrawableRes val coverResourceId: Int
 ) : Parcelable
