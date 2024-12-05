@@ -17,8 +17,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
+    ): View {
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -26,19 +25,16 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Set some example data, you can replace it with actual user data
         binding.tvUsername.text = getString(R.string.oktapiani_r)
         binding.tvEmail.text = getString(R.string.ramdhanioktapiani_gmail_com)
 
-        // Menyambungkan ImageButton (icBack) dengan NavController untuk tombol back
         binding.icBack.setOnClickListener {
-            // Menggunakan navigateUp() untuk kembali ke fragment sebelumnya
             findNavController().navigateUp()
         }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null  // Clear binding reference
+        _binding = null
     }
 }

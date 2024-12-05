@@ -26,18 +26,18 @@
         app:layout_constraintStart_toStartOf="@id/dateText"
         app:layout_constraintTop_toBottomOf="@id/dateText"/>
 
-    <!-- Search Icon -->
+    <!-- Ikon Pencarian -->
     <ImageView
         android:id="@+id/searchIcon"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:layout_marginEnd="12dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:src="@drawable/ic_search"
         android:contentDescription="@string/search_icon"
-        android:padding="4dp"
-        app:layout_constraintTop_toTopOf="@id/libraryText"
-        app:layout_constraintBottom_toBottomOf="@id/libraryText"
-        app:layout_constraintEnd_toStartOf="@id/profileImage" />
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone" />
 
     <!-- Profile Image -->
     <ImageView

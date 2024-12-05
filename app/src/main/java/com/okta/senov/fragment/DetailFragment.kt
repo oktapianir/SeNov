@@ -22,13 +22,10 @@ class DetailFragment : Fragment() {
     ): View {
         _binding = FragmentDetailBinding.inflate(inflater, container, false)
 
-        // Retrieve the passed book argument
         val book = arguments?.getParcelable<Book>("bookArg")
 
-        // Setup the UI with book details
         book?.let { setupBookDetails(it) }
 
-        // Setup back button
         setupBackButton()
 
         return binding.root
@@ -36,22 +33,16 @@ class DetailFragment : Fragment() {
 
     private fun setupBookDetails(book: Book) {
         binding.apply {
-            // Set book cover
             bookCoverImageView.setImageResource(book.coverResourceId)
 
-            // Set book title
             bookTitle.text = book.title
 
-            // Set book subtitle (you might want to customize this)
             bookSubtitle.text = getString(R.string.karya)
 
-            // Set author name
             authorName.text = book.author
 
-            // Set synopsis
             synopsisText.text = book.synopsis
 
-            // Optional: Set up listen/read button
             listenButton.text = getString(R.string.read, book.price)
         }
     }
