@@ -11,6 +11,7 @@ import com.okta.senov.model.BookRepository
 import com.okta.senov.data.BookDatabase
 import kotlinx.coroutines.launch
 
+
 class BookViewModel(application: Application) : AndroidViewModel(application) {
 
     private val bookRepository: BookRepository
@@ -24,25 +25,20 @@ class BookViewModel(application: Application) : AndroidViewModel(application) {
         val bookDao = BookDatabase.getDatabase(application).bookDao()
         bookRepository = BookRepository(bookDao)
 
-        // Memasukkan buku ke database saat ViewModel dibuat
         insertBooks()
 
-        // Mengambil data buku
         fetchBooks()
     }
 
     private fun fetchBooks() {
         viewModelScope.launch {
-            // Mengambil semua buku dari repositori
             val allBooksList = bookRepository.getBooks()
 
-            // Pisahkan buku berdasarkan rating
             val popular = allBooksList.filter { it.rating >= 4.5f }
             val all = allBooksList.filter { it.rating < 4.5f }
 
-            // Update LiveData setelah data diproses
             _popularBooks.postValue(popular.ifEmpty { listOf() })
-            _allBooks.postValue(all.ifEmpty { allBooksList }) // Menampilkan semua jika tidak ada popular
+            _allBooks.postValue(all.ifEmpty { allBooksList })
         }
     }
 
