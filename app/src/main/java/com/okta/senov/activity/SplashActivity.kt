@@ -10,24 +10,20 @@ import com.okta.senov.databinding.ActivitySplashBinding // Import ViewBinding
 @SuppressLint("CustomSplashScreen")
 class SplashActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivitySplashBinding // Deklarasikan binding
+    private lateinit var binding: ActivitySplashBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Inisialisasi binding dan setContentView
         binding = ActivitySplashBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Set duration of splash screen (in milliseconds)
-        val splashDuration = 3000L // 3 detik
+        val splashDuration = 3000L
 
-        // Handler untuk mengarahkan ke MainActivity setelah splash screen selesai
         Handler(mainLooper).postDelayed({
-            // Arahkan ke MainActivity setelah splash
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
-            finish()  // Menutup SplashActivity
+            finish()
         }, splashDuration)
     }
 }
