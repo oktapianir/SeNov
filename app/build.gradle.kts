@@ -3,7 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     id("kotlin-parcelize")
     id("androidx.navigation.safeargs.kotlin")
-    id("kotlin-kapt")
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -50,13 +50,19 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    //navigation
     implementation (libs.androidx.navigation.fragment.ktx)
     implementation (libs.androidx.navigation.ui.ktx)
+
+    //lottie
     implementation (libs.lottie)
+
+    //room
+    ksp(libs.androidx.room.compiler.v250)
+    implementation (libs.androidx.room.ktx)
     implementation (libs.androidx.lifecycle.viewmodel.ktx)
     implementation (libs.androidx.lifecycle.livedata.ktx)
     implementation (libs.androidx.room.runtime)
-    //noinspection KaptUsageInsteadOfKsp
-    kapt (libs.androidx.room.compiler)
-    implementation (libs.androidx.room.ktx)
+    implementation (libs.androidx.legacy.support.v4)
 }
