@@ -15,6 +15,9 @@
         <action
             android:id="@+id/action_home_to_profile"
             app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_home_to_search"
+            app:destination="@id/searchFragment" />
     </fragment>
 
     <!-- Definisi Fragment Detail -->
@@ -33,29 +36,12 @@
             app:destination="@id/profileFragment" />
     </fragment>
 
-    <!--nested nav graph for books-->
-    <navigation
-        android:id="@+id/booksNavGraph"
-        app:startDestination="@id/bookListFragment">
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.okta.senov.fragment.SearchFragment"
+        android:label="Search"
+        tools:layout="@layout/fragment_search" />
 
-        <!-- Fragment Daftar Buku -->
-        <fragment
-            android:id="@+id/bookListFragment"
-            android:name="com.okta.senov.fragment.BookListFragment"
-            android:label="Book List"
-            tools:layout="@layout/fragment_list_category">
-            <action
-                android:id="@+id/action_bookList_to_bookDetail"
-                app:destination="@id/bookDetailFragment" />
-        </fragment>
-
-        <!-- Fragment Detail Buku -->
-        <fragment
-            android:id="@+id/bookDetailFragment"
-            android:name="com.okta.senov.fragment.DetailFragment"
-            android:label="Book Detail"
-            tools:layout="@layout/fragment_detail" />
-    </navigation>
 
     <!-- Definisi Fragment Profile -->
     <fragment

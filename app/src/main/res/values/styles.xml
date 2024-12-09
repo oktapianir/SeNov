@@ -5,4 +5,7 @@
         <item name="colorPrimaryDark">#00A890</item>
         <item name="colorAccent">#00A890</item>
     </style>
+    <style name="CircularImageView">
+        <item name="cornerSize">50%</item>
+    </style>
 </resources>

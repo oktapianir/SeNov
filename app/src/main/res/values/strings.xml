@@ -10,7 +10,7 @@
     <string name="buy_now">Buy Now</string>
     <string name="nov24">Nov 2024</string>
     <string name="DigiNov">Digital Novel</string>
-    <string name="search_icon">Search Icon</string>
+    <string name="search_icon">Search</string>
     <string name="popular">Popular</string>
     <string name="all_books">All Books</string>
     <string name="home">Home</string>
@@ -41,5 +41,19 @@
     <string name="nomor_telepon">Nomor Telepon</string>
     <string name="alamat_develop">Alamat</string>
     <string name="tanggal_bergabung">Tanggal Bergabung</string>
+    <string name="top_authors_search">Top Authors Search</string>
+    <string name="author_image">Author Image</string>
+    <string name="top_book_search">Top Book Search</string>
+    <string name="book_title">Book Title</string>
+    <string name="book_author">Book Author</string>
+    <string name="recent">Recent</string>
+    <string name="name_book1">Siputih</string>
+    <string name="recent_search">Recent Search</string>
+    <string name="close_button">Close</string>
+    <string name="all">All</string>
+    <string name="fiksi">Fiksi</string>
+    <string name="fantasi">Fantasi</string>
+    <string name="petualangan">Petualangan</string>"
+    <string name="rating">5.0</string>
 
 </resources>
