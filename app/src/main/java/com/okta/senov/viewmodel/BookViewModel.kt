@@ -8,13 +8,17 @@ import androidx.lifecycle.viewModelScope
 import com.okta.senov.R
 import com.okta.senov.model.Book
 import com.okta.senov.model.BookRepository
-import com.okta.senov.data.BookDatabase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 
-class BookViewModel(application: Application) : AndroidViewModel(application) {
+@HiltViewModel
+class BookViewModel @Inject constructor(
+    private val bookRepository: BookRepository,
+    application: Application
+) : AndroidViewModel(application) {
 
-    private val bookRepository: BookRepository
     private val _popularBooks = MutableLiveData<List<Book>>()
     val popularBooks: LiveData<List<Book>> = _popularBooks
 
@@ -22,11 +26,7 @@ class BookViewModel(application: Application) : AndroidViewModel(application) {
     val allBooks: LiveData<List<Book>> = _allBooks
 
     init {
-        val bookDao = BookDatabase.getDatabase(application).bookDao()
-        bookRepository = BookRepository(bookDao)
-
         insertBooks()
-
         fetchBooks()
     }
 

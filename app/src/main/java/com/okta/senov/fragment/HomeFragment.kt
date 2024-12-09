@@ -10,7 +10,9 @@ import com.okta.senov.R
 import com.okta.senov.adapter.BookAdapter
 import com.okta.senov.databinding.FragmentHomeBinding
 import com.okta.senov.viewmodel.BookViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private lateinit var binding: FragmentHomeBinding
