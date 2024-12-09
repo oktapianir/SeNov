@@ -21,10 +21,11 @@
         android:id="@+id/libraryText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/average"
         android:text="@string/DigiNov"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="@id/dateText"
-        app:layout_constraintTop_toBottomOf="@id/dateText"/>
+        app:layout_constraintTop_toBottomOf="@id/dateText" />
 
     <!-- Ikon Pencarian -->
     <ImageView
@@ -58,12 +59,13 @@
         android:id="@+id/popularHeader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:fontFamily="@font/abril_fatface"
         android:text="@string/popular"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:layout_marginTop="24dp"
         app:layout_constraintStart_toStartOf="@id/libraryText"
-        app:layout_constraintTop_toBottomOf="@id/libraryText"/>
+        app:layout_constraintTop_toBottomOf="@id/libraryText" />
 
     <!-- Popular Books RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView
@@ -81,12 +83,13 @@
         android:id="@+id/allBooksHeader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:fontFamily="@font/abril_fatface"
         android:text="@string/all_books"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:layout_marginTop="24dp"
         app:layout_constraintStart_toStartOf="@id/popularHeader"
-        app:layout_constraintTop_toBottomOf="@id/popularBooksRecyclerView"/>
+        app:layout_constraintTop_toBottomOf="@id/popularBooksRecyclerView" />
 
     <!-- All Books RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView
