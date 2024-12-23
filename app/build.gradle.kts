@@ -43,11 +43,19 @@ android {
 }
 
 dependencies {
+
+    //glide
+    implementation (libs.glide)
+    annotationProcessor (libs.compiler)
+    implementation (libs.coil)
+    //android libraries
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
+
+    //testing libraries
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -59,7 +67,7 @@ dependencies {
     //lottie
     implementation (libs.lottie)
 
-    //room
+    //room database
     ksp(libs.androidx.room.compiler.v250)
     implementation (libs.androidx.room.ktx)
     implementation (libs.androidx.lifecycle.viewmodel.ktx)
@@ -70,5 +78,12 @@ dependencies {
     //hilt
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
+
+    //retrofit
+    implementation (libs.retrofit)
+    implementation (libs.converter.gson)
+    implementation (libs.okhttp)
+    implementation (libs.logging.interceptor)
+
 
 }

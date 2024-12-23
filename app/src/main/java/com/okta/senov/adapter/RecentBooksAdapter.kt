@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.okta.senov.databinding.RecentBooksBinding
 import com.okta.senov.model.Book
 
@@ -24,11 +25,13 @@ class RecentBooksAdapter(private val books: List<Book>) : RecyclerView.Adapter<R
     inner class BookViewHolder(private val binding: RecentBooksBinding) : RecyclerView.ViewHolder(binding.root) {
         @SuppressLint("SetTextI18n")
         fun bind(book: Book) {
-            binding.bookCover.setImageResource(book.coverResourceId)
+            Glide.with(binding.bookCover.context)
+                .load(book.coverResourceId)
+                .into(binding.bookCover)
             binding.bookTitle.text = book.title
-            binding.bookGenre.text = book.genre
-            binding.bookRating.text = "Rating: ${book.rating}"
-            binding.bookPrice.text = book.price
+//            binding.bookGenre.text = book.genre
+//            binding.bookRating.text = "Rating: ${book.rating}"
+//            binding.bookPrice.text = book.price?.toString() ?: "Harga Tidak Tersedia"
         }
     }
 }

@@ -55,5 +55,6 @@
     <string name="fantasi">Fantasi</string>
     <string name="petualangan">Petualangan</string>"
     <string name="rating">5.0</string>
-
+    <string name="api_key">8b71325fbf3a43d8a949fd23ce4e2f5a</string>
+    <string name="titik">•</string>
 </resources>

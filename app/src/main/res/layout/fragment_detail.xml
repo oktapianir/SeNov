@@ -133,7 +133,7 @@
         app:layout_constraintEnd_toEndOf="parent">
 
         <TextView
-            android:id="@+id/synopsisText"
+            android:id="@+id/bookDescriptionTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/description_book"

@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.okta.senov.databinding.ItemBookAllbooksBinding
 import com.okta.senov.fragment.HomeFragmentDirections
 import com.okta.senov.model.Book
@@ -21,17 +22,16 @@ class AllBooksAdapter(
         fun bind(book: Book) {
             binding.apply {
                 bookTitleTextView.text = book.title
-                bookAuthorTextView.text = book.author
-                bookPriceTextView.text = book.price
-                bookCoverImageView.setImageResource(book.coverResourceId)
-                bookRatingBar.rating = book.rating
+//                bookAuthorTextView.text = book.author
+//                bookPriceTextView.text = book.price.toString()
+                Glide.with(binding.root.context)
+                    .load(book.coverResourceId)
+                    .into(bookCoverImageView)
+//                bookRatingBar.rating = book.rating
 
-                // Set click listener
                 root.setOnClickListener { onItemClick(book) }
 
-                // Set click listener for the Go to Detail button
                 buttonGoToDetail.setOnClickListener {
-                    // Get NavController from any view in the RecyclerView
                     val navController = binding.root.findNavController()
                     val action = HomeFragmentDirections.actionHomeToDetail(book)
                     navController.navigate(action)

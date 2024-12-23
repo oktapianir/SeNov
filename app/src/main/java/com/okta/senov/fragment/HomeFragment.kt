@@ -7,6 +7,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.okta.senov.R
+import com.okta.senov.adapter.AllBooksAdapter
 import com.okta.senov.adapter.BookAdapter
 import com.okta.senov.databinding.FragmentHomeBinding
 import com.okta.senov.viewmodel.BookViewModel
@@ -16,8 +17,11 @@ import dagger.hilt.android.AndroidEntryPoint
 class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private lateinit var binding: FragmentHomeBinding
-
     private val bookViewModel: BookViewModel by viewModels()
+
+    private val apiKey = "8b71325fbf3a43d8a949fd23ce4e2f5a"
+
+    private lateinit var allBooksAdapter: AllBooksAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -29,28 +33,31 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         binding.profileImage.setOnClickListener {
             findNavController().navigate(R.id.action_home_to_profile)
         }
+
         binding.searchIcon.setOnClickListener {
             findNavController().navigate(R.id.action_home_to_search)
+        }
+
+        bookViewModel.fetchBooksFromApi(apiKey, "adventure")
+
+        bookViewModel.popularBooks.observe(viewLifecycleOwner) { books ->
+            val adapter = BookAdapter(books)
+            binding.popularBooksRecyclerView.adapter = adapter
+        }
+        bookViewModel.allBooks.observe(viewLifecycleOwner) { books ->
+            allBooksAdapter = AllBooksAdapter(books) { book ->
+                val action = HomeFragmentDirections.actionHomeToDetail(book)
+                findNavController().navigate(action)
+            }
+            binding.allBooksRecyclerView.adapter = allBooksAdapter
         }
     }
 
     private fun setupRecyclerViews() {
-        val popularBooksLayoutManager = LinearLayoutManager(
-            requireContext(),
-            LinearLayoutManager.HORIZONTAL,
-            false
-        )
-        binding.popularBooksRecyclerView.layoutManager = popularBooksLayoutManager
-
-        bookViewModel.popularBooks.observe(viewLifecycleOwner) { popularBooks ->
-            binding.popularBooksRecyclerView.adapter = BookAdapter(popularBooks, isPopular = true)
-        }
-
-        val allBooksLayoutManager = LinearLayoutManager(requireContext())
-        binding.allBooksRecyclerView.layoutManager = allBooksLayoutManager
-
-        bookViewModel.allBooks.observe(viewLifecycleOwner) { allBooks ->
-            binding.allBooksRecyclerView.adapter = BookAdapter(allBooks, isPopular = false)
-        }
+        binding.popularBooksRecyclerView.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        binding.allBooksRecyclerView.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
     }
+
 }
