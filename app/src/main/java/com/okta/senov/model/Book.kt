@@ -14,6 +14,6 @@ data class Book(
 //    val genre: String,
 //    val rating: Float,
 //    val price: Float,
-//    val synopsis: String,
+    val synopsis: String? = null,
       val coverResourceId: String
 ) : Parcelable
