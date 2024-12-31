@@ -2,10 +2,10 @@ package com.okta.senov.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.okta.senov.databinding.ItemBookAllbooksBinding
+import com.okta.senov.extensions.findNavController
 import com.okta.senov.fragment.HomeFragmentDirections
 import com.okta.senov.model.Book
 

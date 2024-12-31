@@ -4,12 +4,12 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.okta.senov.R
 import com.okta.senov.adapter.AllBooksAdapter
 import com.okta.senov.adapter.BookAdapter
 import com.okta.senov.databinding.FragmentHomeBinding
+import com.okta.senov.extensions.findNavController
 import com.okta.senov.viewmodel.BookViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -31,11 +31,11 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         setupRecyclerViews()
 
         binding.profileImage.setOnClickListener {
-            findNavController().navigate(R.id.action_home_to_profile)
+            binding.profileImage.findNavController().navigate(R.id.action_home_to_profile)
         }
 
         binding.searchIcon.setOnClickListener {
-            findNavController().navigate(R.id.action_home_to_search)
+            binding.searchIcon.findNavController().navigate(R.id.action_home_to_search)
         }
 
         bookViewModel.fetchBooksFromApi(apiKey, "adventure")
@@ -44,10 +44,11 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             val adapter = BookAdapter(books)
             binding.popularBooksRecyclerView.adapter = adapter
         }
+
         bookViewModel.allBooks.observe(viewLifecycleOwner) { books ->
             allBooksAdapter = AllBooksAdapter(books) { book ->
                 val action = HomeFragmentDirections.actionHomeToDetail(book)
-                findNavController().navigate(action)
+                binding.allBooksRecyclerView.findNavController().navigate(action)
             }
             binding.allBooksRecyclerView.adapter = allBooksAdapter
         }

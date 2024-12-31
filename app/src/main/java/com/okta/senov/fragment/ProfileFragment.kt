@@ -5,10 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
 import com.okta.senov.R
 import com.okta.senov.databinding.FragmentProfileBinding
-
+import com.okta.senov.extensions.findNavController
 class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
     private var _binding: FragmentProfileBinding? = null
@@ -29,7 +28,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         binding.tvEmail.text = getString(R.string.ramdhanioktapiani_gmail_com)
 
         binding.icBack.setOnClickListener {
-            findNavController().navigateUp()
+            binding.icBack.findNavController().navigateUp()
         }
     }
 
