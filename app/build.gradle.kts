@@ -1,17 +1,19 @@
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     id("kotlin-parcelize")
     id("androidx.navigation.safeargs.kotlin")
-    id("com.google.devtools.ksp")
-    id("com.google.dagger.hilt.android")
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.hilt)
+    alias(libs.plugins.google.gms.google.services)
 }
 
 android {
     namespace = "com.okta.senov"
     compileSdk = 35
 
-    defaultConfig {
+    defaultConfig    {
         applicationId = "com.okta.senov"
         minSdk = 24
         targetSdk = 34
@@ -46,6 +48,7 @@ dependencies {
 
     //glide
     implementation (libs.glide)
+    implementation(libs.firebase.firestore)
     annotationProcessor (libs.compiler)
     implementation (libs.coil)
     //android libraries
