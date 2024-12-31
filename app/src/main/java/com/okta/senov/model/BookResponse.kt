@@ -7,9 +7,3 @@
         val books: List<List<BookData>>
     )
 
-    data class BookData(
-        val id: Int,
-        val title: String,
-        val image: String
-
-    )
