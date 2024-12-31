@@ -22,12 +22,9 @@ class AllBooksAdapter(
         fun bind(book: Book) {
             binding.apply {
                 bookTitleTextView.text = book.title
-//                bookAuthorTextView.text = book.author
-//                bookPriceTextView.text = book.price.toString()
                 Glide.with(binding.root.context)
                     .load(book.coverResourceId)
                     .into(bookCoverImageView)
-//                bookRatingBar.rating = book.rating
 
                 root.setOnClickListener { onItemClick(book) }
 

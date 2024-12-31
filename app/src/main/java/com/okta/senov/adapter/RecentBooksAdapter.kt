@@ -29,9 +29,6 @@ class RecentBooksAdapter(private val books: List<Book>) : RecyclerView.Adapter<R
                 .load(book.coverResourceId)
                 .into(binding.bookCover)
             binding.bookTitle.text = book.title
-//            binding.bookGenre.text = book.genre
-//            binding.bookRating.text = "Rating: ${book.rating}"
-//            binding.bookPrice.text = book.price?.toString() ?: "Harga Tidak Tersedia"
         }
     }
 }
