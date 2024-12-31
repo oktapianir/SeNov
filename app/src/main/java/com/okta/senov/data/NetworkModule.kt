@@ -5,6 +5,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
@@ -13,18 +14,24 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
-    @Provides
-    @Singleton
-    fun provideRetrofit(): Retrofit {
-        return Retrofit.Builder()
-            .baseUrl("https://api.bigbookapi.com/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-    }
+    private const val BASE_URL = "https://api.bigbookapi.com/"
 
     @Provides
     @Singleton
-    fun provideBigBookApiService(retrofit: Retrofit): BigBookApiService {
-        return retrofit.create(BigBookApiService::class.java)
-    }
+    fun provideOkHttpClient(): OkHttpClient = OkHttpClient.Builder().build()
+
+    @Provides
+    @Singleton
+    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit =
+        Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .client(okHttpClient)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+    @Provides
+    @Singleton
+    fun provideBigBookApiService(retrofit: Retrofit): BigBookApiService =
+        retrofit.create(BigBookApiService::class.java)
+
 }
