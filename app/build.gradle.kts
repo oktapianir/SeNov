@@ -52,8 +52,8 @@ dependencies {
     implementation (libs.glide)
     implementation(libs.firebase.firestore)
     annotationProcessor (libs.compiler)
-    implementation (libs.coil)
-    //android libraries
+
+        //android libraries
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
