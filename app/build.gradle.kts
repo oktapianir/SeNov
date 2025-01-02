@@ -22,6 +22,8 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField ("String", "BASE_URL", "\"https://api.bigbookapi.com/\"")
+        buildConfigField ("String", "API_KEY", "\"8b71325fbf3a43d8a949fd23ce4e2f5a\"")
+
     }
 
     buildTypes {
