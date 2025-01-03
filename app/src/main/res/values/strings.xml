@@ -57,4 +57,14 @@
     <string name="rating">5.0</string>
     <string name="api_key">8b71325fbf3a43d8a949fd23ce4e2f5a</string>
     <string name="titik">•</string>
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="selamat_datang">Selamat Datang!</string>
+    <string name="mail">Email</string>
+    <string name="password">Password</string>
+    <string name="kalimat">Silahkan masuk ke akun Anda</string>
+    <string name="akun">Belum punya akun?</string>
+    <string name="daftar">Daftar</string>
+    <string name="kalimatregister">Silahkan buat akun anda terlebih dahulu</string>
+
 </resources>

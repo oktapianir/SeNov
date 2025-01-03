@@ -8,7 +8,6 @@
     android:background="@color/white"
     tools:context=".fragment.ProfileFragment">
 
-    <!-- Back Button (Icon) -->
     <ImageButton
         android:id="@+id/icBack"
         android:layout_width="48dp"
@@ -22,7 +21,19 @@
         android:layout_marginTop="16dp"
         android:layout_marginStart="16dp"/>
 
-    <!-- Profile Card -->
+    <ImageButton
+        android:id="@+id/icLogout"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:importantForAccessibility="no"
+        android:src="@drawable/ic_logout"
+        android:background="?android:attr/selectableItemBackground"
+        android:padding="12dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp" />
+
     <androidx.cardview.widget.CardView
         android:id="@+id/cardProfileContainer"
         android:layout_width="0dp"
@@ -52,7 +63,6 @@
                 android:scaleType="centerCrop"
                 android:background="@drawable/circle_background"/>
 
-            <!-- Username TextView -->
             <TextView
                 android:id="@+id/tvUsername"
                 android:layout_width="wrap_content"
@@ -63,7 +73,6 @@
                 android:textColor="#333333"
                 android:layout_marginTop="16dp"/>
 
-            <!-- Email TextView -->
             <TextView
                 android:id="@+id/tvEmail"
                 android:layout_width="wrap_content"
@@ -75,7 +84,6 @@
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
-    <!-- Profile Details Section -->
     <androidx.cardview.widget.CardView
         android:id="@+id/cardProfileDetails"
         android:layout_width="0dp"
@@ -94,7 +102,6 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <!-- Phone Number -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -115,7 +122,6 @@
                     android:textColor="#333333"/>
             </LinearLayout>
 
-            <!-- Location -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -136,7 +142,6 @@
                     android:textColor="#333333"/>
             </LinearLayout>
 
-            <!-- Joined Date -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -155,6 +160,33 @@
                     android:text="@string/tanggal"
                     android:textColor="#333333"/>
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginTop="16dp">
+
+                <Button
+                    android:id="@+id/loginButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/login"
+                    android:layout_marginEnd="8dp"
+                    tools:ignore="ButtonStyle" />
+
+                <Button
+                    android:id="@+id/registerButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/register"
+                    tools:ignore="ButtonStyle" />
+            </LinearLayout>
+
+
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 

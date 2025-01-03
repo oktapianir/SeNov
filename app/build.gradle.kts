@@ -53,11 +53,15 @@ dependencies {
 
     //glide
     implementation (libs.glide)
+    annotationProcessor (libs.compiler)
+
+    //firebase
+    implementation(libs.firebase.auth)
     implementation(libs.firebase.firestore)
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.crashlytics)
     implementation(libs.firebase.analytics)
-    annotationProcessor (libs.compiler)
+
 
         //android libraries
     implementation(libs.androidx.core.ktx)
