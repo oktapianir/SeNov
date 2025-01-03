@@ -6,7 +6,8 @@ plugins {
     id("androidx.navigation.safeargs.kotlin")
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
-    alias(libs.plugins.google.gms.google.services)
+    alias(libs.plugins.google.firebase.crashlytics)
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -21,8 +22,8 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        buildConfigField ("String", "BASE_URL", "\"https://api.bigbookapi.com/\"")
-        buildConfigField ("String", "API_KEY", "\"8b71325fbf3a43d8a949fd23ce4e2f5a\"")
+        buildConfigField ("String", "BASE_URL", "\"https://api.apileague.com/\"")
+        buildConfigField ("String", "API_KEY", "\"f444632ab8ee4d8ca4d44353aa0506b6\"")
 
     }
 
@@ -53,6 +54,9 @@ dependencies {
     //glide
     implementation (libs.glide)
     implementation(libs.firebase.firestore)
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.crashlytics)
+    implementation(libs.firebase.analytics)
     annotationProcessor (libs.compiler)
 
         //android libraries
@@ -91,6 +95,11 @@ dependencies {
     implementation (libs.converter.gson)
     implementation (libs.okhttp)
     implementation (libs.logging.interceptor)
+
+
+
+
+
 
 
 }

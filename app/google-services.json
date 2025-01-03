@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1029032182629",
+    "project_id": "senov-3e016",
+    "storage_bucket": "senov-3e016.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1029032182629:android:ace3d3b1cd1bec54c9978c",
+        "android_client_info": {
+          "package_name": "com.okta.senov"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDQrkZl9mJ361-BU2rTKWPp8XIPkOGeIDQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
