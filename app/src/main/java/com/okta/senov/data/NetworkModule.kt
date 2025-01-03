@@ -1,11 +1,13 @@
 package com.okta.senov.data.network
 
 import com.okta.senov.API.BigBookApiService
+import com.okta.senov.BuildConfig
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
@@ -18,7 +20,36 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideOkHttpClient(): OkHttpClient = OkHttpClient.Builder().build()
+    fun provideLoggingInterceptor(): HttpLoggingInterceptor {
+        return HttpLoggingInterceptor().apply {
+            level = HttpLoggingInterceptor.Level.BODY
+        }
+    }
+
+    @Provides
+    @Singleton
+    fun provideOkHttpClient(
+        loggingInterceptor: HttpLoggingInterceptor,
+        apiKey: String
+    ): OkHttpClient {
+        return OkHttpClient.Builder()
+            .addInterceptor { chain ->
+                val originalRequest = chain.request()
+                val originalUrl = originalRequest.url
+
+                val newUrl = originalUrl.newBuilder()
+                    .addQueryParameter("api-key", apiKey)
+                    .build()
+
+                val newRequest = originalRequest.newBuilder()
+                    .url(newUrl)
+                    .build()
+
+                chain.proceed(newRequest)
+            }
+            .addInterceptor(loggingInterceptor)
+            .build()
+    }
 
     @Provides
     @Singleton
@@ -33,5 +64,11 @@ object NetworkModule {
     @Singleton
     fun provideBigBookApiService(retrofit: Retrofit): BigBookApiService =
         retrofit.create(BigBookApiService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideApiKey(): String {
+        return BuildConfig.API_KEY
+    }
 
 }
