@@ -58,7 +58,7 @@
                 android:id="@+id/ivProfileImage"
                 android:layout_width="140dp"
                 android:layout_height="140dp"
-                android:src="@drawable/img_fotodiri"
+                android:src="@drawable/ic_person"
                 android:contentDescription="@string/profile_image"
                 android:scaleType="centerCrop"
                 android:background="@drawable/circle_background"/>
@@ -118,7 +118,7 @@
                     android:id="@+id/tvPhoneNumber"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/nomer"
+                    android:text="@string/strip"
                     android:textColor="#333333"/>
             </LinearLayout>
 
@@ -138,7 +138,7 @@
                     android:id="@+id/tvLocation"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/alamat"
+                    android:text="@string/strip"
                     android:textColor="#333333"/>
             </LinearLayout>
 

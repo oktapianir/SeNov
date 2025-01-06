@@ -66,5 +66,8 @@
     <string name="akun">Belum punya akun?</string>
     <string name="daftar">Daftar</string>
     <string name="kalimatregister">Silahkan buat akun anda terlebih dahulu</string>
+    <string name="guest">Guest</string>
+    <string name="pembuka">Silakan login untuk melihat detail</string>
+    <string name="strip">-</string>
 
 </resources>

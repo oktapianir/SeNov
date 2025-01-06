@@ -10,7 +10,6 @@ import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.okta.senov.R
 import com.okta.senov.databinding.FragmentProfileBinding
-import com.okta.senov.extensions.findNavController
 
 class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
@@ -19,20 +18,21 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
     private var auth: FirebaseAuth? = null
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
+
+        auth = FirebaseAuth.getInstance()
+
         binding.loginButton.setOnClickListener {
             findNavController().navigate(R.id.action_profileFragment_to_loginFragment)
         }
+
         binding.registerButton.setOnClickListener {
             findNavController().navigate(R.id.action_profileFragment_to_registerFragment)
         }
-
-        auth = FirebaseAuth.getInstance()
 
         return binding.root
     }
@@ -40,26 +40,24 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.tvUsername.text = getString(R.string.oktapiani_r)
-        binding.tvEmail.text = getString(R.string.ramdhanioktapiani_gmail_com)
+        val currentUser = auth?.currentUser
+        if (currentUser != null) {
+            binding.tvUsername.text = currentUser.displayName ?: "Anonymous"
+            binding.tvEmail.text = currentUser.email ?: "Email tidak tersedia"
+        } else {
+            binding.tvUsername.text = getString(R.string.guest)
+            binding.tvEmail.text = getString(R.string.pembuka)
+        }
 
         binding.icBack.setOnClickListener {
-            binding.icBack.findNavController().navigateUp()
+            findNavController().navigateUp()
         }
 
         binding.icLogout.setOnClickListener {
-            val currentAuth = auth
-            if (currentAuth != null) {
-                currentAuth.signOut()
-
-                Toast.makeText(requireContext(), "You have been logged out", Toast.LENGTH_SHORT).show()
-
-                findNavController().navigate(R.id.action_profileFragment_to_loginFragment)
-            } else {
-                Toast.makeText(requireContext(), "Error: FirebaseAuth not initialized", Toast.LENGTH_SHORT).show()
-            }
+            auth?.signOut()
+            Toast.makeText(requireContext(), "You have been logged out", Toast.LENGTH_SHORT).show()
+            findNavController().navigate(R.id.action_profileFragment_to_loginFragment)
         }
-
     }
 
     override fun onDestroyView() {
