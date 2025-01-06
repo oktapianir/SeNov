@@ -26,6 +26,7 @@ firebaseCrashlytics = "19.3.0"
 googleFirebaseCrashlytics = "3.0.2"
 googleFirebaseAnalytics = "22.1.2"
 
+
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-legacy-support-v4 = { module = "androidx.legacy:legacy-support-v4", version.ref = "legacySupportV4" }
