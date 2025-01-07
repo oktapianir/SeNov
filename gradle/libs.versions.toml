@@ -25,6 +25,7 @@ firebaseFirestore = "25.1.1"
 firebaseCrashlytics = "19.3.0"
 googleFirebaseCrashlytics = "3.0.2"
 googleFirebaseAnalytics = "22.1.2"
+timber = "5.0.1"
 
 
 [libraries]
@@ -59,6 +60,7 @@ retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit
 firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore", version.ref = "firebaseFirestore" }
 firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics", version.ref = "firebaseCrashlytics" }
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics", version.ref = "googleFirebaseAnalytics" }
+timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

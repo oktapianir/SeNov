@@ -100,6 +100,10 @@ dependencies {
     implementation (libs.okhttp)
     implementation (libs.logging.interceptor)
 
+    //timber
+    implementation (libs.timber)
+
+
 
 
 
