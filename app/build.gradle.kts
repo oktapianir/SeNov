@@ -103,6 +103,12 @@ dependencies {
     //timber
     implementation (libs.timber)
 
+    //chucker
+    implementation (libs.library)
+    releaseImplementation (libs.library.no.op)
+
+
+
 
 
 

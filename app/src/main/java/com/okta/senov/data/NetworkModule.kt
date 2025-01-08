@@ -1,10 +1,13 @@
 package com.okta.senov.data.network
 
+import android.content.Context
+import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.okta.senov.API.BigBookApiService
 import com.okta.senov.BuildConfig
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -28,8 +31,18 @@ object NetworkModule {
 
     @Provides
     @Singleton
+    fun provideChuckerInterceptor(
+        @ApplicationContext context: Context
+    ): ChuckerInterceptor {
+        return ChuckerInterceptor.Builder(context)
+            .build()
+    }
+
+    @Provides
+    @Singleton
     fun provideOkHttpClient(
         loggingInterceptor: HttpLoggingInterceptor,
+        chuckerInterceptor: ChuckerInterceptor,
         apiKey: String
     ): OkHttpClient {
         return OkHttpClient.Builder()
@@ -48,6 +61,7 @@ object NetworkModule {
                 chain.proceed(newRequest)
             }
             .addInterceptor(loggingInterceptor)
+            .addInterceptor(chuckerInterceptor)
             .build()
     }
 
@@ -70,5 +84,4 @@ object NetworkModule {
     fun provideApiKey(): String {
         return BuildConfig.API_KEY
     }
-
 }
