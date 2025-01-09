@@ -70,6 +70,11 @@
     <string name="pembuka">Silakan login terlebih dahulu</string>
     <string name="strip">-</string>
     <string name="logout">Logout</string>
-
+    <string name="google">login_with_google</string>
+    <string name="default_web_client_id">1029032182629-5ue6c7lv3lre448s4fcndb7strug9mco.apps.googleusercontent.com</string>
+    <string name="error_empty_fields">Please enter both email and password</string>
+    <string name="login_success">Welcome %1$s</string>
+    <string name="error_authentication_failed">Authentication failed.</string>
+    <string name="error_google_sign_in_failed">Google sign-in failed</string>
 
 </resources>
