@@ -1,6 +1,5 @@
 package com.okta.senov.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,6 +10,7 @@ import com.okta.senov.repository.BookRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -46,10 +46,10 @@ class BookViewModel @Inject constructor(
                     )
                 })
 
-                Log.d("API_SUCCESS", "Books fetched successfully: ${bookDataList.size} books received.")
+                Timber.d("API_SUCCESS", "Books fetched successfully: ${bookDataList.size} books received.")
             } catch (e: Exception) {
                 _errorMessage.postValue("Error fetching books: ${e.message}")
-                Log.e("BookViewModel", "Error fetching books", e)
+                Timber.e("BookViewModel", "Error fetching books", e)
             } finally {
                 _loading.postValue(false)
             }

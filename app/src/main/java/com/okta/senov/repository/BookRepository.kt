@@ -1,7 +1,6 @@
 package com.okta.senov.repository
 
 import android.content.Context
-import android.util.Log
 import com.okta.senov.API.BigBookApiService
 import com.okta.senov.model.BookData
 import com.okta.senov.model.BookResponse
@@ -9,6 +8,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 import javax.inject.Inject
 
 class BookRepository @Inject constructor(
@@ -20,7 +20,7 @@ class BookRepository @Inject constructor(
         val response = bigBookApiService.getSearchBooks(query, apiKey)
         if (response.isSuccessful) {
             val books = response.body()?.books?.flatten() ?: emptyList()
-            Log.d("API_RESPONSE", "Books received: ${books.size}")
+            Timber.d("API_RESPONSE", "Books received: ${books.size}")
             return books.map { book ->
                 BookData(
                     id = book.id,
@@ -29,7 +29,7 @@ class BookRepository @Inject constructor(
                 )
             }
         } else {
-            Log.e("API_ERROR", "Error response: ${response.message()}")
+            Timber.e("API_ERROR", "Error response: ${response.message()}")
             throw Exception("Error fetching books: ${response.code()}")
         }
     }

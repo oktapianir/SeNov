@@ -44,7 +44,9 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
             .requestEmail()
+            .requestProfile()
             .build()
+
 
         googleSignInClient = GoogleSignIn.getClient(requireContext(), gso)
 
@@ -84,9 +86,12 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     }
 
     private fun signInWithGoogle() {
-        val signInIntent = googleSignInClient.signInIntent
-        googleSignInResultLauncher.launch(signInIntent)
+        googleSignInClient.signOut().addOnCompleteListener {
+            val signInIntent = googleSignInClient.signInIntent
+            googleSignInResultLauncher.launch(signInIntent)
+        }
     }
+
 
     private fun handleSignInResult(task: Task<GoogleSignInAccount>) {
         try {
