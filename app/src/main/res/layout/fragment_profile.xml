@@ -127,7 +127,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
-                    android:text="@string/tanggal"
+                    android:text="@string/joining_date"
                     android:textColor="#666666" />
             </LinearLayout>
         </LinearLayout>

@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.okta.senov.R
 import com.okta.senov.databinding.ItemBookBinding
 import com.okta.senov.model.BookData
 
@@ -26,7 +27,7 @@ class BookAdapter(private val books: List<BookData>) : RecyclerView.Adapter<Book
             binding.bookTitleTextView.text = book.title
             Glide.with(binding.root.context)
                 .load(book.image)
-                .placeholder(com.okta.senov.R.drawable.img_book_cover1)
+                .placeholder(R.drawable.img_book_cover1)
                 .into(binding.bookCoverImageView)
         }
     }

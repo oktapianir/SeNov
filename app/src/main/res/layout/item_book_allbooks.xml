@@ -71,7 +71,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="4dp"
-                android:text="@string/titik"
+                android:text="@string/point"
                 android:textColor="#757575"
                 app:layout_constraintBottom_toBottomOf="@id/typeTextView"
                 app:layout_constraintStart_toEndOf="@id/typeTextView"

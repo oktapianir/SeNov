@@ -46,7 +46,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             binding.tvEmail.text = currentUser.email ?: "Email tidak tersedia"
         } else {
             binding.tvUsername.text = getString(R.string.guest)
-            binding.tvEmail.text = getString(R.string.pembuka)
+            binding.tvEmail.text = getString(R.string.opener)
         }
 
         binding.icBack.setOnClickListener {

@@ -31,7 +31,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/selamat_datang"
+        android:text="@string/welcome"
         android:textSize="28sp"
         android:textStyle="bold"
         android:textColor="@color/black"
@@ -41,7 +41,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/kalimat"
+        android:text="@string/sentence"
         android:textSize="16sp"
         android:textColor="#757575"
         android:layout_marginBottom="32dp"
@@ -105,22 +105,25 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_marginBottom="24dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/akun"
+            android:text="@string/account"
             android:textColor="#757575" />
 
         <TextView
             android:id="@+id/registerButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/daftar"
+            android:text="@string/list"
             android:textStyle="bold"
             android:textColor="@color/design_default_color_primary" />
     </LinearLayout>
+
+    <!-- Google Sign In Button -->
     <com.google.android.gms.common.SignInButton
         android:id="@+id/googleSignInButton"
         android:layout_width="match_parent"
@@ -132,5 +135,11 @@
         android:layout_gravity="center"
         tools:ignore="MissingConstraints" />
 
-
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_centerInParent="true"
+        tools:ignore="ObsoleteLayoutParam" />
 </LinearLayout>
