@@ -8,8 +8,4 @@
     <style name="CircularImageView">
         <item name="cornerSize">50%</item>
     </style>
-    <style name="CircleImageView" parent="">
-        <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">50%</item>
-    </style>
 </resources>

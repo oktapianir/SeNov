@@ -81,7 +81,7 @@
                 android:layout_height="120dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/ic_person"
-                app:shapeAppearanceOverlay="@style/CircleImageView"
+                app:shapeAppearanceOverlay="@style/CircularImageView"
                 android:contentDescription="@string/profile_image"/>
 
             <TextView
