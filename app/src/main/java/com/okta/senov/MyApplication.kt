@@ -15,10 +15,10 @@ class MyApplication @Inject constructor() : Application() {
         FirebaseCrashlytics.getInstance().isCrashlyticsCollectionEnabled = true
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
-            Timber.d("Aplikasi berjalan di mode Debug")
+        Timber.tag("MyApplication").d("Aplikasi berjalan di mode Debug")
         } else {
             Timber.plant(ReleaseTree())
-            Timber.d("Aplikasi berjalan di mode Rilis")
+            Timber.tag("MyApplication").d("Aplikasi berjalan di mode Rilis")
         }
     }
 }

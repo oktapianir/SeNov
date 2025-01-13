@@ -46,10 +46,10 @@ class BookViewModel @Inject constructor(
                     )
                 })
 
-                Timber.d("API_SUCCESS", "Books fetched successfully: ${bookDataList.size} books received.")
+                Timber.tag("API_SUCCESS").d("Books fetched successfully: ${bookDataList.size} books received.")
             } catch (e: Exception) {
                 _errorMessage.postValue("Error fetching books: ${e.message}")
-                Timber.e("BookViewModel", "Error fetching books", e)
+                Timber.tag("BookViewModel").e("Error fetching books")
             } finally {
                 _loading.postValue(false)
             }

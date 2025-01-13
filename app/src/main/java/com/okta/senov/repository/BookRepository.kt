@@ -20,7 +20,7 @@ class BookRepository @Inject constructor(
         val response = bigBookApiService.getSearchBooks(query, apiKey)
         if (response.isSuccessful) {
             val books = response.body()?.books?.flatten() ?: emptyList()
-            Timber.d("API_RESPONSE", "Books received: ${books.size}")
+            Timber.tag("API_RESPONSE").d("Books received: ${books.size}")
             return books.map { book ->
                 BookData(
                     id = book.id,
@@ -29,7 +29,7 @@ class BookRepository @Inject constructor(
                 )
             }
         } else {
-            Timber.e("API_ERROR", "Error response: ${response.message()}")
+            Timber.tag("API_ERROR").d("Error response: ${response.message()}")
             throw Exception("Error fetching books: ${response.code()}")
         }
     }

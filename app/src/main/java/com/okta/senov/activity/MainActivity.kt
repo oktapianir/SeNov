@@ -23,10 +23,10 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        Timber.d("Debug log: Activity created")
-        Timber.i("Info log: User ID = %s", "12345")
-        Timber.w("Warning log: Network error detected")
-        Timber.e(Throwable("Example error"), "Error log: Something went wrong")
+        Timber.tag("MainActivity").d("Debug log: Activity created")
+        Timber.tag("MainActivity").i("Info log: User ID = %s", "12345")
+        Timber.tag("MainActivity").w("Warning log: Network error detected")
+        Timber.tag("MainActivity").e(Throwable("Example error"), "Error log: Something went wrong")
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
