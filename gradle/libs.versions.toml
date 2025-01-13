@@ -24,10 +24,7 @@ playServicesAuthVersion = "21.3.0"
 retrofit = "2.9.0"
 roomCompilerVersion = "2.6.1"
 roomRuntime = "2.6.1"
-firebaseFirestore = "25.1.1"
-firebaseCrashlytics = "19.3.0"
 googleFirebaseCrashlytics = "3.0.2"
-googleFirebaseAnalytics = "22.1.2"
 timber = "5.0.1"
 
 
@@ -63,9 +60,9 @@ androidx-constraintlayout = { group = "androidx.constraintlayout", name = "const
 okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
 play-services-auth-v2060 = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuthVersion" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
-firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore", version.ref = "firebaseFirestore" }
-firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics", version.ref = "firebaseCrashlytics" }
-firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics", version.ref = "googleFirebaseAnalytics" }
+firebase-firestore = { module = "com.google.firebase:firebase-firestore" }
+firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics" }
+firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 
 [plugins]
