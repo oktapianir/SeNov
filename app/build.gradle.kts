@@ -56,13 +56,13 @@ dependencies {
     annotationProcessor (libs.compiler)
 
     //firebase
+    implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth)
     implementation(libs.firebase.firestore)
-    implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.crashlytics)
     implementation(libs.firebase.analytics)
-    implementation(libs.play.services.auth.v2060)
-
+    implementation(libs.firebase.auth.ktx)
+    implementation(libs.play.services.auth.v2030)
 
     //android libraries
     implementation(libs.androidx.core.ktx)
@@ -107,14 +107,4 @@ dependencies {
     //chucker
     implementation (libs.library)
     releaseImplementation (libs.library.no.op)
-
-
-
-
-
-
-
-
-
-
 }

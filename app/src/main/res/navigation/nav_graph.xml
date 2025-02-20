@@ -71,6 +71,9 @@
         <action
             android:id="@+id/action_loginFragment_to_registerFragment"
             app:destination="@id/registerfragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_adminFragment"
+            app:destination="@id/adminFragment" />
     </fragment>
 
     <fragment
@@ -84,6 +87,19 @@
         <action
             android:id="@+id/action_registerFragment_to_fragmentProfile"
             app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_registerFragment_to_adminFragment"
+            app:destination="@id/adminFragment" />
     </fragment>
+
+    <!-- Definisi Fragment Admin -->
+    <fragment
+        android:id="@+id/adminFragment"
+        android:name="com.okta.senov.fragment.AdminFragment"
+        android:label="Admin"
+        tools:layout="@layout/fragment_admin">
+    </fragment>
+
+
 
 </navigation>

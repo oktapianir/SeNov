@@ -76,7 +76,13 @@
     <string name="login_success">Welcome %1$s</string>
     <string name="error_authentication_failed">Authentication failed.</string>
     <string name="error_google_sign_in_failed">Google sign-in failed</string>
-    <string name="login_success_with_name">Login Success, Welcome %1$s</string>
-
-
+    <string name="login_success_with_name">Login Succes</string>
+    <string name="login_success_admin">Login Success</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hello_admin">Selamat datang admin</string>
+    <string name="register_success_admin">Registrasi admin berhasil</string>
+    <string name="register_success_user">Registrasi user berhasil</string>
+    <string name="dashboard_admin">Dashboard Admin</string>
+    <string name="title_feature_add">Tambah Author</string>
 </resources>
