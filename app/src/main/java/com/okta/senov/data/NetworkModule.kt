@@ -3,6 +3,7 @@ package com.okta.senov.data.network
 import android.content.Context
 import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.okta.senov.API.BigBookApiService
+import com.okta.senov.API.FakeStoreApiService
 import com.okta.senov.BuildConfig
 import dagger.Module
 import dagger.Provides
@@ -20,6 +21,8 @@ import javax.inject.Singleton
 object NetworkModule {
 
     private const val BASE_URL = "https://api.bigbookapi.com/"
+    private const val FAKE_STORE_BASE_URL = "https://fakestoreapi.com/"
+
 
     @Provides
     @Singleton
@@ -83,5 +86,16 @@ object NetworkModule {
     @Singleton
     fun provideApiKey(): String {
         return BuildConfig.API_KEY
+    }
+
+    @Provides
+    @Singleton
+    fun provideFakeStoreApiService(okHttpClient: OkHttpClient): FakeStoreApiService {
+        return Retrofit.Builder()
+            .baseUrl(FAKE_STORE_BASE_URL)
+            .client(okHttpClient)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(FakeStoreApiService::class.java)
     }
 }
