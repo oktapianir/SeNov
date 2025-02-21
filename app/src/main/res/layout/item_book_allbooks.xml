@@ -103,6 +103,8 @@
                 app:layout_constraintTop_toBottomOf="@id/typeTextView" />
 
             <!-- Detail Button -->
+
+            <!-- Rating Bar -->
             <Button
                 android:id="@+id/buttonGoToDetail"
                 android:layout_width="98dp"
@@ -114,9 +116,9 @@
                 android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="@id/priceTextView"
                 app:layout_constraintStart_toEndOf="@id/priceTextView"
-                app:layout_constraintTop_toTopOf="@id/priceTextView" />
+                app:layout_constraintTop_toTopOf="@id/priceTextView"
+                app:layout_constraintVertical_bias="0.0" />
 
-            <!-- Rating Bar -->
             <RatingBar
                 android:id="@+id/ratingBar"
                 style="?android:attr/ratingBarStyleSmall"

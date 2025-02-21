@@ -10,6 +10,7 @@ import com.okta.senov.adapter.AllBooksAdapter
 import com.okta.senov.adapter.BookAdapter
 import com.okta.senov.databinding.FragmentHomeBinding
 import com.okta.senov.extensions.findNavController
+import com.okta.senov.model.Book
 import com.okta.senov.viewmodel.BookViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -43,8 +44,33 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         bookViewModel.fetchBooksFromApi(apiKey, "adventure")
 
+//        bookViewModel.popularBooks.observe(viewLifecycleOwner) { books ->
+//            val adapter = BookAdapter(books)
+//            binding.popularBooksRecyclerView.adapter = adapter
+//        }
+//        bookViewModel.popularBooks.observe(viewLifecycleOwner) { books ->
+//            val adapter = BookAdapter(books) { book ->
+//                val action = HomeFragmentDirections.actionHomeToDetail(book)
+//                binding.popularBooksRecyclerView.findNavController().navigate(action)
+//            }
+//            binding.popularBooksRecyclerView.adapter = adapter
+//        }
         bookViewModel.popularBooks.observe(viewLifecycleOwner) { books ->
-            val adapter = BookAdapter(books)
+            val adapter = BookAdapter(books) { bookData ->
+                // Convert BookData to Book
+                val book = Book(
+                    id = bookData.id,
+                    title = bookData.title,
+//                    author = bookData.author ?: "",
+//                    category = bookData.category ?: "",
+//                    description = bookData.description ?: "",
+//                    price = bookData.price ?: 0.0,
+//                    rating = bookData.rating ?: 0.0f,
+                    coverResourceId = bookData.image
+                )
+                val action = HomeFragmentDirections.actionHomeToDetail(book)
+                binding.popularBooksRecyclerView.findNavController().navigate(action)
+            }
             binding.popularBooksRecyclerView.adapter = adapter
         }
 
