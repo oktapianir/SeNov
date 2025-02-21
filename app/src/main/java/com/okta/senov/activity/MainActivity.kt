@@ -47,6 +47,9 @@ class MainActivity : AppCompatActivity() {
                 R.id.searchFragment -> {
                     binding.bottomNavigation.visibility = View.VISIBLE
                 }
+                R.id.YourBookFragment -> {
+                    binding.bottomNavigation.visibility = View.VISIBLE
+                }
                 else -> {
                     binding.bottomNavigation.visibility = View.GONE
                 }

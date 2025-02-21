@@ -37,6 +37,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         binding.searchIcon.setOnClickListener {
             binding.searchIcon.findNavController().navigate(R.id.action_home_to_search)
         }
+        binding.yourBook.setOnClickListener {
+            binding.yourBook.findNavController().navigate(R.id.action_home_to_yourbook)
+        }
 
         bookViewModel.fetchBooksFromApi(apiKey, "adventure")
 

@@ -15,6 +15,7 @@
     <string name="all_books">All Books</string>
     <string name="home">Home</string>
     <string name="books">Books</string>
+    <string name="your_book">Your Book</string>
     <string name="audio">Audio</string>
     <string name="profile">Profile</string>
     <string name="go_to_detail">Go to Detail</string>
@@ -85,4 +86,5 @@
     <string name="register_success_user">Registrasi user berhasil</string>
     <string name="dashboard_admin">Dashboard Admin</string>
     <string name="title_feature_add">Tambah Author</string>
+    <string name="your_book_nav">Your Book</string>
 </resources>

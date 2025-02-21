@@ -18,6 +18,9 @@
         <action
             android:id="@+id/action_home_to_search"
             app:destination="@id/searchFragment" />
+        <action
+            android:id="@+id/action_home_to_yourbook"
+            app:destination="@id/YourBookFragment" />
     </fragment>
 
     <!-- Definisi Fragment Detail -->
@@ -42,6 +45,11 @@
         android:label="Search"
         tools:layout="@layout/fragment_search" />
 
+    <fragment
+        android:id="@+id/YourBookFragment"
+        android:name="com.okta.senov.fragment.YourBookFragment"
+        android:label="Search"
+        tools:layout="@layout/fragment_your_book" />
 
     <!-- Definisi Fragment Profile -->
     <fragment
