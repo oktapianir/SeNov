@@ -87,4 +87,5 @@
     <string name="dashboard_admin">Dashboard Admin</string>
     <string name="title_feature_add">Tambah Author</string>
     <string name="your_book_nav">Your Book</string>
+    <string name="rating_book">4,5</string>
 </resources>
