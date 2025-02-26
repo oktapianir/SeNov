@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.okta.senov.R
 import com.okta.senov.databinding.FragmentAdminBinding
+import com.okta.senov.extensions.findNavController
 import timber.log.Timber
 
 class AdminFragment : Fragment(R.layout.fragment_admin) {
@@ -20,6 +21,9 @@ class AdminFragment : Fragment(R.layout.fragment_admin) {
     ): View {
         Timber.tag("AdminFragment").d("onCreateView called")
         _binding = FragmentAdminBinding.inflate(inflater, container, false)
+        binding.btnTambahAuthor.setOnClickListener {
+            binding.btnTambahAuthor.findNavController().navigate(R.id.action_adminFragment_to_addauthorFragment)
+        }
         return binding.root
     }
 

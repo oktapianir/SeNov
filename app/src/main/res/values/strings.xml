@@ -18,13 +18,10 @@
     <string name="audio">Audio</string>
     <string name="profile">Profile</string>
     <string name="go_to_detail">Detail Book</string>
-    <string name="name_develop">Oktapiani</string>
     <string name="email">Ramadhanioktapinian@gmail.com</string>
     <string name="edit_profile">Edit Profile</string>
     <string name="back">Back</string>
     <string name="grid">Grid</string>
-    <string name="name_book">Bulan</string>
-    <string name="name_book_to">Karya</string>
     <string name="author">Tere Liye</string>
     <string name="listen_now">Listen Now</string>
     <string name="synopsis">Synopsis</string>
@@ -47,7 +44,7 @@
     <string name="book_title">Book Title</string>
     <string name="book_author">Book Author</string>
     <string name="recent">Recent</string>
-    <string name="name_book1">Siputih</string>
+
     <string name="recent_search">Recent Search</string>
     <string name="close_button">Close</string>
     <string name="all">All</string>
@@ -85,7 +82,21 @@
     <string name="dashboard_admin">Dashboard Admin</string>
     <string name="your_book_nav">Your Book</string>
     <string name="rating_book">4,5</string>
+    <string name="choose_file">Pilih Foto</string>
+    <string name="save">Simpan</string>
+
 
     <string name="title_feature_add_author">Tambah Author</string>
     <string name="title_feature_add_content_book">Tambah Cerita</string>
+
+    <string name="name_add_author">Nama Author</string>
+    <string name="name_book1">Siputih</string>
+    <string name="name_develop">Oktapiani</string>
+    <string name="name_book">Bulan</string>
+    <string name="name_book_to">Karya</string>
+
+
+
+
+
 </resources>
