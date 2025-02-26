@@ -1,39 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:padding="16dp"
     tools:context=".fragment.AdminFragment">
 
-    <!-- Judul Halaman -->
     <TextView
-        android:layout_width="match_parent"
+        android:id="@+id/tvDashboard"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/dashboard_admin"
         android:textSize="22sp"
         android:textStyle="bold"
-        android:gravity="center"
-        android:paddingBottom="10dp" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:paddingBottom="10dp"
+        android:gravity="center"/>
 
-    <!-- Tombol Tambah Novel -->
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btnTambahAuthor"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/title_feature_add"
         android:backgroundTint="@color/teal_700"
-        android:textColor="@android:color/white"
         android:drawableLeft="@android:drawable/ic_input_add"
         android:padding="10dp"
-        tools:ignore="RtlHardcoded" />
+        android:text="@string/title_feature_add_author"
+        android:textColor="@android:color/white"
+        app:cornerRadius="0dp"
+        app:layout_constraintTop_toBottomOf="@id/tvDashboard"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/btnTambahIsiContent"
+        app:layout_constraintWidth_percent="0.48"/>
 
-    <!-- RecyclerView untuk Menampilkan Daftar Novel -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnTambahIsiContent"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/teal_700"
+        android:drawableLeft="@android:drawable/ic_input_add"
+        android:padding="10dp"
+        android:text="@string/title_feature_add_content_book"
+        android:textColor="@android:color/white"
+        app:cornerRadius="0dp"
+        app:layout_constraintTop_toBottomOf="@id/tvDashboard"
+        app:layout_constraintStart_toEndOf="@id/btnTambahAuthor"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintWidth_percent="0.48"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewNovel"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:paddingTop="10dp"
-        android:scrollbars="vertical"/>
-</LinearLayout>
+        android:scrollbars="vertical"
+        app:layout_constraintTop_toBottomOf="@id/btnTambahAuthor"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
