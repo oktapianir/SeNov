@@ -5,81 +5,50 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginVertical="4dp"
-    android:layout_marginHorizontal="4dp"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="2dp">
+    android:layout_margin="8dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="4dp">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="8dp">
+        android:orientation="horizontal"
+        android:padding="12dp">
 
-        <!-- Cover Buku -->
         <ImageView
-            android:id="@+id/ivBookCover"
-            android:layout_width="60dp"
-            android:layout_height="80dp"
+            android:id="@+id/bookCoverImageView"
+            android:layout_width="80dp"
+            android:layout_height="100dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/img_book_cover1"
-            android:background="@android:color/darker_gray"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            android:src="@drawable/img_book_cover1"/>
 
-        <!-- Informasi Buku - Layout memanjang ke samping -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:orientation="vertical"
-            android:layout_marginStart="12dp"
-            app:layout_constraintStart_toEndOf="@id/ivBookCover"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent">
+            android:paddingStart="12dp"
+            tools:ignore="RtlSymmetry">
 
-            <!-- Judul Buku -->
             <TextView
-                android:id="@+id/tvBookTitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:textColor="@android:color/black"
-                android:maxLines="1"
-                android:ellipsize="end"
-                tools:text="Judul Buku" />
-
-            <!-- Penulis Buku -->
-            <TextView
-                android:id="@+id/tvAuthor"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:textColor="@android:color/darker_gray"
-                android:maxLines="1"
-                android:ellipsize="end"
-                tools:text="Penulis Buku" />
-
-            <!-- Progress Baca -->
-            <TextView
-                android:id="@+id/tvProgress"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="12sp"
-                android:layout_marginTop="4dp"
-                tools:text="Progress: 75%" />
-
-            <!-- Rating -->
-            <RatingBar
-                android:id="@+id/ratingBar"
+                android:id="@+id/bookTitleTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="?android:attr/ratingBarStyleSmall"
-                android:numStars="5"
-                android:rating="4.5"
-                android:layout_marginTop="4dp" />
-        </LinearLayout>
+                android:text="@string/book_title"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:maxLines="2"
+                android:ellipsize="end"/>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                android:id="@+id/bookDescription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/description_book"
+                android:textSize="14sp"
+                android:maxLines="3"
+                android:ellipsize="end"
+                android:paddingTop="4dp"/>
+        </LinearLayout>
+    </LinearLayout>
 </androidx.cardview.widget.CardView>
