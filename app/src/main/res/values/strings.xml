@@ -54,31 +54,20 @@
     <string name="rating">5.0</string>
     <string name="api_key">8b71325fbf3a43d8a949fd23ce4e2f5a</string>
     <string name="point">•</string>
-    <string name="login">Login</string>
-    <string name="register">Register</string>
     <string name="welcome">Selamat Datang!</string>
     <string name="mail">Email</string>
     <string name="password">Password</string>
     <string name="sentence">Silahkan masuk ke akun Anda</string>
     <string name="account">Belum punya akun?</string>
     <string name="list">Daftar</string>
-    <string name="registersentence">Silahkan buat akun anda terlebih dahulu</string>
     <string name="guest">Guest</string>
     <string name="opener">Silakan login terlebih dahulu</string>
     <string name="strip">-</string>
     <string name="logout">Logout</string>
     <string name="google">login_with_google</string>
     <string name="default_web_client_id">1029032182629-5ue6c7lv3lre448s4fcndb7strug9mco.apps.googleusercontent.com</string>
-    <string name="error_empty_fields">Please enter both email and password</string>
-    <string name="login_success">Welcome %1$s</string>
-    <string name="error_authentication_failed">Authentication failed.</string>
-    <string name="error_google_sign_in_failed">Google sign-in failed</string>
-    <string name="login_success_with_name">Login Succes</string>
-    <string name="login_success_admin">Login Success</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="hello_admin">Selamat datang admin</string>
-    <string name="register_success_admin">Registrasi admin berhasil</string>
-    <string name="register_success_user">Registrasi user berhasil</string>
     <string name="dashboard_admin">Dashboard Admin</string>
     <string name="your_book_nav">Your Book</string>
     <string name="rating_book">4,5</string>
@@ -96,7 +85,23 @@
     <string name="name_book_to">Karya</string>
     
     <string name="author_bio">Biografi</string>
-    <string name="author_social_media">Social Media</string>"
+    <string name="author_social_media">Social Media</string>
+
+    <string name="register">Register</string>
+    <string name="registersentence">Silahkan buat akun anda terlebih dahulu</string>
+    <string name="register_success_admin">Registrasi admin berhasil</string>
+    <string name="register_success_user">Registrasi user berhasil</string>
+
+    <string name="login">Login</string>
+    <string name="login_success">Welcome %1$s</string>
+    <string name="login_success_with_name">Login Succes</string>
+    <string name="login_success_admin">Login Succes</string>
+
+    <string name="error_empty_fields">Please enter both email and password</string>
+    <string name="error_authentication_failed">Authentication failed.</string>
+    <string name="error_google_sign_in_failed">Google sign-in failed</string>
+
+
 
 
 

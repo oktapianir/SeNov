@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -10,52 +9,42 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <!-- Date and Library Name -->
-        <TextView
-            android:id="@+id/dateText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/nov24"
-            android:textSize="18sp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
-
+        <!-- Ikon Pencarian -->
         <TextView
             android:id="@+id/libraryText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="140dp"
+            android:layout_marginTop="24dp"
             android:fontFamily="@font/abril_fatface"
             android:text="@string/DigiNov"
-            android:textSize="14sp"
-            app:layout_constraintStart_toStartOf="@id/dateText"
-            app:layout_constraintTop_toBottomOf="@id/dateText" />
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- Ikon Pencarian -->
         <ImageView
             android:id="@+id/searchIcon"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:src="@drawable/ic_search"
-            android:contentDescription="@string/search_icon"
-            android:layout_marginEnd="16dp"
             android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:contentDescription="@string/search_icon"
+            android:src="@drawable/ic_search"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:visibility="gone" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/yourBook"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:src="@drawable/ic_search"
-            android:contentDescription="@string/search_icon"
-            android:layout_marginEnd="16dp"
             android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:contentDescription="@string/search_icon"
+            android:src="@drawable/ic_search"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:visibility="gone" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <!-- Profile Image -->
         <ImageView
@@ -63,28 +52,27 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginEnd="16dp"
-            android:src="@drawable/ic_profile_placeholder"
+            android:background="@drawable/circle_background"
             android:contentDescription="@string/profile_image"
             android:scaleType="centerCrop"
-            android:background="@drawable/circle_background"
+            android:src="@drawable/ic_profile_placeholder"
+            app:layout_constraintBottom_toBottomOf="@id/libraryText"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/libraryText"
-            app:layout_constraintBottom_toBottomOf="@id/libraryText" />
+            app:layout_constraintTop_toTopOf="@id/libraryText" />
 
-        <!-- Popular Header -->
         <TextView
             android:id="@+id/popularHeader"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="20dp"
             android:fontFamily="@font/cantata_one"
             android:text="@string/popular"
             android:textSize="20sp"
             android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="@id/libraryText"
-            app:layout_constraintTop_toBottomOf="@id/libraryText" />
+            app:layout_constraintTop_toBottomOf="@id/libraryText"
+            tools:ignore="MissingConstraints"
+            tools:layout_editor_absoluteX="17dp" />
 
-        <!-- Popular Books RecyclerView -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/popularBooksRecyclerView"
             android:layout_width="386dp"

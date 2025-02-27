@@ -85,8 +85,8 @@
             <!-- Book Button -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/buttonGoToDetail"
-                android:layout_width="175dp"
-                android:layout_height="41dp"
+                android:layout_width="135dp"
+                android:layout_height="39dp"
                 android:layout_marginStart="48dp"
                 android:text="@string/go_to_detail"
                 android:textColor="@android:color/black"
