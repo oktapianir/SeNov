@@ -43,6 +43,8 @@
     <string name="top_book_search">Top Book Search</string>
     <string name="book_title">Book Title</string>
     <string name="book_author">Book Author</string>
+    <string name="book_total">Total Book</string>
+    <string name="book_collection">Book Collection</string>
     <string name="recent">Recent</string>
 
     <string name="recent_search">Recent Search</string>
@@ -70,12 +72,15 @@
     <string name="hello_admin">Selamat datang admin</string>
     <string name="dashboard_admin">Dashboard Admin</string>
     <string name="your_book_nav">Your Book</string>
-    <string name="rating_book">4,5</string>
+    <string name="rating_book">4</string>
     <string name="choose_file">Pilih Foto</string>
     <string name="save">Simpan</string>
 
     <string name="title_feature_add_author">Tambah Author</string>
     <string name="title_feature_add_content_book">Tambah Cerita</string>
+    <string name="titla_MA_admin">Management Actions</string>
+    <string name="title_feature_add_book">Tambah Buku Baru</string>
+
 
     <string name="name_add_author">Nama Author</string>
     <string name="name_book1">Siputih</string>
@@ -88,6 +93,7 @@
     <string name="author_social_media">Social Media</string>
     <string name="author_foto">Author Photo</string>
     <string name="author_info">Author Informasi</string>
+    <string name="author_total">Total Authors</string>
 
     <string name="register">Register</string>
     <string name="registersentence">Silahkan buat akun anda terlebih dahulu</string>
