@@ -9,4 +9,7 @@
     <color name="ic_launcher_background">#FFFFFF</color>
     <color name="lily">#D4BEE4</color>
     <color name="teal_700">#AA71009E</color>
+    <color name="white_72">#B7FFFFFF</color>
+    <color name="white_20">#9CFFFFFF</color>
+
 </resources>
