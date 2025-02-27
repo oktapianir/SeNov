@@ -87,7 +87,7 @@
                 android:id="@+id/buttonGoToDetail"
                 android:layout_width="175dp"
                 android:layout_height="41dp"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="48dp"
                 android:text="@string/go_to_detail"
                 android:textColor="@android:color/black"
                 android:textSize="14sp"
@@ -95,7 +95,6 @@
                 app:cornerRadius="0dp"
                 app:layout_constraintBottom_toBottomOf="@id/priceTextView"
                 app:layout_constraintStart_toEndOf="@id/priceTextView" />
-
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
