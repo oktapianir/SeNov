@@ -57,18 +57,23 @@
 package com.okta.senov.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.google.firebase.firestore.FirebaseFirestore
 import com.okta.senov.databinding.ItemBookAllbooksBinding
 import com.okta.senov.extensions.findNavController
 import com.okta.senov.fragment.HomeFragmentDirections
 import com.okta.senov.model.Book
+import timber.log.Timber
 
 class AllBooksAdapter(
     private var books: List<Book>, // Ubah val menjadi var agar bisa diperbarui
     private val onItemClick: (Book) -> Unit
 ) : RecyclerView.Adapter<AllBooksAdapter.AllBooksViewHolder>() {
+
+    private val db = FirebaseFirestore.getInstance()
 
     inner class AllBooksViewHolder(
         private val binding: ItemBookAllbooksBinding,
@@ -90,6 +95,27 @@ class AllBooksAdapter(
                     navController.navigate(action)
                 }
             }
+            val bookId = "lRvC5g2AX1oPjH8E9qbo"
+            fetchBookAuthor(bookId)
+        }
+
+        private fun fetchBookAuthor(bookId: String) {
+            db.collection("authors").document(bookId)
+                .get()
+                .addOnSuccessListener { document ->
+                    if (document.exists()) {
+                        val author = document.getString("nama") ?: "Tidak ada data"
+                        binding.typeTextView.text = author
+                        Timber.tag("Firestore").d("Data berhasil diambil: $author")
+                    } else {
+                        Timber.tag("Firestore").e("Dokumen tidak ditemukan")
+                        binding.typeTextView.visibility = View.GONE
+                    }
+                }
+                .addOnFailureListener { e ->
+                    Timber.tag("FirestoreError").e("Gagal mengambil data: ${e.message}")
+                    binding.typeTextView.visibility = View.GONE
+                }
         }
     }
 
