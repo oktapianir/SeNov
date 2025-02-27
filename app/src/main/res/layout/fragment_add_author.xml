@@ -7,6 +7,7 @@
     android:padding="16dp"
     tools:context=".fragment.AddAuthorFragment">
 
+    <!-- Judul -->
     <TextView
         android:id="@+id/tvTitleTambahAuthor"
         android:layout_width="wrap_content"
@@ -14,11 +15,12 @@
         android:text="@string/title_feature_add_author"
         android:textSize="22sp"
         android:textStyle="bold"
+        android:gravity="center"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:gravity="center"/>
+        app:layout_constraintEnd_toEndOf="parent" />
 
+    <!-- Input Nama Author -->
     <EditText
         android:id="@+id/etNamaAuthor"
         android:layout_width="match_parent"
@@ -29,29 +31,63 @@
         app:layout_constraintTop_toBottomOf="@id/tvTitleTambahAuthor"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp"/>
+        android:layout_marginTop="16dp" />
 
+    <!-- Input Biografi -->
+    <EditText
+        android:id="@+id/etBioAuthor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/author_bio"
+        android:padding="12dp"
+        android:background="@android:drawable/edit_text"
+        android:inputType="textMultiLine"
+        android:maxLines="5"
+        android:gravity="top|start"
+        android:scrollbars="vertical"
+        app:layout_constraintTop_toBottomOf="@id/etNamaAuthor"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="12dp" />
+
+
+    <!-- Input Sosial Media -->
+    <EditText
+        android:id="@+id/etSocialMediaAuthor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/author_social_media"
+        android:padding="12dp"
+        android:background="@android:drawable/edit_text"
+        app:layout_constraintTop_toBottomOf="@id/etBioAuthor"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="12dp" />
+
+    <!-- Foto Author -->
     <ImageView
         android:id="@+id/ivFotoAuthor"
         android:layout_width="120dp"
         android:layout_height="120dp"
-        android:src="@android:drawable/ic_menu_gallery"
-        android:scaleType="centerCrop"
         android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/etNamaAuthor"
+        android:scaleType="centerCrop"
+        android:src="@android:drawable/ic_menu_gallery"
+        app:layout_constraintTop_toBottomOf="@id/etSocialMediaAuthor"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent" />
 
+    <!-- Tombol Pilih Foto -->
     <Button
         android:id="@+id/btnPilihFoto"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/choose_file"
+        android:layout_marginTop="8dp"
         app:layout_constraintTop_toBottomOf="@id/ivFotoAuthor"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="8dp"/>
+        app:layout_constraintEnd_toEndOf="parent" />
 
+    <!-- Tombol Simpan -->
     <Button
         android:id="@+id/btnSimpanAuthor"
         android:layout_width="match_parent"
@@ -59,9 +95,9 @@
         android:text="@string/save"
         android:backgroundTint="@color/teal_700"
         android:textColor="@android:color/white"
+        android:layout_marginTop="16dp"
         app:layout_constraintTop_toBottomOf="@id/btnPilihFoto"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp"/>
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
