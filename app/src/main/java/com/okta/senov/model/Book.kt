@@ -10,7 +10,7 @@ import kotlinx.parcelize.Parcelize
 data class Book(
     @PrimaryKey val id: Int,
     val title: String,
-//    val author: String,
+//    val authorName: String,
 //    val genre: String,
 //    val rating: Float,
 //    val price: Float,

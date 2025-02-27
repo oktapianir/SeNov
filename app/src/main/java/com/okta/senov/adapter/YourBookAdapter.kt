@@ -33,21 +33,25 @@ class YourBookAdapter(
         fun bind(book: Book) {
             binding.apply {
                 // Set book details
-                tvBookTitle.text = book.title
+                bookTitleTextView.text = book.title
 //                tvAuthor.text = book.author
 //                tvProgress.text = "Progress: ${book.readingProgress}%"
 //                ratingBar.rating = book.rating
 
                 // Load book cover
-                Glide.with(ivBookCover.context)
+                Glide.with(bookCoverImageView.context)
                     .load(book.coverResourceId)
-                    .into(ivBookCover)
+                    .into(bookCoverImageView)
 
                 // Set click listener
                 root.setOnClickListener { onItemClick(book) }
             }
         }
     }
+    // Menambahkan listener untuk tombol hapus
+//    fun setOnRemoveClickListener(listener: (Book) -> Unit) {
+//        removeClickListener = listener
+//    }
 
     class BookDiffCallback : DiffUtil.ItemCallback<Book>() {
         override fun areItemsTheSame(oldItem: Book, newItem: Book): Boolean {

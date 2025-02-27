@@ -1,5 +1,6 @@
 package com.okta.senov.API
 
+import com.okta.senov.model.AuthorResponse
 import com.okta.senov.model.BookResponse
 import retrofit2.Response
 import retrofit2.http.GET
@@ -12,4 +13,10 @@ interface BigBookApiService {
         @Query("query") query: String,
         @Query("api-key") apiKey: String
     ): Response<BookResponse>
+
+    @GET("search_author")
+    suspend fun getSearchAuthors(
+        @Query("author") author: String,
+        @Query("api-key") apiKey: String
+    ): Response<AuthorResponse>
 }

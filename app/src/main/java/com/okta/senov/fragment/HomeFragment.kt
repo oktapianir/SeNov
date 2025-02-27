@@ -1,5 +1,84 @@
 package com.okta.senov.fragment
 
+//@AndroidEntryPoint
+//class HomeFragment : Fragment(R.layout.fragment_home) {
+//
+//    private lateinit var binding: FragmentHomeBinding
+//    private val bookViewModel: BookViewModel by viewModels()
+//
+//    private val apiKey = "8b71325fbf3a43d8a949fd23ce4e2f5a"
+//
+//    private lateinit var allBooksAdapter: AllBooksAdapter
+//
+//    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+//        super.onViewCreated(view, savedInstanceState)
+//
+//        binding = FragmentHomeBinding.bind(view)
+//
+//        setupRecyclerViews()
+//
+//        binding.profileImage.setOnClickListener {
+//            binding.profileImage.findNavController().navigate(R.id.action_home_to_profile)
+//        }
+//
+//        binding.searchIcon.setOnClickListener {
+//            binding.searchIcon.findNavController().navigate(R.id.action_home_to_search)
+//        }
+//        binding.yourBook.setOnClickListener {
+//            binding.yourBook.findNavController().navigate(R.id.action_home_to_yourbook)
+//        }
+//
+//        bookViewModel.fetchBooksFromApi(apiKey, "adventure")
+//
+////        bookViewModel.popularBooks.observe(viewLifecycleOwner) { books ->
+////            val adapter = BookAdapter(books)
+////            binding.popularBooksRecyclerView.adapter = adapter
+////        }
+////        bookViewModel.popularBooks.observe(viewLifecycleOwner) { books ->
+////            val adapter = BookAdapter(books) { book ->
+////                val action = HomeFragmentDirections.actionHomeToDetail(book)
+////                binding.popularBooksRecyclerView.findNavController().navigate(action)
+////            }
+////            binding.popularBooksRecyclerView.adapter = adapter
+////        }
+//        bookViewModel.popularBooks.observe(viewLifecycleOwner) { books ->
+//            val adapter = BookAdapter(books) { bookData ->
+//                // Convert BookData to Book
+//                val book = Book(
+//                    id = bookData.id,
+//                    title = bookData.title,
+////                    author = bookData.author ?: "",
+////                    category = bookData.category ?: "",
+////                    description = bookData.description ?: "",
+////                    price = bookData.price ?: 0.0,
+////                    rating = bookData.rating ?: 0.0f,
+////                    authorName = bookData.authorName,
+//                    coverResourceId = bookData.image
+//                )
+//                val action = HomeFragmentDirections.actionHomeToDetail(book)
+//                binding.popularBooksRecyclerView.findNavController().navigate(action)
+//            }
+//            binding.popularBooksRecyclerView.adapter = adapter
+//        }
+//
+//        bookViewModel.allBooks.observe(viewLifecycleOwner) { books ->
+//            allBooksAdapter = AllBooksAdapter(books) { book ->
+//                val action = HomeFragmentDirections.actionHomeToDetail(book)
+//                binding.allBooksRecyclerView.findNavController().navigate(action)
+//            }
+//            binding.allBooksRecyclerView.adapter = allBooksAdapter
+//        }
+//    }
+//
+//    private fun setupRecyclerViews() {
+//        binding.popularBooksRecyclerView.layoutManager =
+//            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+//        binding.allBooksRecyclerView.layoutManager =
+//            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+//    }
+//
+//}
+
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
@@ -22,15 +101,60 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private val apiKey = "8b71325fbf3a43d8a949fd23ce4e2f5a"
 
+    // Adapter untuk daftar buku populer
+    private lateinit var bookAdapter: BookAdapter
+
+    // Adapter untuk semua buku
     private lateinit var allBooksAdapter: AllBooksAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         binding = FragmentHomeBinding.bind(view)
-
         setupRecyclerViews()
 
+        // Inisialisasi Adapter
+        bookAdapter = BookAdapter{ bookData ->
+            val book = Book(
+                id = bookData.id,
+                title = bookData.title,
+                coverResourceId = bookData.image
+            )
+            val action = HomeFragmentDirections.actionHomeToDetail(book)
+            binding.popularBooksRecyclerView.findNavController().navigate(action)
+        }
+
+        allBooksAdapter = AllBooksAdapter(emptyList()) { book ->
+            val action = HomeFragmentDirections.actionHomeToDetail(book)
+            binding.allBooksRecyclerView.findNavController().navigate(action)
+        }
+
+
+        binding.popularBooksRecyclerView.adapter = bookAdapter
+        binding.allBooksRecyclerView.adapter = allBooksAdapter
+
+        // Fetch data dari API
+        bookViewModel.fetchBooksFromApi(apiKey, "adventure")
+
+        // Observasi data populer dan update adapter
+        bookViewModel.popularBooks.observe(viewLifecycleOwner) { books ->
+            bookAdapter.submitList(books)
+        }
+
+        // Observasi semua buku dan update adapter
+        bookViewModel.allBooks.observe(viewLifecycleOwner) { bookDataList ->
+            val books = bookDataList.map { bookData ->
+                Book(
+                    id = bookData.id,
+                    title = bookData.title,
+                    coverResourceId = bookData.image
+                )
+            }
+            allBooksAdapter.setBooks(books) // Gunakan metode yang sudah diperbaiki di adapter
+        }
+
+
+        // Navigasi ke halaman lain
         binding.profileImage.setOnClickListener {
             binding.profileImage.findNavController().navigate(R.id.action_home_to_profile)
         }
@@ -38,48 +162,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         binding.searchIcon.setOnClickListener {
             binding.searchIcon.findNavController().navigate(R.id.action_home_to_search)
         }
+
         binding.yourBook.setOnClickListener {
             binding.yourBook.findNavController().navigate(R.id.action_home_to_yourbook)
-        }
-
-        bookViewModel.fetchBooksFromApi(apiKey, "adventure")
-
-//        bookViewModel.popularBooks.observe(viewLifecycleOwner) { books ->
-//            val adapter = BookAdapter(books)
-//            binding.popularBooksRecyclerView.adapter = adapter
-//        }
-//        bookViewModel.popularBooks.observe(viewLifecycleOwner) { books ->
-//            val adapter = BookAdapter(books) { book ->
-//                val action = HomeFragmentDirections.actionHomeToDetail(book)
-//                binding.popularBooksRecyclerView.findNavController().navigate(action)
-//            }
-//            binding.popularBooksRecyclerView.adapter = adapter
-//        }
-        bookViewModel.popularBooks.observe(viewLifecycleOwner) { books ->
-            val adapter = BookAdapter(books) { bookData ->
-                // Convert BookData to Book
-                val book = Book(
-                    id = bookData.id,
-                    title = bookData.title,
-//                    author = bookData.author ?: "",
-//                    category = bookData.category ?: "",
-//                    description = bookData.description ?: "",
-//                    price = bookData.price ?: 0.0,
-//                    rating = bookData.rating ?: 0.0f,
-                    coverResourceId = bookData.image
-                )
-                val action = HomeFragmentDirections.actionHomeToDetail(book)
-                binding.popularBooksRecyclerView.findNavController().navigate(action)
-            }
-            binding.popularBooksRecyclerView.adapter = adapter
-        }
-
-        bookViewModel.allBooks.observe(viewLifecycleOwner) { books ->
-            allBooksAdapter = AllBooksAdapter(books) { book ->
-                val action = HomeFragmentDirections.actionHomeToDetail(book)
-                binding.allBooksRecyclerView.findNavController().navigate(action)
-            }
-            binding.allBooksRecyclerView.adapter = allBooksAdapter
         }
     }
 
@@ -89,5 +174,4 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         binding.allBooksRecyclerView.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
     }
-
 }

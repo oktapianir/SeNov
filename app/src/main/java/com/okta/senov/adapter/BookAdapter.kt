@@ -1,3 +1,109 @@
+package com.okta.senov.adapter
+////
+////import android.view.LayoutInflater
+////import android.view.ViewGroup
+////import androidx.recyclerview.widget.RecyclerView
+////import com.bumptech.glide.Glide
+////import com.okta.senov.R
+////import com.okta.senov.databinding.ItemBookBinding
+////import com.okta.senov.model.BookData
+////
+////class BookAdapter(private val books: List<BookData>) : RecyclerView.Adapter<BookAdapter.BookViewHolder>() {
+////
+////    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookViewHolder {
+////        val binding = ItemBookBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+////        return BookViewHolder(binding)
+////    }
+////
+////    override fun onBindViewHolder(holder: BookViewHolder, position: Int) {
+////        val book = books[position]
+////        holder.bind(book)
+////    }
+////
+////    override fun getItemCount() = books.size
+////
+////    inner class BookViewHolder(private val binding: ItemBookBinding) : RecyclerView.ViewHolder(binding.root) {
+////        fun bind(book: BookData) {
+////            binding.bookTitleTextView.text = book.title
+////            Glide.with(binding.root.context)
+////                .load(book.image)
+////                .placeholder(R.drawable.img_book_cover1)
+////                .into(binding.bookCoverImageView)
+////        }
+////    }
+////}
+//
+////package com.okta.senov.adapter
+////
+////import android.view.LayoutInflater
+////import android.view.ViewGroup
+////import androidx.recyclerview.widget.RecyclerView
+////import com.bumptech.glide.Glide
+////import com.okta.senov.R
+////import com.okta.senov.databinding.ItemBookBinding
+////import com.okta.senov.extensions.findNavController
+////import com.okta.senov.fragment.HomeFragmentDirections
+////import com.okta.senov.model.Book
+////import com.okta.senov.model.BookData
+////
+////class BookAdapter(
+////    private val books: List<BookData>,
+////    private val onItemClick: (BookData) -> Unit
+////) : RecyclerView.Adapter<BookAdapter.BookViewHolder>() {
+////
+////    inner class BookViewHolder(
+////        private val binding: ItemBookBinding,
+////        private val onItemClick: (BookData) -> Unit
+////    ) : RecyclerView.ViewHolder(binding.root) {
+////
+////        fun bind(book: BookData) {
+////            binding.apply {
+////                bookTitleTextView.text = book.title
+////                Glide.with(binding.root.context)
+////                    .load(book.image)
+////                    .placeholder(R.drawable.img_book_cover1)
+////                    .into(bookCoverImageView)
+////
+////                root.setOnClickListener { onItemClick(book) }
+////
+////                buttonGoToDetail.setOnClickListener {
+////                    val navController = binding.root.findNavController()
+////                    val action = HomeFragmentDirections.actionHomeToDetail(
+////                        Book(
+////                            id = book.id,
+////                            title = book.title,
+//////                            authorName = book.authorName,
+////                            coverResourceId = book.image
+////                        )
+////                    )
+////                    navController.navigate(action)
+////                }
+////            }
+////        }
+////    }
+////
+////    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookViewHolder {
+////        val binding = ItemBookBinding.inflate(
+////            LayoutInflater.from(parent.context),
+////            parent,
+////            false
+////        )
+////        return BookViewHolder(binding, onItemClick)
+////    }
+////
+////    override fun onBindViewHolder(holder: BookViewHolder, position: Int) {
+////        holder.bind(books[position])
+////    }
+////
+////    override fun getItemCount() = books.size
+////
+////    fun updateBooks(newBooks: List<BookData>) {
+////        val updatedList = books.toMutableList() // Buat salinan list
+////        updatedList.addAll(newBooks) // Tambahkan data baru
+////        notifyDataSetChanged()
+////    }
+////}
+//
 //package com.okta.senov.adapter
 //
 //import android.view.LayoutInflater
@@ -6,93 +112,116 @@
 //import com.bumptech.glide.Glide
 //import com.okta.senov.R
 //import com.okta.senov.databinding.ItemBookBinding
+//import com.okta.senov.extensions.findNavController
+//import com.okta.senov.fragment.HomeFragmentDirections
+//import com.okta.senov.model.Book
 //import com.okta.senov.model.BookData
 //
-//class BookAdapter(private val books: List<BookData>) : RecyclerView.Adapter<BookAdapter.BookViewHolder>() {
+//class BookAdapter(
+//    private var books: List<BookData>, // Menggunakan var agar dapat diperbarui
+//    private val onItemClick: (BookData) -> Unit
+//) : RecyclerView.Adapter<BookAdapter.BookViewHolder>() {
+//
+//    inner class BookViewHolder(
+//        private val binding: ItemBookBinding,
+//        private val onItemClick: (BookData) -> Unit
+//    ) : RecyclerView.ViewHolder(binding.root) {
+//
+//        fun bind(book: BookData) {
+//            binding.apply {
+//                bookTitleTextView.text = book.title
+//                Glide.with(binding.root.context)
+//                    .load(book.image)
+//                    .placeholder(R.drawable.img_book_cover1)
+//                    .into(bookCoverImageView)
+//
+//                root.setOnClickListener { onItemClick(book) }
+//
+//                buttonGoToDetail.setOnClickListener {
+//                    val navController = binding.root.findNavController()
+//                    val action = HomeFragmentDirections.actionHomeToDetail(
+//                        Book(
+//                            id = book.id,
+//                            title = book.title,
+////                            authorName = book.authorName,
+//                            coverResourceId = book.image
+//                        )
+//                    )
+//                    navController.navigate(action)
+//                }
+//            }
+//        }
+//    }
 //
 //    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookViewHolder {
-//        val binding = ItemBookBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-//        return BookViewHolder(binding)
+//        val binding = ItemBookBinding.inflate(
+//            LayoutInflater.from(parent.context),
+//            parent,
+//            false
+//        )
+//        return BookViewHolder(binding, onItemClick)
 //    }
 //
 //    override fun onBindViewHolder(holder: BookViewHolder, position: Int) {
-//        val book = books[position]
-//        holder.bind(book)
+//        holder.bind(books[position])
 //    }
 //
 //    override fun getItemCount() = books.size
 //
-//    inner class BookViewHolder(private val binding: ItemBookBinding) : RecyclerView.ViewHolder(binding.root) {
-//        fun bind(book: BookData) {
-//            binding.bookTitleTextView.text = book.title
-//            Glide.with(binding.root.context)
-//                .load(book.image)
-//                .placeholder(R.drawable.img_book_cover1)
-//                .into(binding.bookCoverImageView)
-//        }
+//    // Fungsi untuk memperbarui data di adapter
+//    fun updateBooks(newBooks: List<BookData>) {
+//        books = newBooks // Mengganti data lama dengan data baru
+//        notifyDataSetChanged()
 //    }
 //}
 
-package com.okta.senov.adapter
-
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.okta.senov.R
 import com.okta.senov.databinding.ItemBookBinding
-import com.okta.senov.extensions.findNavController
-import com.okta.senov.fragment.HomeFragmentDirections
-import com.okta.senov.model.Book
 import com.okta.senov.model.BookData
 
 class BookAdapter(
-    private val books: List<BookData>,
     private val onItemClick: (BookData) -> Unit
-) : RecyclerView.Adapter<BookAdapter.BookViewHolder>() {
+) : ListAdapter<BookData, BookAdapter.BookViewHolder>(DIFF_CALLBACK) {
 
-    inner class BookViewHolder(
-        private val binding: ItemBookBinding,
-        private val onItemClick: (BookData) -> Unit
-    ) : RecyclerView.ViewHolder(binding.root) {
-
+    inner class BookViewHolder(private val binding: ItemBookBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         fun bind(book: BookData) {
-            binding.apply {
-                bookTitleTextView.text = book.title
-                Glide.with(binding.root.context)
-                    .load(book.image)
-                    .placeholder(R.drawable.img_book_cover1)
-                    .into(bookCoverImageView)
+            binding.bookTitleTextView.text = book.title
+            Glide.with(binding.root.context)
+                .load(book.image)
+                .placeholder(R.drawable.img_book_cover1)
+                .into(binding.bookCoverImageView)
 
-                root.setOnClickListener { onItemClick(book) }
-
-                buttonGoToDetail.setOnClickListener {
-                    val navController = binding.root.findNavController()
-                    val action = HomeFragmentDirections.actionHomeToDetail(
-                        Book(
-                            id = book.id,
-                            title = book.title,
-                            coverResourceId = book.image
-                        )
-                    )
-                    navController.navigate(action)
-                }
-            }
+            binding.root.setOnClickListener { onItemClick(book) }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookViewHolder {
         val binding = ItemBookBinding.inflate(
-            LayoutInflater.from(parent.context),
-            parent,
-            false
+            LayoutInflater.from(parent.context), parent, false
         )
-        return BookViewHolder(binding, onItemClick)
+        return BookViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: BookViewHolder, position: Int) {
-        holder.bind(books[position])
+        holder.bind(getItem(position))
     }
 
-    override fun getItemCount() = books.size
+    companion object {
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<BookData>() {
+            override fun areItemsTheSame(oldItem: BookData, newItem: BookData): Boolean {
+                return oldItem.id == newItem.id
+            }
+
+            override fun areContentsTheSame(oldItem: BookData, newItem: BookData): Boolean {
+                return oldItem == newItem
+            }
+        }
+    }
 }

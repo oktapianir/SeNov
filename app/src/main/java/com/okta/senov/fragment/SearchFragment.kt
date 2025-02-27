@@ -79,15 +79,16 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     }
 
     private fun setupObservers() {
-        viewModel.allBooks.observe(viewLifecycleOwner) { books ->
-            bookAdapter.updateBooks(books)
-        }
+//        viewModel.allBooks.observe(viewLifecycleOwner) { books ->
+//            bookAdapter.updateBooks(books)
+//        }
 
         viewModel.popularBooks.observe(viewLifecycleOwner) { popularBooks ->
             val recentBooks = popularBooks.map { bookData ->
                 Book(
                     id = bookData.id,
                     title = bookData.title,
+//                    authorName = bookData.authorName,
                     coverResourceId = bookData.image
                 )
             }

@@ -2,6 +2,7 @@ package com.okta.senov.repository
 
 import android.content.Context
 import com.okta.senov.API.BigBookApiService
+import com.okta.senov.model.Author
 import com.okta.senov.model.BookData
 import com.okta.senov.model.BookResponse
 import kotlinx.coroutines.CoroutineScope
@@ -25,6 +26,7 @@ class BookRepository @Inject constructor(
                 BookData(
                     id = book.id,
                     title = book.title,
+//                    authorName = book,authorName,
                     image = book.image
                 )
             }
@@ -49,6 +51,22 @@ class BookRepository @Inject constructor(
                 withContext(Dispatchers.Main) {
                     callback.onError("Error: ${e.message}")
                 }
+            }
+        }
+    }
+    suspend fun fetchAuthors(apiKey: String, authorName: String): List<Author> {
+        return withContext(Dispatchers.IO) {
+            try {
+                val response = bigBookApiService.getSearchAuthors(authorName, apiKey)
+                if (response.isSuccessful) {
+                    response.body()?.authors ?: emptyList()
+                } else {
+                    Timber.tag("API_ERROR").e("Failed to fetch authors: ${response.message()}")
+                    emptyList()
+                }
+            } catch (e: Exception) {
+                Timber.tag("API_ERROR").e("Exception fetching authors: ${e.message}")
+                emptyList()
             }
         }
     }
