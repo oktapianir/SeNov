@@ -63,6 +63,7 @@ dependencies {
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.auth.ktx)
     implementation(libs.play.services.auth.v2030)
+    implementation (libs.firebase.storage.ktx)
 
     //android libraries
     implementation(libs.androidx.core.ktx)
