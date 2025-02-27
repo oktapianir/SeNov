@@ -137,14 +137,18 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
+import com.google.firebase.firestore.FirebaseFirestore
 import com.okta.senov.R
 import com.okta.senov.databinding.FragmentDetailBinding
 import com.okta.senov.model.Book
 import com.okta.senov.viewmodel.YourBookViewModel
+import timber.log.Timber
 
 class DetailFragment : Fragment() {
     private var _binding: FragmentDetailBinding? = null
     private val binding get() = _binding!!
+
+    private val db = FirebaseFirestore.getInstance()
 
     private val yourBookViewModel: YourBookViewModel by viewModels()
     private val args: DetailFragmentArgs by navArgs()
@@ -186,6 +190,27 @@ class DetailFragment : Fragment() {
             val description = bookDescriptions[book.title] ?: "Deskripsi tidak tersedia"
             bookDescriptionTextView.text = description
         }
+        val bookId = "lRvC5g2AX1oPjH8E9qbo"
+        fetchBookAuthor(bookId)
+
+    }
+    private fun fetchBookAuthor(bookId: String) {
+        db.collection("authors").document(bookId)
+            .get()
+            .addOnSuccessListener { document ->
+                if (document.exists()) {
+                    val author = document.getString("nama") ?: "Tidak ada data"
+                    binding.authorName.text = author
+                    Timber.tag("Firestore").d("Data berhasil diambil: $author")
+                } else {
+                    Timber.tag("Firestore").e("Dokumen tidak ditemukan")
+                    binding.authorName.visibility = View.GONE
+                }
+            }
+            .addOnFailureListener { e ->
+                Timber.tag("FirestoreError").e("Gagal mengambil data: ${e.message}")
+                binding.authorName.visibility = View.GONE
+            }
     }
 
     private fun setupBackButton() {
