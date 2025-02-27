@@ -116,12 +116,17 @@
         <action
             android:id="@+id/action_adminFragment_to_addauthorFragment"
             app:destination="@id/addAuthorFragment" />
+
     </fragment>
 
     <fragment
         android:id="@+id/addAuthorFragment"
         android:name="com.okta.senov.fragment.AddAuthorFragment"
         android:label="Add Author"
-        tools:layout="@layout/fragment_add_author"/>
+        tools:layout="@layout/fragment_add_author">
+    <action
+        android:id="@+id/action_addauthorFragment_to_adminFragment"
+        app:destination="@id/adminFragment" />
+    </fragment>
 
 </navigation>

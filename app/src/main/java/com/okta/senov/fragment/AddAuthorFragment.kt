@@ -87,7 +87,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.okta.senov.databinding.FragmentAddAuthorBinding
@@ -110,7 +112,7 @@ class AddAuthorFragment : Fragment() {
 
         binding.btnPilihFoto.setOnClickListener { openGallery() }
         binding.btnSimpanAuthor.setOnClickListener { saveAuthor() }
-
+        setupBackButton()
         return binding.root
     }
 
@@ -181,11 +183,26 @@ class AddAuthorFragment : Fragment() {
     }
 
     private fun clearFields() {
-        binding.etNamaAuthor.text.clear()
-        binding.etBioAuthor.text.clear()
-        binding.etSocialMediaAuthor.text.clear()
+        binding.etNamaAuthor.text?.clear()
+        binding.etBioAuthor.text?.clear()
+        binding.etSocialMediaAuthor.text?.clear()
         imageUri = null
         binding.ivFotoAuthor.setImageDrawable(null)
+    }
+
+    private fun setupBackButton() {
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    findNavController().popBackStack()
+                }
+            }
+        )
+
+        binding.btnBack.setOnClickListener {
+            findNavController().popBackStack()
+        }
     }
 
     override fun onDestroyView() {

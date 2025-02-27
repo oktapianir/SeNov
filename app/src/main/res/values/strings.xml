@@ -74,7 +74,6 @@
     <string name="choose_file">Pilih Foto</string>
     <string name="save">Simpan</string>
 
-
     <string name="title_feature_add_author">Tambah Author</string>
     <string name="title_feature_add_content_book">Tambah Cerita</string>
 
@@ -83,9 +82,12 @@
     <string name="name_develop">Oktapiani</string>
     <string name="name_book">Bulan</string>
     <string name="name_book_to">Karya</string>
-    
-    <string name="author_bio">Biografi</string>
+    <string name="name_full">Full Name</string>
+
+    <string name="author_bio">Biography</string>
     <string name="author_social_media">Social Media</string>
+    <string name="author_foto">Author Photo</string>
+    <string name="author_info">Author Informasi</string>
 
     <string name="register">Register</string>
     <string name="registersentence">Silahkan buat akun anda terlebih dahulu</string>
@@ -100,11 +102,5 @@
     <string name="error_empty_fields">Please enter both email and password</string>
     <string name="error_authentication_failed">Authentication failed.</string>
     <string name="error_google_sign_in_failed">Google sign-in failed</string>
-
-
-
-
-
-
 
 </resources>
