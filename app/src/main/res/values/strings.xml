@@ -49,6 +49,8 @@
     <string name="notif">Notifikasi</string>
     <string name="filter">Filter</string>
     <string name="see_all">Lihat Semua</string>
+    <string name="account_forgot_pass">Lupa Kata Sandi?</string>
+    <string name="account_google_sign_in">Atau Login dengan</string>
 
     <string name="recent_search">Recent Search</string>
     <string name="close_button">Close</string>

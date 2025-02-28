@@ -7,7 +7,6 @@
     android:background="@color/white"
     tools:context=".fragment.LoginFragment">
 
-    <!-- Top Wave Shape -->
     <ImageView
         android:id="@+id/ivTopWave"
         android:layout_width="match_parent"
