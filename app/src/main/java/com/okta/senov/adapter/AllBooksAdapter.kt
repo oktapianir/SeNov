@@ -105,16 +105,16 @@ class AllBooksAdapter(
                 .addOnSuccessListener { document ->
                     if (document.exists()) {
                         val author = document.getString("nama") ?: "Tidak ada data"
-                        binding.typeTextView.text = author
+                        binding.bookAuthorTextView.text = author
                         Timber.tag("Firestore").d("Data berhasil diambil: $author")
                     } else {
                         Timber.tag("Firestore").e("Dokumen tidak ditemukan")
-                        binding.typeTextView.visibility = View.GONE
+                        binding.bookAuthorTextView.visibility = View.GONE
                     }
                 }
                 .addOnFailureListener { e ->
                     Timber.tag("FirestoreError").e("Gagal mengambil data: ${e.message}")
-                    binding.typeTextView.visibility = View.GONE
+                    binding.bookAuthorTextView.visibility = View.GONE
                 }
         }
     }
