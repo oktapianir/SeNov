@@ -46,6 +46,9 @@
     <string name="book_total">Total Book</string>
     <string name="book_collection">Book Collection</string>
     <string name="recent">Recent</string>
+    <string name="notif">Notifikasi</string>
+    <string name="filter">Filter</string>
+    <string name="see_all">Lihat Semua</string>
 
     <string name="recent_search">Recent Search</string>
     <string name="close_button">Close</string>
@@ -53,6 +56,9 @@
     <string name="fiction">Fiksi</string>
     <string name="fantacy">Fantasi</string>
     <string name="adventure">Petualangan</string>"
+    <string name="category_romance">Romantis</string>
+    <string name="category_mistery">Misteri</string>
+    <string name="category_science_fiction">Fiksi Ilmuwan</string>
     <string name="rating">5.0</string>
     <string name="api_key">8b71325fbf3a43d8a949fd23ce4e2f5a</string>
     <string name="point">•</string>

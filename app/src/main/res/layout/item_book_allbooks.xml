@@ -1,103 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingHorizontal="16dp"
-    android:paddingVertical="8dp">
+    android:paddingVertical="12dp">
 
-    <!-- Book Cover Image -->
-    <ImageView
+    <!-- Book Cover with Shadow -->
+    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/bookCoverImageView"
-        android:layout_width="66dp"
-        android:layout_height="105dp"
-        android:contentDescription="@string/book_cover"
-        android:elevation="5dp"
+        android:layout_width="80dp"
+        android:layout_height="120dp"
+        android:elevation="4dp"
         android:scaleType="centerCrop"
         android:src="@drawable/img_book_cover1"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:shapeAppearanceOverlay="@style/RoundedImageStyle" />
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardView"
+    <!-- Book Info Container -->
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        app:cardCornerRadius="12dp"
-        app:cardElevation="4dp"
-        app:layout_constraintStart_toEndOf="@id/bookCoverImageView"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/bookCoverImageView"
         app:layout_constraintTop_toTopOf="parent">
 
+        <!-- Book Title -->
+        <TextView
+            android:id="@+id/bookTitleTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="The Midnight Library" />
+
+        <!-- Author Name -->
+        <TextView
+            android:id="@+id/bookAuthorTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/bookTitleTextView"
+            tools:text="Matt Haig" />
+
+        <!-- Genre Chip -->
+        <com.google.android.material.chip.Chip
+            android:id="@+id/genreChip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textColor="@color/primary"
+            android:textSize="12sp"
+            app:chipMinHeight="28dp"
+            app:chipStrokeColor="@color/primary"
+            app:chipStrokeWidth="1dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/bookAuthorTextView"
+            tools:text="Fantasy" />
+
+        <!-- Rating & Price Section -->
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="12dp">
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/genreChip">
 
-            <!-- Rating & Location -->
-            <TextView
-                android:id="@+id/ratingTextView"
+            <!-- Rating -->
+            <LinearLayout
+                android:id="@+id/ratingContainer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/rating_book"
-                android:textColor="@android:color/black"
-                android:textSize="14sp"
-                android:textStyle="bold"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent">
 
-            <!-- Service Name -->
-            <TextView
-                android:id="@+id/bookTitleTextView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="@string/book_title"
-                android:textColor="@android:color/black"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                app:layout_constraintTop_toBottomOf="@id/ratingTextView"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:contentDescription="@string/rating_book"
+                    android:src="@drawable/ic_star"
+                    app:tint="@color/black" />
 
-            <!-- Artist Name -->
-            <TextView
-                android:id="@+id/typeTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/author"
-                android:textColor="#757575"
-                android:textSize="14sp"
-                app:layout_constraintTop_toBottomOf="@id/bookTitleTextView"
-                app:layout_constraintStart_toStartOf="parent" />
+                <TextView
+                    android:id="@+id/ratingTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    tools:text="4.5" />
+            </LinearLayout>
 
             <!-- Price -->
             <TextView
                 android:id="@+id/priceTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/_12_99"
-                android:textColor="@android:color/black"
+                android:textColor="@color/primary"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                app:layout_constraintTop_toBottomOf="@id/typeTextView"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@id/buttonGoToDetail"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="$12.99" />
 
-            <!-- Book Button -->
+            <!-- Detail Button -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/buttonGoToDetail"
-                android:layout_width="135dp"
-                android:layout_height="39dp"
-                android:layout_marginStart="48dp"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:paddingHorizontal="16dp"
                 android:text="@string/go_to_detail"
-                android:textColor="@android:color/black"
-                android:textSize="14sp"
-                app:backgroundTint="#D4BEE4"
-                app:cornerRadius="0dp"
-                app:layout_constraintBottom_toBottomOf="@id/priceTextView"
-                app:layout_constraintStart_toEndOf="@id/priceTextView" />
-
-
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                app:backgroundTint="@color/primary"
+                app:cornerRadius="18dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.cardview.widget.CardView>
-
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
