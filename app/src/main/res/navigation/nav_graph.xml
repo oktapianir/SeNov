@@ -117,6 +117,9 @@
             android:id="@+id/action_adminFragment_to_addauthorFragment"
             app:destination="@id/addAuthorFragment" />
 
+        <action
+            android:id="@+id/action_adminFragment_to_addBookFragment"
+            app:destination="@id/addBookFragment" />
     </fragment>
 
     <fragment
@@ -127,6 +130,16 @@
     <action
         android:id="@+id/action_addauthorFragment_to_adminFragment"
         app:destination="@id/adminFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/addBookFragment"
+        android:name="com.okta.senov.fragment.AddBookFragment"
+        android:label="Add Book"
+        tools:layout="@layout/fragment_add_book">
+        <action
+            android:id="@+id/action_addBookFragment_to_adminFragment"
+            app:destination="@id/adminFragment" />
     </fragment>
 
 </navigation>

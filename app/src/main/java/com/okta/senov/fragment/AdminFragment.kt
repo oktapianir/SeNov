@@ -24,6 +24,9 @@ class AdminFragment : Fragment(R.layout.fragment_admin) {
         binding.btnTambahAuthor.setOnClickListener {
             binding.btnTambahAuthor.findNavController().navigate(R.id.action_adminFragment_to_addauthorFragment)
         }
+        binding.btnTambahIsiContent.setOnClickListener {
+            binding.btnTambahIsiContent.findNavController().navigate(R.id.action_adminFragment_to_addBookFragment)
+        }
         return binding.root
     }
 
