@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">SeNov</string>
-    <string name="book_cover">cover book</string>
     <string name="profile_image">profile image</string>
     <string name="author_name">Author Name</string>
     <string name="category">Category</string>
@@ -45,6 +44,13 @@
     <string name="book_author">Book Author</string>
     <string name="book_total">Total Book</string>
     <string name="book_collection">Book Collection</string>
+    <string name="book_cover">Book Cover</string>
+    <string name="book_information">Book Information</string>
+    <string name="book_enter_title">Enter Book Title</string>
+    <string name="book_description">Book Description</string>
+    <string name="book_enter_description">Enter Book Description</string>
+    <string name="book_content">Book Content</string>
+    <string name="book_enter_content">Enter Book Content</string>
     <string name="recent">Recent</string>
     <string name="notif">Notifikasi</string>
     <string name="filter">Filter</string>
@@ -102,6 +108,7 @@
     <string name="author_foto">Author Photo</string>
     <string name="author_info">Author Informasi</string>
     <string name="author_total">Total Authors</string>
+    <string name="author_label">Author</string>
 
     <string name="register">Register</string>
     <string name="registersentence">Silahkan buat akun anda terlebih dahulu</string>
