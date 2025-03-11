@@ -50,7 +50,9 @@
     <string name="book_description">Book Description</string>
     <string name="book_enter_description">Enter Book Description</string>
     <string name="book_content">Book Content</string>
+    <string name="book_enter_author">Enter Author Book</string>
     <string name="book_enter_content">Enter Book Content</string>
+    <string name="book_enter_category">Enter Book Category</string>
     <string name="recent">Recent</string>
     <string name="notif">Notifikasi</string>
     <string name="filter">Filter</string>
