@@ -69,7 +69,7 @@ import com.okta.senov.model.Book
 import timber.log.Timber
 
 class AllBooksAdapter(
-    private var books: List<Book>, // Ubah val menjadi var agar bisa diperbarui
+    private var books: List<Book>,
     private val onItemClick: (Book) -> Unit
 ) : RecyclerView.Adapter<AllBooksAdapter.AllBooksViewHolder>() {
 
@@ -137,6 +137,6 @@ class AllBooksAdapter(
     // Tambahkan metode untuk memperbarui daftar buku
     fun setBooks(newBooks: List<Book>) {
         books = newBooks
-        notifyDataSetChanged() // Beri tahu adapter bahwa data berubah
+        notifyDataSetChanged()
     }
 }
