@@ -11,5 +11,6 @@
     <color name="teal_700">#AA71009E</color>
     <color name="white_72">#B7FFFFFF</color>
     <color name="white_20">#9CFFFFFF</color>
+    <color name="chip_background">#F1F3F4</color>
 
 </resources>

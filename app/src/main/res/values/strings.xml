@@ -32,6 +32,10 @@
     <string name="oktapiani_r">Oktapiani R.</string>
     <string name="ramdhanioktapiani_gmail_com">ramdhanioktapiani@gmail.com</string>
     <string name="genre">Fantasi Petulangan</string>
+    <string name="find_your_next_favorite_book">Temukan Buku Terbaru Anda</string>
+    <string name="search_books_authors_genres">Cari judul, author, kategori...</string>
+    <string name="popular_search">Pencarian Terbanyak</string>
+    <string name="discover">Discover</string>
     <string name="karya">Karya</string>
     <string name="read">Read Now - %1$s</string>
     <string name="phone_number">Nomor Telepon</string>
@@ -53,7 +57,7 @@
     <string name="book_enter_author">Enter Author Book</string>
     <string name="book_enter_content">Enter Book Content</string>
     <string name="book_enter_category">Enter Book Category</string>
-    <string name="recent">Recent</string>
+    <string name="recent">Pencarian</string>
     <string name="notif">Notifikasi</string>
     <string name="filter">Filter</string>
     <string name="see_all">Lihat Semua</string>
@@ -62,6 +66,8 @@
 
     <string name="recent_search">Recent Search</string>
     <string name="close_button">Close</string>
+    <string name="clear_all">Clear All</string>
+    <string name="trending_now">Trending Now</string>
     <string name="all">All</string>
     <string name="fiction">Fiksi</string>
     <string name="fantacy">Fantasi</string>
