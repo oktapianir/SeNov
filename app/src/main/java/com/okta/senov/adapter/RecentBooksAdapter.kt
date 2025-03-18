@@ -26,7 +26,7 @@ class RecentBooksAdapter(private val books: List<Book>) : RecyclerView.Adapter<R
         @SuppressLint("SetTextI18n")
         fun bind(book: Book) {
             Glide.with(binding.bookCover.context)
-                .load(book.coverResourceId)
+                .load(book.image)
                 .into(binding.bookCover)
             binding.bookTitle.text = book.title
         }

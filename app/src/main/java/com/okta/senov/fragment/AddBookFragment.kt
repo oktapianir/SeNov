@@ -14,7 +14,6 @@ import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.storage.FirebaseStorage
 import com.okta.senov.R
 import com.okta.senov.databinding.FragmentAddBookBinding
 import okhttp3.Call
@@ -48,6 +47,7 @@ class AddBookFragment : Fragment(R.layout.fragment_add_book) {
     ): View {
         Timber.tag("AddBookFragment").d("onCreateView called")
         _binding = FragmentAddBookBinding.inflate(inflater, container, false)
+        binding.etBookId.setOnClickListener { saveBook() }
         binding.btnPilihCover.setOnClickListener { openGallery() }
         binding.etBookTitle.setOnClickListener { saveBook() }
         binding.etBookDescription.setOnClickListener { saveBook() }
@@ -71,19 +71,21 @@ class AddBookFragment : Fragment(R.layout.fragment_add_book) {
     }
 
     private fun saveBook() {
+        val idBook = binding.etBookId.text.toString().trim()
         val titleBook = binding.etBookTitle.text.toString().trim()
         val nameAuthor = binding.etNameAuthor.text.toString().trim()
         val bookDescription = binding.etBookDescription.text.toString().trim()
         val nameCategory = binding.etNameCategory.text.toString().trim()
         val bookContent = binding.etBookContent.text.toString().trim()
 
-        if (titleBook.isEmpty() || nameAuthor.isEmpty() || bookDescription.isEmpty() || bookContent.isEmpty() || nameCategory.isEmpty()) {
+        if (idBook.isEmpty() || titleBook.isEmpty() || nameAuthor.isEmpty() || bookDescription.isEmpty() || bookContent.isEmpty() || nameCategory.isEmpty()) {
             Toast.makeText(requireContext(), "Data wajib diisi!", Toast.LENGTH_SHORT).show()
             return
         }
 
         if (imageUri != null) {
             uploadImageToImgur(
+                idBook,
                 titleBook,
                 nameAuthor,
                 bookDescription,
@@ -92,6 +94,7 @@ class AddBookFragment : Fragment(R.layout.fragment_add_book) {
             )
         } else {
             saveBookToFirestore(
+                idBook,
                 titleBook,
                 nameAuthor,
                 bookDescription,
@@ -103,6 +106,7 @@ class AddBookFragment : Fragment(R.layout.fragment_add_book) {
     }
 
     private fun uploadImageToImgur(
+        idBook: String,
         titleBook: String,
         nameAuthor: String,
         bookDescription: String,
@@ -155,6 +159,7 @@ class AddBookFragment : Fragment(R.layout.fragment_add_book) {
 
                         activity?.runOnUiThread {
                             saveBookToFirestore(
+                                idBook,
                                 titleBook,
                                 nameAuthor,
                                 bookDescription,
@@ -185,6 +190,7 @@ class AddBookFragment : Fragment(R.layout.fragment_add_book) {
         }
     }
     private fun saveBookToFirestore(
+        idBook: String,
         titleBook: String,
         nameAuthor: String,
         bookDescription: String,
@@ -193,6 +199,7 @@ class AddBookFragment : Fragment(R.layout.fragment_add_book) {
         fotoUrl: String?
     ) {
         val bookData = hashMapOf(
+            "idBook" to idBook,
             "titleBook" to titleBook,
             "nameAuthor" to nameAuthor,
             "bookDescription" to bookDescription,
@@ -224,6 +231,7 @@ class AddBookFragment : Fragment(R.layout.fragment_add_book) {
     }
 
     private fun clearFields() {
+        binding.etBookId.text?.clear()
         binding.etBookTitle.text?.clear()
         binding.etNameAuthor.text?.clear()
         binding.etBookDescription.text?.clear()

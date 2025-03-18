@@ -40,7 +40,7 @@ class YourBookAdapter(
 
                 // Load book cover
                 Glide.with(bookCoverImageView.context)
-                    .load(book.coverResourceId)
+                    .load(book.image)
                     .into(bookCoverImageView)
 
                 // Set click listener

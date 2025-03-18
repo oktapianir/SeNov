@@ -88,8 +88,10 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                 Book(
                     id = bookData.id,
                     title = bookData.title,
-//                    authorName = bookData.authorName,
-                    coverResourceId = bookData.image
+                    authorName = bookData.authorName,
+                    category = bookData.category,
+                    description = bookData.description,
+                    image = bookData.image
                 )
             }
             recentBookAdapter.updateBooks(recentBooks)

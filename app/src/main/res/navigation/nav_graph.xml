@@ -40,6 +40,9 @@
         <action
             android:id="@+id/action_detail_to_yourbook"
             app:destination="@id/YourBookFragment" />
+        <action
+            android:id="@+id/action_detail_to_bookreader"
+            app:destination="@id/BookReaderFragment"/>
     </fragment>
 
     <fragment
@@ -120,6 +123,9 @@
         <action
             android:id="@+id/action_adminFragment_to_addBookFragment"
             app:destination="@id/addBookFragment" />
+        <action
+            android:id="@+id/action_adminFragment_to_addContentBookFragment"
+            app:destination="@id/addContentBookFragment"/>
     </fragment>
 
     <fragment
@@ -139,6 +145,29 @@
         tools:layout="@layout/fragment_add_book">
         <action
             android:id="@+id/action_addBookFragment_to_adminFragment"
+            app:destination="@id/adminFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/BookReaderFragment"
+        android:name="com.okta.senov.fragment.BookReaderFragment"
+        android:label="Read Book"
+        tools:layout="@layout/fragment_book_reader">
+        <argument
+            android:name="bookContentArg"
+            app:argType="com.okta.senov.model.BookContent" />
+        <action
+            android:id="@+id/action_bookReaderFragment_to_detailFragment"
+            app:destination="@id/BookReaderFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/addContentBookFragment"
+        android:name="com.okta.senov.fragment.AddContentBookFragment"
+        android:label="Add Book"
+        tools:layout="@layout/fragment_add_content_book">
+        <action
+            android:id="@+id/action_addContentBookFragment_to_adminFragment"
             app:destination="@id/adminFragment" />
     </fragment>
 

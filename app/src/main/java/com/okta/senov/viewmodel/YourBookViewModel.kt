@@ -66,7 +66,10 @@ class YourBookViewModel @Inject constructor() : ViewModel() {
         val bookData = BookData(
             id = book.id,
             title = book.title,
-            image = book.coverResourceId
+            authorName = book.authorName,
+            category = book.category,
+            description = book.description,
+            image = book.image
         )
 
         // Cek apakah buku sudah ada (berdasarkan ID)
@@ -89,15 +92,15 @@ class YourBookViewModel @Inject constructor() : ViewModel() {
             Timber.tag("YourBookViewModel").d("Book already exists: ${book.title}")
         }
     }
-    fun removeBook(bookId: Int) {
-        val currentList = _yourBooks.value.orEmpty().toMutableList()
-        val newList = currentList.filterNot { it.id == bookId }
-
-        if (currentList.size != newList.size) {
-            _yourBooks.value = newList
-            Timber.tag("YourBookViewModel").d("Book removed: $bookId")
-        } else {
-            Timber.tag("YourBookViewModel").d("Book not found: $bookId")
-        }
-    }
+//    fun removeBook(bookId: Int) {
+//        val currentList = _yourBooks.value.orEmpty().toMutableList()
+//        val newList = currentList.filterNot { it.id == bookId }
+//
+//        if (currentList.size != newList.size) {
+//            _yourBooks.value = newList
+//            Timber.tag("YourBookViewModel").d("Book removed: $bookId")
+//        } else {
+//            Timber.tag("YourBookViewModel").d("Book not found: $bookId")
+//        }
+//    }
 }
