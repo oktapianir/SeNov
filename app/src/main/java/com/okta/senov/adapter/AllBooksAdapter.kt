@@ -62,6 +62,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.firebase.firestore.FirebaseFirestore
+import com.okta.senov.R
 import com.okta.senov.databinding.ItemBookAllbooksBinding
 import com.okta.senov.extensions.findNavController
 import com.okta.senov.fragment.HomeFragmentDirections
@@ -80,12 +81,51 @@ class AllBooksAdapter(
         private val onItemClick: (Book) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
 
+        //        fun bind(book: Book) {
+//            binding.apply {
+//                bookTitleTextView.text = book.title
+//                Glide.with(binding.root.context)
+//                    .load(book.coverResourceId)
+//                    .into(bookCoverImageView)
+//
+//                root.setOnClickListener { onItemClick(book) }
+//
+//                buttonGoToDetail.setOnClickListener {
+//                    val navController = binding.root.findNavController()
+//                    val action = HomeFragmentDirections.actionHomeToDetail(book)
+//                    navController.navigate(action)
+//                }
+//            }
+//            val bookId = "lRvC5g2AX1oPjH8E9qbo"
+//            fetchBookAuthor(bookId)
+//        }
+// In AllBooksAdapter.AllBooksViewHolder.bind method
         fun bind(book: Book) {
             binding.apply {
                 bookTitleTextView.text = book.title
-                Glide.with(binding.root.context)
-                    .load(book.coverResourceId)
-                    .into(bookCoverImageView)
+                genreChip.text = book.category
+                // Display author name
+                if (book.authorName.isNotEmpty()) {
+                    bookAuthorTextView.text = book.authorName
+                    bookAuthorTextView.visibility = View.VISIBLE
+                } else {
+                    // Only fetch from Firestore if we don't have author data
+                    fetchBookAuthor(book.id)
+                }
+
+                // Make sure Glide is loading the image properly
+                if (book.image.isNotEmpty()) {
+                    Glide.with(binding.root.context)
+                        .load(book.image)
+                        .placeholder(R.drawable.ic_add) // Add a placeholder image
+                        .error(R.drawable.ic_book) // Add an error image
+                        .into(bookCoverImageView)
+
+                    // Log image URL for debugging
+                    Timber.tag("IMAGE_LOADING").d("Loading image from URL: ${book.image}")
+                } else {
+                    Timber.tag("IMAGE_LOADING").e("Empty image URL for book: ${book.title}")
+                }
 
                 root.setOnClickListener { onItemClick(book) }
 
@@ -95,8 +135,6 @@ class AllBooksAdapter(
                     navController.navigate(action)
                 }
             }
-            val bookId = "lRvC5g2AX1oPjH8E9qbo"
-            fetchBookAuthor(bookId)
         }
 
         private fun fetchBookAuthor(bookId: String) {

@@ -6,14 +6,15 @@ import androidx.room.PrimaryKey
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-@Entity(tableName = "books")
+@Entity(tableName = "Books")
 data class Book(
-    @PrimaryKey val id: Int,
+    @PrimaryKey val id: String,
     val title: String,
-//    val authorName: String,
-//    val genre: String,
+    val authorName: String,
+    val category: String,
 //    val rating: Float,
 //    val price: Float,
-    val synopsis: String? = null,
-      val coverResourceId: String
-) : Parcelable
+    val description: String,
+      val image: String
+    ) : Parcelable
+

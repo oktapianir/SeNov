@@ -92,6 +92,7 @@ import com.okta.senov.extensions.findNavController
 import com.okta.senov.model.Book
 import com.okta.senov.viewmodel.BookViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @AndroidEntryPoint
 class HomeFragment : Fragment(R.layout.fragment_home) {
@@ -118,10 +119,13 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             val book = Book(
                 id = bookData.id,
                 title = bookData.title,
-                coverResourceId = bookData.image
+                authorName = bookData.authorName,
+                category = bookData.category,
+                description = bookData.description,
+                image = bookData.image
             )
             val action = HomeFragmentDirections.actionHomeToDetail(book)
-            binding.popularBooksRecyclerView.findNavController().navigate(action)
+//            binding.popularBooksRecyclerView.findNavController().navigate(action)
         }
 
         allBooksAdapter = AllBooksAdapter(emptyList()) { book ->
@@ -130,7 +134,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
 
 
-        binding.popularBooksRecyclerView.adapter = bookAdapter
+//        binding.popularBooksRecyclerView.adapter = bookAdapter
         binding.allBooksRecyclerView.adapter = allBooksAdapter
 
         // Fetch data dari API
@@ -143,17 +147,29 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         // Observasi semua buku dan update adapter
         bookViewModel.allBooks.observe(viewLifecycleOwner) { bookDataList ->
+            // Add logging
+            Timber.tag("HOME_FRAGMENT").d("Received ${bookDataList.size} books")
+
             val books = bookDataList.map { bookData ->
+                // Log each conversion
+                Timber.tag("DATA_CONVERSION").d("Converting: ID=${bookData.id}, Title=${bookData.title}")
+
                 Book(
                     id = bookData.id,
                     title = bookData.title,
-                    coverResourceId = bookData.image
+                    authorName = bookData.authorName,
+                    category = bookData.category,
+                    description = bookData.description,
+                    image = bookData.image
                 )
             }
-            allBooksAdapter.setBooks(books) // Gunakan metode yang sudah diperbaiki di adapter
+
+            // Log the converted books
+            Timber.tag("ADAPTER_UPDATE").d("Setting ${books.size} books to adapter")
+
+            // Update adapter
+            allBooksAdapter.setBooks(books)
         }
-
-
         // Navigasi ke halaman lain
         binding.profileImage.setOnClickListener {
             binding.profileImage.findNavController().navigate(R.id.action_home_to_profile)
@@ -169,8 +185,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
     private fun setupRecyclerViews() {
-        binding.popularBooksRecyclerView.layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+//        binding.popularBooksRecyclerView.layoutManager =
+//            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         binding.allBooksRecyclerView.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
     }
