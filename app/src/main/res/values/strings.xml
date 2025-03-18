@@ -138,5 +138,8 @@
     <string name="error_authentication_failed">Authentication failed.</string>
     <string name="error_google_sign_in_failed">Google sign-in failed</string>
     <string name="desc_empty">Deskripsi tidak tersedia</string>
+    <string name="error">Error: %1$s</string>
+    <string name="empty_chapter">Tidak ada bab yang tersedia.</string>
+    <string name="empty_book">Tidak ada konten buku yang ditemukan.</string>
 
 </resources>
