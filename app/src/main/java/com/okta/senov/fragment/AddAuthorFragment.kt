@@ -71,34 +71,21 @@ class AddAuthorFragment : Fragment() {
         val namaAuthor = binding.etNamaAuthor.text.toString().trim()
         val bioAuthor = binding.etBioAuthor.text.toString().trim()
         val socialMediaAuthor = binding.etSocialMediaAuthor.text.toString().trim()
-        val image = binding.btnPilihFoto.text.toString().trim()
 
-//        if (namaAuthor.isEmpty() || bioAuthor.isEmpty()) {
-//            Toast.makeText(
-//                requireContext(),
-//                "Nama, email, dan bio harus diisi!",
-//                Toast.LENGTH_SHORT
-//            ).show()
-//            return
-//        }
-//
-//        if (imageUri != null) {
-//            uploadImageAndSaveData(namaAuthor, bioAuthor, socialMediaAuthor)
-//        } else {
-//            saveAuthorToFirestore(namaAuthor, bioAuthor, socialMediaAuthor, null)
-//        }
-        if (idAuthor.isEmpty() || namaAuthor.isEmpty() || bioAuthor.isEmpty() || socialMediaAuthor.isEmpty() || image.isEmpty()) {
+        if (idAuthor.isEmpty() || namaAuthor.isEmpty() || bioAuthor.isEmpty() || socialMediaAuthor.isEmpty()) {
             Toast.makeText(requireContext(), "Data wajib diisi!", Toast.LENGTH_SHORT).show()
             return
         }
+
+        // Show loading indicator
+        showLoading(true)
 
         if (imageUri != null) {
             uploadImageToImgur(
                 idAuthor,
                 namaAuthor,
                 bioAuthor,
-                socialMediaAuthor,
-                image
+                socialMediaAuthor
             )
         } else {
             saveAuthorToFirestore(
@@ -106,16 +93,16 @@ class AddAuthorFragment : Fragment() {
                 namaAuthor,
                 bioAuthor,
                 socialMediaAuthor,
-                image,
+                null
             )
         }
     }
+
     private fun uploadImageToImgur(
         idAuthor: String,
         nameAuthor: String,
         bioAuthor: String,
-        socialMedia: String,
-        image: String
+        socialMedia: String
     ) {
         try {
             // Konversi Uri ke ByteArray
@@ -137,7 +124,7 @@ class AddAuthorFragment : Fragment() {
             // Buat request untuk Imgur API
             val request = Request.Builder()
                 .url("https://api.imgur.com/3/image")
-                .header("Authorization","Client-ID 79b90818f6bc407")
+                .header("Authorization", "Client-ID 79b90818f6bc407")
                 .post(requestBody)
                 .build()
 
@@ -162,12 +149,13 @@ class AddAuthorFragment : Fragment() {
                         val imageUrl = data.getString("link")
 
                         activity?.runOnUiThread {
+                            // Use the actual Imgur URL here
                             saveAuthorToFirestore(
                                 idAuthor,
                                 nameAuthor,
                                 bioAuthor,
                                 socialMedia,
-                                image
+                                imageUrl
                             )
                         }
                     } else {
@@ -191,24 +179,26 @@ class AddAuthorFragment : Fragment() {
             ).show()
         }
     }
+
     private fun saveAuthorToFirestore(
         idAuthor: String,
         nameAuthor: String,
         bioAuthor: String,
         socialMedia: String,
-        image: String?
+        imageUrl: String?
     ) {
         val authorData = hashMapOf(
             "idAuthor" to idAuthor,
             "nameAuthor" to nameAuthor,
             "bioAuthor" to bioAuthor,
             "socialMedia" to socialMedia,
-            "image" to (image ?: "")
+            "image" to (imageUrl ?: "")
         )
 
         db.collection("authors")
             .add(authorData)
             .addOnSuccessListener {
+                showLoading(false)
                 Toast.makeText(
                     requireContext(),
                     "Data Author berhasil ditambahkan!",
@@ -217,56 +207,11 @@ class AddAuthorFragment : Fragment() {
                 clearFields()
             }
             .addOnFailureListener {
+                showLoading(false)
                 Toast.makeText(requireContext(), "Gagal menambahkan data author!", Toast.LENGTH_SHORT)
                     .show()
             }
     }
-
-//    private fun uploadImageAndSaveData(nama: String, bio: String, socialMedia: String) {
-//        val fileName = "authors/${UUID.randomUUID()}.jpg"
-//        val imageRef = storage.child(fileName)
-//
-//        imageUri?.let { uri ->
-//            imageRef.putFile(uri)
-//                .addOnSuccessListener {
-//                    imageRef.downloadUrl.addOnSuccessListener { downloadUrl ->
-//                        saveAuthorToFirestore(nama, bio, socialMedia, downloadUrl.toString())
-//                    }
-//                }
-//                .addOnFailureListener {
-//                    Toast.makeText(requireContext(), "Gagal mengunggah gambar!", Toast.LENGTH_SHORT)
-//                        .show()
-//                }
-//        }
-//    }
-
-//    private fun saveAuthorToFirestore(
-//        idAuthor: String,
-//        nama: String,
-//        bio: String,
-//        socialMedia: String?,
-//        fotoUrl: String?
-//    ) {
-//        val authorData = hashMapOf(
-//            "id" to idAuthor,
-//            "nama" to nama,
-//            "bio" to bio,
-//            "socialMedia" to (socialMedia ?: ""),
-//            "fotoUrl" to (fotoUrl ?: "")
-//        )
-//
-//        db.collection("authors")
-//            .add(authorData)
-//            .addOnSuccessListener {
-//                Toast.makeText(requireContext(), "Author berhasil ditambahkan!", Toast.LENGTH_SHORT)
-//                    .show()
-//                clearFields()
-//            }
-//            .addOnFailureListener {
-//                Toast.makeText(requireContext(), "Gagal menambahkan author!", Toast.LENGTH_SHORT)
-//                    .show()
-//            }
-//    }
 
     private fun showLoading(isLoading: Boolean) {
         // Anda perlu menambahkan ProgressBar di layout Anda
