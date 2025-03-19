@@ -1,85 +1,8 @@
 package com.okta.senov.fragment
-//
-//import android.app.Activity
-//import android.content.Intent
-//import android.net.Uri
-//import android.os.Bundle
-//import android.provider.MediaStore
-//import android.view.LayoutInflater
-//import android.view.View
-//import android.view.ViewGroup
-//import android.widget.Toast
-//import androidx.fragment.app.Fragment
-//import androidx.navigation.fragment.findNavController
-//import com.okta.senov.databinding.FragmentAddAuthorBinding
-//import java.io.IOException
-//
-//class AddAuthorFragment : Fragment() {
-//    private var _binding: FragmentAddAuthorBinding? = null
-//    private val binding get() = _binding!!
-//
-//    private var imageUri: Uri? = null
-//
-//    override fun onCreateView(
-//        inflater: LayoutInflater, container: ViewGroup?,
-//        savedInstanceState: Bundle?
-//    ): View {
-//        _binding = FragmentAddAuthorBinding.inflate(inflater, container, false)
-//        return binding.root
-//    }
-//
-//    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-//        super.onViewCreated(view, savedInstanceState)
-//
-//        binding.btnPilihFoto.setOnClickListener { openGallery() }
-//        binding.btnSimpanAuthor.setOnClickListener { saveAuthor() }
-//    }
-//
-//    private fun openGallery() {
-//        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-//        startActivityForResult(intent, PICK_IMAGE_REQUEST)
-//    }
-//
-//    @Deprecated("Deprecated in Java")
-//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        super.onActivityResult(requestCode, resultCode, data)
-//        if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
-//            imageUri = data.data
-//            try {
-//                val bitmap = MediaStore.Images.Media.getBitmap(requireActivity().contentResolver, imageUri)
-//                binding.ivFotoAuthor.setImageBitmap(bitmap)
-//            } catch (e: IOException) {
-//                e.printStackTrace()
-//            }
-//        }
-//    }
-//
-//    private fun saveAuthor() {
-//        val namaAuthor = binding.etNamaAuthor.text.toString().trim()
-//
-//        if (namaAuthor.isEmpty() || imageUri == null) {
-//            Toast.makeText(requireContext(), "Nama dan foto harus diisi!", Toast.LENGTH_SHORT).show()
-//            return
-//        }
-//
-//        Toast.makeText(requireContext(), "Author $namaAuthor berhasil ditambahkan!", Toast.LENGTH_SHORT).show()
-//
-//        findNavController().navigateUp()
-//    }
-//
-//    override fun onDestroyView() {
-//        super.onDestroyView()
-//        _binding = null
-//    }
-//
-//    companion object {
-//        private const val PICK_IMAGE_REQUEST = 1
-//    }
-//}
-
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -93,7 +16,17 @@ import androidx.navigation.fragment.findNavController
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.okta.senov.databinding.FragmentAddAuthorBinding
-import java.util.UUID
+import okhttp3.Call
+import okhttp3.Callback
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody
+import okhttp3.Response
+import org.json.JSONObject
+import java.io.ByteArrayOutputStream
+import java.io.IOException
 
 class AddAuthorFragment : Fragment() {
 
@@ -102,6 +35,7 @@ class AddAuthorFragment : Fragment() {
 
     private var imageUri: Uri? = null
     private val db = FirebaseFirestore.getInstance()
+    private val client = OkHttpClient()
     private val storage = FirebaseStorage.getInstance().reference
 
     override fun onCreateView(
@@ -110,8 +44,11 @@ class AddAuthorFragment : Fragment() {
     ): View {
         _binding = FragmentAddAuthorBinding.inflate(inflater, container, false)
 
-        binding.btnPilihFoto.setOnClickListener { openGallery() }
+        binding.etAuthorId.setOnClickListener { saveAuthor() }
+        binding.etNamaAuthor.setOnClickListener { saveAuthor() }
+        binding.etSocialMediaAuthor.setOnClickListener { saveAuthor() }
         binding.btnSimpanAuthor.setOnClickListener { saveAuthor() }
+        binding.btnPilihFoto.setOnClickListener { openGallery() }
         setupBackButton()
         return binding.root
     }
@@ -130,59 +67,215 @@ class AddAuthorFragment : Fragment() {
     }
 
     private fun saveAuthor() {
+        val idAuthor = binding.etAuthorId.text.toString().trim()
         val namaAuthor = binding.etNamaAuthor.text.toString().trim()
         val bioAuthor = binding.etBioAuthor.text.toString().trim()
         val socialMediaAuthor = binding.etSocialMediaAuthor.text.toString().trim()
+        val image = binding.btnPilihFoto.text.toString().trim()
 
-        if (namaAuthor.isEmpty() || bioAuthor.isEmpty()) {
-            Toast.makeText(requireContext(), "Nama, email, dan bio harus diisi!", Toast.LENGTH_SHORT).show()
+//        if (namaAuthor.isEmpty() || bioAuthor.isEmpty()) {
+//            Toast.makeText(
+//                requireContext(),
+//                "Nama, email, dan bio harus diisi!",
+//                Toast.LENGTH_SHORT
+//            ).show()
+//            return
+//        }
+//
+//        if (imageUri != null) {
+//            uploadImageAndSaveData(namaAuthor, bioAuthor, socialMediaAuthor)
+//        } else {
+//            saveAuthorToFirestore(namaAuthor, bioAuthor, socialMediaAuthor, null)
+//        }
+        if (idAuthor.isEmpty() || namaAuthor.isEmpty() || bioAuthor.isEmpty() || socialMediaAuthor.isEmpty() || image.isEmpty()) {
+            Toast.makeText(requireContext(), "Data wajib diisi!", Toast.LENGTH_SHORT).show()
             return
         }
 
         if (imageUri != null) {
-            uploadImageAndSaveData(namaAuthor, bioAuthor, socialMediaAuthor)
+            uploadImageToImgur(
+                idAuthor,
+                namaAuthor,
+                bioAuthor,
+                socialMediaAuthor,
+                image
+            )
         } else {
-            saveAuthorToFirestore(namaAuthor, bioAuthor, socialMediaAuthor, null)
+            saveAuthorToFirestore(
+                idAuthor,
+                namaAuthor,
+                bioAuthor,
+                socialMediaAuthor,
+                image,
+            )
         }
     }
+    private fun uploadImageToImgur(
+        idAuthor: String,
+        nameAuthor: String,
+        bioAuthor: String,
+        socialMedia: String,
+        image: String
+    ) {
+        try {
+            // Konversi Uri ke ByteArray
+            val bitmap = MediaStore.Images.Media.getBitmap(requireContext().contentResolver, imageUri)
+            val stream = ByteArrayOutputStream()
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 90, stream)
+            val byteArray = stream.toByteArray()
 
-    private fun uploadImageAndSaveData(nama: String, bio: String, socialMedia: String) {
-        val fileName = "authors/${UUID.randomUUID()}.jpg"
-        val imageRef = storage.child(fileName)
+            // Buat request body dengan gambar
+            val requestBody = MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart(
+                    "image",
+                    "image.jpg",
+                    RequestBody.create("image/jpeg".toMediaTypeOrNull(), byteArray)
+                )
+                .build()
 
-        imageUri?.let { uri ->
-            imageRef.putFile(uri)
-                .addOnSuccessListener {
-                    imageRef.downloadUrl.addOnSuccessListener { downloadUrl ->
-                        saveAuthorToFirestore(nama, bio, socialMedia, downloadUrl.toString())
+            // Buat request untuk Imgur API
+            val request = Request.Builder()
+                .url("https://api.imgur.com/3/image")
+                .header("Authorization","Client-ID 79b90818f6bc407")
+                .post(requestBody)
+                .build()
+
+            // Kirim request secara asynchronous
+            client.newCall(request).enqueue(object : Callback {
+                override fun onFailure(call: Call, e: IOException) {
+                    activity?.runOnUiThread {
+                        showLoading(false)
+                        Toast.makeText(
+                            requireContext(),
+                            "Gagal mengunggah gambar ke Imgur: ${e.message}",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
-                .addOnFailureListener {
-                    Toast.makeText(requireContext(), "Gagal mengunggah gambar!", Toast.LENGTH_SHORT).show()
+
+                override fun onResponse(call: Call, response: Response) {
+                    if (response.isSuccessful) {
+                        val responseBody = response.body?.string()
+                        val jsonObject = JSONObject(responseBody)
+                        val data = jsonObject.getJSONObject("data")
+                        val imageUrl = data.getString("link")
+
+                        activity?.runOnUiThread {
+                            saveAuthorToFirestore(
+                                idAuthor,
+                                nameAuthor,
+                                bioAuthor,
+                                socialMedia,
+                                image
+                            )
+                        }
+                    } else {
+                        activity?.runOnUiThread {
+                            showLoading(false)
+                            Toast.makeText(
+                                requireContext(),
+                                "Gagal mengunggah gambar ke Imgur: ${response.message}",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
                 }
+            })
+        } catch (e: Exception) {
+            showLoading(false)
+            Toast.makeText(
+                requireContext(),
+                "Error: ${e.message}",
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
-
-    private fun saveAuthorToFirestore(nama: String, bio: String, socialMedia: String?, fotoUrl: String?) {
+    private fun saveAuthorToFirestore(
+        idAuthor: String,
+        nameAuthor: String,
+        bioAuthor: String,
+        socialMedia: String,
+        image: String?
+    ) {
         val authorData = hashMapOf(
-            "nama" to nama,
-            "bio" to bio,
-            "socialMedia" to (socialMedia ?: ""),
-            "fotoUrl" to (fotoUrl ?: "")
+            "idAuthor" to idAuthor,
+            "nameAuthor" to nameAuthor,
+            "bioAuthor" to bioAuthor,
+            "socialMedia" to socialMedia,
+            "image" to (image ?: "")
         )
 
         db.collection("authors")
             .add(authorData)
             .addOnSuccessListener {
-                Toast.makeText(requireContext(), "Author berhasil ditambahkan!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    requireContext(),
+                    "Data Author berhasil ditambahkan!",
+                    Toast.LENGTH_SHORT
+                ).show()
                 clearFields()
             }
             .addOnFailureListener {
-                Toast.makeText(requireContext(), "Gagal menambahkan author!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Gagal menambahkan data author!", Toast.LENGTH_SHORT)
+                    .show()
             }
     }
 
+//    private fun uploadImageAndSaveData(nama: String, bio: String, socialMedia: String) {
+//        val fileName = "authors/${UUID.randomUUID()}.jpg"
+//        val imageRef = storage.child(fileName)
+//
+//        imageUri?.let { uri ->
+//            imageRef.putFile(uri)
+//                .addOnSuccessListener {
+//                    imageRef.downloadUrl.addOnSuccessListener { downloadUrl ->
+//                        saveAuthorToFirestore(nama, bio, socialMedia, downloadUrl.toString())
+//                    }
+//                }
+//                .addOnFailureListener {
+//                    Toast.makeText(requireContext(), "Gagal mengunggah gambar!", Toast.LENGTH_SHORT)
+//                        .show()
+//                }
+//        }
+//    }
+
+//    private fun saveAuthorToFirestore(
+//        idAuthor: String,
+//        nama: String,
+//        bio: String,
+//        socialMedia: String?,
+//        fotoUrl: String?
+//    ) {
+//        val authorData = hashMapOf(
+//            "id" to idAuthor,
+//            "nama" to nama,
+//            "bio" to bio,
+//            "socialMedia" to (socialMedia ?: ""),
+//            "fotoUrl" to (fotoUrl ?: "")
+//        )
+//
+//        db.collection("authors")
+//            .add(authorData)
+//            .addOnSuccessListener {
+//                Toast.makeText(requireContext(), "Author berhasil ditambahkan!", Toast.LENGTH_SHORT)
+//                    .show()
+//                clearFields()
+//            }
+//            .addOnFailureListener {
+//                Toast.makeText(requireContext(), "Gagal menambahkan author!", Toast.LENGTH_SHORT)
+//                    .show()
+//            }
+//    }
+
+    private fun showLoading(isLoading: Boolean) {
+        // Anda perlu menambahkan ProgressBar di layout Anda
+        // binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+        binding.btnSimpanAuthor.isEnabled = !isLoading
+    }
+
     private fun clearFields() {
+        binding.etAuthorId.text?.clear()
         binding.etNamaAuthor.text?.clear()
         binding.etBioAuthor.text?.clear()
         binding.etSocialMediaAuthor.text?.clear()

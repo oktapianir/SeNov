@@ -10,7 +10,6 @@ import com.okta.senov.adapter.TopAuthorsAdapter
 import com.okta.senov.adapter.TopBooksAdapter
 import com.okta.senov.databinding.FragmentSearchBinding
 import com.okta.senov.extensions.findNavController
-import com.okta.senov.model.Author
 import com.okta.senov.model.Book
 import com.okta.senov.viewmodel.BookViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -24,14 +23,14 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 
     private val viewModel: BookViewModel by viewModels()
 
-    private val topAuthors = listOf(
-        Author("Tere Liye", R.drawable.img_andrea_hirata),
-        Author("Dewi Lestari", R.drawable.img_andrea_hirata),
-        Author("Andrea Hirata", R.drawable.img_andrea_hirata),
-        Author("Fiersa Besari", R.drawable.img_andrea_hirata),
-        Author("Leila S.Chudori", R.drawable.img_andrea_hirata),
-        Author("Pidi Baiq", R.drawable.img_andrea_hirata)
-    )
+//    private val topAuthors = listOf(
+//        Author("Tere Liye", R.drawable.img_andrea_hirata),
+//        Author("Dewi Lestari", R.drawable.img_andrea_hirata),
+//        Author("Andrea Hirata", R.drawable.img_andrea_hirata),
+//        Author("Fiersa Besari", R.drawable.img_andrea_hirata),
+//        Author("Leila S.Chudori", R.drawable.img_andrea_hirata),
+//        Author("Pidi Baiq", R.drawable.img_andrea_hirata)
+//    )
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -58,7 +57,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             LinearLayoutManager.HORIZONTAL,
             false
         )
-        authorAdapter = TopAuthorsAdapter(topAuthors)
+//        authorAdapter = TopAuthorsAdapter(topAuthors)
         binding.topAuthorsRecycler.adapter = authorAdapter
     }
 

@@ -59,6 +59,7 @@
     <string name="book_enter_content">Enter Book Content</string>
     <string name="book_enter_category">Enter Book Category</string>
     <string name="book_enter_id">Enter Book ID</string>
+    <string name="author_enter_id">Enter Author ID</string>
     <string name="recent">Pencarian</string>
     <string name="notif">Notifikasi</string>
     <string name="filter">Filter</string>
@@ -66,6 +67,7 @@
     <string name="add_content">Tambahkan isi cerita</string>
     <string name="see_all">Lihat Semua</string>
     <string name="book_id">Book ID</string>
+    <string name="author_id">Author ID</string>
     <string name="title_chapter">Judul Chapter</string>
     <string name="account_forgot_pass">Lupa Kata Sandi?</string>
     <string name="account_google_sign_in">Atau Login dengan</string>

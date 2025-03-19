@@ -34,7 +34,6 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent" />
 
-            <!-- Title (keeping your original ID) -->
             <TextView
                 android:id="@+id/tvTitleTambahAuthor"
                 android:layout_width="wrap_content"
@@ -67,18 +66,17 @@
             android:layout_height="wrap_content"
             android:padding="16dp">
 
-            <!-- Section Title -->
             <TextView
                 android:id="@+id/tvPhotoLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/author_foto"
                 android:textSize="16sp"
+                android:textStyle="bold"
                 android:textColor="@color/black"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
 
-            <!-- Author Photo (keeping your original ID) -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/photoContainer"
                 android:layout_width="120dp"
@@ -98,7 +96,6 @@
                     android:src="@drawable/ic_profile_placeholder" />
             </androidx.cardview.widget.CardView>
 
-            <!-- Choose Photo Button (keeping your original ID) -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnPilihFoto"
                 android:layout_width="wrap_content"
@@ -152,7 +149,41 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent" />
 
-                <!-- Name Field Label -->
+                <!-- Book ID Field -->
+                <TextView
+                    android:id="@+id/tvLabelAuthorId"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/author_id"
+                    android:textSize="14sp"
+                    android:textColor="@color/black"
+                    android:layout_marginTop="16dp"
+                    app:layout_constraintTop_toBottomOf="@id/tvInfoLabel"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilAuthorId"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    app:boxStrokeColor="@color/black"
+                    app:boxCornerRadiusBottomEnd="12dp"
+                    app:boxCornerRadiusBottomStart="12dp"
+                    app:boxCornerRadiusTopEnd="12dp"
+                    app:boxCornerRadiusTopStart="12dp"
+                    app:startIconTint="@color/black"
+                    app:layout_constraintTop_toBottomOf="@id/tvLabelAuthorId">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etAuthorId"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/author_enter_id"
+                        android:padding="12dp"
+                        android:inputType="text" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Name Field -->
                 <TextView
                     android:id="@+id/tvLabelName"
                     android:layout_width="wrap_content"
@@ -161,16 +192,15 @@
                     android:textSize="14sp"
                     android:textColor="@color/black"
                     android:layout_marginTop="16dp"
-                    app:layout_constraintTop_toBottomOf="@id/tvInfoLabel"
+                    app:layout_constraintTop_toBottomOf="@id/tilAuthorId"
                     app:layout_constraintStart_toStartOf="parent" />
 
-                <!-- Name Field (keeping your original ID) -->
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/tilNamaAuthor"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    app:boxStrokeColor="@color/grey"
+                    app:boxStrokeColor="@color/black"
                     app:boxCornerRadiusBottomEnd="12dp"
                     app:boxCornerRadiusBottomStart="12dp"
                     app:boxCornerRadiusTopEnd="12dp"
@@ -187,7 +217,7 @@
                         android:inputType="textPersonName" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <!-- Bio Field Label -->
+                <!-- Bio Field -->
                 <TextView
                     android:id="@+id/tvLabelBio"
                     android:layout_width="wrap_content"
@@ -199,7 +229,6 @@
                     app:layout_constraintTop_toBottomOf="@id/tilNamaAuthor"
                     app:layout_constraintStart_toStartOf="parent" />
 
-                <!-- Bio Field (keeping your original ID) -->
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/tilBioAuthor"
                     android:layout_width="match_parent"
@@ -225,7 +254,7 @@
                         android:scrollbars="vertical" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <!-- Social Media Field Label -->
+                <!-- Social Media Field -->
                 <TextView
                     android:id="@+id/tvLabelSocial"
                     android:layout_width="wrap_content"
@@ -237,7 +266,6 @@
                     app:layout_constraintTop_toBottomOf="@id/tilBioAuthor"
                     app:layout_constraintStart_toStartOf="parent" />
 
-                <!-- Social Media Field (keeping your original ID) -->
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/tilSocialMediaAuthor"
                     android:layout_width="match_parent"
@@ -264,7 +292,7 @@
         </androidx.core.widget.NestedScrollView>
     </androidx.cardview.widget.CardView>
 
-    <!-- Save Button (keeping your original ID) -->
+    <!-- Save Button -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnSimpanAuthor"
         android:layout_width="match_parent"
