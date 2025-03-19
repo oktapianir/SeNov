@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -128,7 +127,8 @@
                 android:overScrollMode="never"
                 android:requiresFadingEdge="horizontal"
                 android:scrollbars="none"
-                app:layout_constraintTop_toBottomOf="@id/searchBarContainer">
+                app:layout_constraintTop_toBottomOf="@id/searchBarContainer"
+                tools:layout_editor_absoluteX="-130dp">
 
                 <com.google.android.material.chip.ChipGroup
                     android:id="@+id/categoriesChipGroup"
@@ -168,11 +168,11 @@
                         android:text="@string/category_mistery" />
 
                     <com.google.android.material.chip.Chip
-                        android:id="@+id/scienceChip"
+                        android:id="@+id/adventureChip"
                         style="@style/CustomChipStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/category_science_fiction" />
+                        android:text="@string/category_adventure" />
                 </com.google.android.material.chip.ChipGroup>
             </HorizontalScrollView>
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -191,51 +191,71 @@
             android:layout_height="wrap_content"
             android:paddingBottom="24dp">
 
-            <!-- Popular Books Section -->
-<!--            <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--                android:id="@+id/popularSection"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:paddingHorizontal="20dp"-->
-<!--                android:paddingTop="24dp"-->
-<!--                tools:ignore="MissingConstraints">-->
+            <!-- Empty state Section -->
+            <!--            <androidx.constraintlayout.widget.ConstraintLayout-->
+            <!--                android:id="@+id/popularSection"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:paddingHorizontal="20dp"-->
+            <!--                android:paddingTop="24dp"-->
+            <!--                tools:ignore="MissingConstraints">-->
 
-<!--                <TextView-->
-<!--                    android:id="@+id/popularHeader"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:fontFamily="@font/cantata_one"-->
-<!--                    android:text="@string/popular"-->
-<!--                    android:textColor="@color/black"-->
-<!--                    android:textSize="20sp"-->
-<!--                    android:textStyle="bold"-->
-<!--                    app:layout_constraintStart_toStartOf="parent"-->
-<!--                    app:layout_constraintTop_toTopOf="parent" />-->
+            <!--                <TextView-->
+            <!--                    android:id="@+id/popularHeader"-->
+            <!--                    android:layout_width="wrap_content"-->
+            <!--                    android:layout_height="wrap_content"-->
+            <!--                    android:fontFamily="@font/cantata_one"-->
+            <!--                    android:text="@string/popular"-->
+            <!--                    android:textColor="@color/black"-->
+            <!--                    android:textSize="20sp"-->
+            <!--                    android:textStyle="bold"-->
+            <!--                    app:layout_constraintStart_toStartOf="parent"-->
+            <!--                    app:layout_constraintTop_toTopOf="parent" />-->
 
-<!--                <TextView-->
-<!--                    android:id="@+id/seeAllPopular"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:text="@string/see_all"-->
-<!--                    android:textColor="@color/primary"-->
-<!--                    android:textSize="14sp"-->
-<!--                    app:layout_constraintBottom_toBottomOf="@id/popularHeader"-->
-<!--                    app:layout_constraintEnd_toEndOf="parent"-->
-<!--                    app:layout_constraintTop_toTopOf="@id/popularHeader" />-->
+            <!--                <TextView-->
+            <!--                    android:id="@+id/seeAllPopular"-->
+            <!--                    android:layout_width="wrap_content"-->
+            <!--                    android:layout_height="wrap_content"-->
+            <!--                    android:text="@string/see_all"-->
+            <!--                    android:textColor="@color/primary"-->
+            <!--                    android:textSize="14sp"-->
+            <!--                    app:layout_constraintBottom_toBottomOf="@id/popularHeader"-->
+            <!--                    app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                    app:layout_constraintTop_toTopOf="@id/popularHeader" />-->
 
-<!--                <androidx.recyclerview.widget.RecyclerView-->
-<!--                    android:id="@+id/popularBooksRecyclerView"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginTop="16dp"-->
-<!--                    android:clipToPadding="false"-->
-<!--                    android:orientation="horizontal"-->
-<!--                    android:overScrollMode="never"-->
-<!--                    android:paddingEnd="20dp"-->
-<!--                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"-->
-<!--                    app:layout_constraintTop_toBottomOf="@id/popularHeader"-->
-<!--                    tools:listitem="@layout/item_book" />-->
-<!--            </androidx.constraintlayout.widget.ConstraintLayout>-->
+            <!--                <androidx.recyclerview.widget.RecyclerView-->
+            <!--                    android:id="@+id/popularBooksRecyclerView"-->
+            <!--                    android:layout_width="match_parent"-->
+            <!--                    android:layout_height="wrap_content"-->
+            <!--                    android:layout_marginTop="16dp"-->
+            <!--                    android:clipToPadding="false"-->
+            <!--                    android:orientation="horizontal"-->
+            <!--                    android:overScrollMode="never"-->
+            <!--                    android:paddingEnd="20dp"-->
+            <!--                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"-->
+            <!--                    app:layout_constraintTop_toBottomOf="@id/popularHeader"-->
+            <!--                    tools:listitem="@layout/item_book" />-->
+            <!--            </androidx.constraintlayout.widget.ConstraintLayout>-->
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/emptySection"
+                android:layout_width="411dp"
+                android:layout_height="487dp"
+                android:paddingHorizontal="20dp"
+                android:paddingTop="24dp"
+                tools:ignore="MissingConstraints"
+                tools:layout_editor_absoluteX="0dp">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/emptyRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:nestedScrollingEnabled="false"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:itemCount="5"
+                    tools:listitem="@layout/empty_search" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <!-- All Books Section -->
             <androidx.constraintlayout.widget.ConstraintLayout

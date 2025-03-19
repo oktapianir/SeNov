@@ -80,7 +80,7 @@
     <string name="adventure">Petualangan</string>"
     <string name="category_romance">Romantis</string>
     <string name="category_mistery">Misteri</string>
-    <string name="category_science_fiction">Fiksi Ilmuwan</string>
+    <string name="category_adventure">Adventure</string>
     <string name="rating">5.0</string>
     <string name="api_key">8b71325fbf3a43d8a949fd23ce4e2f5a</string>
     <string name="point">•</string>
@@ -141,5 +141,8 @@
     <string name="error">Error: %1$s</string>
     <string name="empty_chapter">Tidak ada bab yang tersedia.</string>
     <string name="empty_book">Tidak ada konten buku yang ditemukan.</string>
+    <string name="empty_search_illustration">Ilustrasi Pencarian Kosong</string>
+    <string name="empty_no_search">Tidak Ada Buku Ditemukan</string>
+    <string name="empty_no_search_desc">Coba cari menggunakan kata lain yaa!</string>
 
 </resources>

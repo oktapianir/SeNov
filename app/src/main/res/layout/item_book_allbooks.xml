@@ -14,7 +14,7 @@
         android:layout_height="120dp"
         android:elevation="4dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/img_book_cover1"
+        android:src="@drawable/ic_error"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
