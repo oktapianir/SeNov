@@ -395,15 +395,15 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
 
         binding.fictionChip.setOnClickListener {
-            filterBooksByCategory("fiction")
+            filterBooksByCategory("fiksi")
         }
 
         binding.romanceChip.setOnClickListener {
-            filterBooksByCategory("romance")
+            filterBooksByCategory("romantis")
         }
 
         binding.mysteryChip.setOnClickListener {
-            filterBooksByCategory("mystery")
+            filterBooksByCategory("misteri")
         }
 
         binding.adventureChip.setOnClickListener {
