@@ -4,7 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.firestore.FirebaseFirestore
 import com.okta.senov.model.Author
+import com.okta.senov.model.Book
 import com.okta.senov.model.BookContent
 import com.okta.senov.model.BookData
 import com.okta.senov.repository.BookContentRepository
@@ -44,6 +46,9 @@ class BookViewModel @Inject constructor(
 
     private val _errorMessage = MutableLiveData<String>()
     val errorMessage: LiveData<String> = _errorMessage
+
+    private val firestore = FirebaseFirestore.getInstance()
+
 
 //    fun fetchBooksFromApi(apiKey: String, query: String = "") {
 //        _loading.postValue(true)
@@ -145,7 +150,8 @@ class BookViewModel @Inject constructor(
 
                 // Log each book to verify data
                 bookDataList.forEach { book ->
-                    Timber.tag("BOOK_DATA").d("Book: ${book.title}, Author: ${book.authorName}, Image: ${book.image}")
+                    Timber.tag("BOOK_DATA")
+                        .d("Book: ${book.title}, Author: ${book.authorName}, Image: ${book.image}")
                 }
 
                 // Update LiveData
@@ -160,8 +166,57 @@ class BookViewModel @Inject constructor(
             } finally {
                 _loading.postValue(false)
             }
-        }    }
+        }
+    }
+    fun fetchBooksFromFirestore() {
+        viewModelScope.launch {
+            try {
+                Timber.d("Memulai fetch buku dari Firestore")
+                firestore.collection("Books")
+                    .get()
+                    .addOnSuccessListener { snapshot ->
+                        Timber.d("Mendapatkan snapshot dari Firestore: ${snapshot.documents.size} dokumen")
 
+                        // Log untuk melihat raw data
+                        snapshot.documents.forEachIndexed { index, doc ->
+                            Timber.d("Dokumen[$index] ID: ${doc.id}, Data: ${doc.data}")
+                        }
+
+                        val booksList = snapshot.documents.mapNotNull { doc ->
+                            // Konversi Book ke BookData
+                            val book = doc.toObject(Book::class.java)
+                            Timber.d("Konversi dokumen ${doc.id} ke Book: ${book != null}")
+
+                            book?.let {
+                                val bookData = BookData(
+                                    id = doc.id,
+                                    title = it.title,
+                                    authorName = it.authorName,
+                                    category = it.category,
+                                    image = it.image
+                                )
+                                Timber.d("Konversi Book ke BookData berhasil: $bookData")
+                                bookData
+                            }
+                        }
+
+                        Timber.d("Jumlah buku setelah konversi: ${booksList.size}")
+                        _allBooks.value = booksList
+                        Timber.d("Nilai _allBooks.value telah diperbarui dengan ${booksList.size} buku")
+
+                        // Memeriksa nilai _allBooks setelah diperbarui
+                        Timber.d("Nilai _allBooks sekarang: ${_allBooks.value?.size} buku")
+                    }
+                    .addOnFailureListener { e ->
+                        Timber.e("Error mengambil buku: ${e.message}")
+                        e.printStackTrace()
+                    }
+            } catch (e: Exception) {
+                Timber.e("Exception saat mengambil buku: ${e.message}")
+                e.printStackTrace()
+            }
+        }
+    }
 
     //    fun fetchAuthors(apiKey: String, authorName: String) {
 //        _loading.postValue(true)

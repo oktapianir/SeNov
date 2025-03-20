@@ -282,6 +282,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 //        binding.popularBooksRecyclerView.adapter = bookAdapter
         binding.allBooksRecyclerView.adapter = allBooksAdapter
 
+        bookViewModel.fetchBooksFromFirestore()
+
         // Fetch data dari API
         bookViewModel.fetchBooksFromApi(apiKey, "adventure")
 

@@ -8,13 +8,13 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 @Entity(tableName = "Books")
 data class Book(
-    @PrimaryKey val id: String,
-    val title: String,
-    val authorName: String,
-    val category: String,
+    @PrimaryKey val id: String = "",
+    val title: String = "",
+    val authorName: String = "",
+    val category: String = "",
 //    val rating: Float,
 //    val price: Float,
-    val description: String,
-      val image: String
+    val description: String = "",
+      val image: String = ""
     ) : Parcelable
 

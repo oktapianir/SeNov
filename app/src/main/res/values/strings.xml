@@ -146,5 +146,6 @@
     <string name="empty_search_illustration">Ilustrasi Pencarian Kosong</string>
     <string name="empty_no_search">Tidak Ada Buku Ditemukan</string>
     <string name="empty_no_search_desc">Coba cari menggunakan kata lain yaa!</string>
+    <string name="saving">Menyimpan...</string>
 
 </resources>
