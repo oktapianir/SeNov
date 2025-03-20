@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import com.okta.senov.R
 import com.okta.senov.databinding.FragmentAddAuthorBinding
 import okhttp3.Call
 import okhttp3.Callback
@@ -25,6 +26,7 @@ import okhttp3.Request
 import okhttp3.RequestBody
 import okhttp3.Response
 import org.json.JSONObject
+import timber.log.Timber
 import java.io.ByteArrayOutputStream
 import java.io.IOException
 
@@ -37,6 +39,7 @@ class AddAuthorFragment : Fragment() {
     private val db = FirebaseFirestore.getInstance()
     private val client = OkHttpClient()
     private val storage = FirebaseStorage.getInstance().reference
+    private val TAG = "AddAuthorFragment" // Tag untuk logging
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,9 +47,6 @@ class AddAuthorFragment : Fragment() {
     ): View {
         _binding = FragmentAddAuthorBinding.inflate(inflater, container, false)
 
-        binding.etAuthorId.setOnClickListener { saveAuthor() }
-        binding.etNamaAuthor.setOnClickListener { saveAuthor() }
-        binding.etSocialMediaAuthor.setOnClickListener { saveAuthor() }
         binding.btnSimpanAuthor.setOnClickListener { saveAuthor() }
         binding.btnPilihFoto.setOnClickListener { openGallery() }
         setupBackButton()
@@ -63,6 +63,7 @@ class AddAuthorFragment : Fragment() {
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
             imageUri = data.data
             binding.ivFotoAuthor.setImageURI(imageUri)
+            Toast.makeText(requireContext(), "Gambar dipilih", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -77,10 +78,13 @@ class AddAuthorFragment : Fragment() {
             return
         }
 
-        // Show loading indicator
+        // Tampilkan loading indicator
         showLoading(true)
 
+        Timber.tag(TAG).d("Mulai menyimpan author dengan ID: $idAuthor")
+
         if (imageUri != null) {
+            Timber.tag(TAG).d("Gambar dipilih, mengupload ke Imgur")
             uploadImageToImgur(
                 idAuthor,
                 namaAuthor,
@@ -88,6 +92,7 @@ class AddAuthorFragment : Fragment() {
                 socialMediaAuthor
             )
         } else {
+            Timber.tag(TAG).d("Tidak ada gambar yang dipilih, menyimpan tanpa gambar")
             saveAuthorToFirestore(
                 idAuthor,
                 namaAuthor,
@@ -105,6 +110,7 @@ class AddAuthorFragment : Fragment() {
         socialMedia: String
     ) {
         try {
+            Timber.tag(TAG).d("Memulai upload gambar ke Imgur")
             // Konversi Uri ke ByteArray
             val bitmap = MediaStore.Images.Media.getBitmap(requireContext().contentResolver, imageUri)
             val stream = ByteArrayOutputStream()
@@ -128,9 +134,11 @@ class AddAuthorFragment : Fragment() {
                 .post(requestBody)
                 .build()
 
+            Timber.tag(TAG).d("Mengirim request ke Imgur API")
             // Kirim request secara asynchronous
             client.newCall(request).enqueue(object : Callback {
                 override fun onFailure(call: Call, e: IOException) {
+                    Timber.tag(TAG).e("Error upload gambar ke Imgur: ${e.message}")
                     activity?.runOnUiThread {
                         showLoading(false)
                         Toast.makeText(
@@ -142,23 +150,45 @@ class AddAuthorFragment : Fragment() {
                 }
 
                 override fun onResponse(call: Call, response: Response) {
-                    if (response.isSuccessful) {
-                        val responseBody = response.body?.string()
-                        val jsonObject = JSONObject(responseBody)
-                        val data = jsonObject.getJSONObject("data")
-                        val imageUrl = data.getString("link")
+                    Timber.tag(TAG)
+                        .d("Mendapat respons dari Imgur API, status code: ${response.code}")
 
-                        activity?.runOnUiThread {
-                            // Use the actual Imgur URL here
-                            saveAuthorToFirestore(
-                                idAuthor,
-                                nameAuthor,
-                                bioAuthor,
-                                socialMedia,
-                                imageUrl
-                            )
+                    if (response.isSuccessful) {
+                        try {
+                            val responseBody = response.body?.string()
+                            Timber.tag(TAG).d("Respon dari Imgur: $responseBody")
+
+                            val jsonObject = JSONObject(responseBody)
+                            val data = jsonObject.getJSONObject("data")
+                            val imageUrl = data.getString("link")
+
+                            Timber.tag(TAG).d("Berhasil mendapatkan URL gambar: $imageUrl")
+
+                            activity?.runOnUiThread {
+                                Toast.makeText(requireContext(), "URL gambar dari Imgur: $imageUrl", Toast.LENGTH_LONG).show()
+
+                                // Gunakan URL gambar dari Imgur
+                                saveAuthorToFirestore(
+                                    idAuthor,
+                                    nameAuthor,
+                                    bioAuthor,
+                                    socialMedia,
+                                    imageUrl
+                                )
+                            }
+                        } catch (e: Exception) {
+                            Timber.tag(TAG).e("Error parsing JSON dari Imgur: ${e.message}")
+                            activity?.runOnUiThread {
+                                showLoading(false)
+                                Toast.makeText(
+                                    requireContext(),
+                                    "Gagal memproses respons dari Imgur: ${e.message}",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
                         }
                     } else {
+                        Timber.tag(TAG).e("Gagal upload gambar ke Imgur: ${response.message}")
                         activity?.runOnUiThread {
                             showLoading(false)
                             Toast.makeText(
@@ -171,6 +201,7 @@ class AddAuthorFragment : Fragment() {
                 }
             })
         } catch (e: Exception) {
+            Timber.tag(TAG).e("Error umum saat upload gambar: ${e.message}")
             showLoading(false)
             Toast.makeText(
                 requireContext(),
@@ -187,17 +218,24 @@ class AddAuthorFragment : Fragment() {
         socialMedia: String,
         imageUrl: String?
     ) {
+        Timber.tag(TAG).d("Menyimpan author ke Firestore dengan imageUrl: $imageUrl")
+
         val authorData = hashMapOf(
             "idAuthor" to idAuthor,
             "nameAuthor" to nameAuthor,
             "bioAuthor" to bioAuthor,
             "socialMedia" to socialMedia,
-            "image" to (imageUrl ?: "")
+            "imageUrl" to (imageUrl ?: "") // Mengubah nama field dari "image" ke "imageUrl"
         )
 
+        Timber.tag(TAG).d("Data author yang akan disimpan: $authorData")
+
+        // Menggunakan ID spesifik alih-alih random ID
         db.collection("authors")
-            .add(authorData)
+            .document(idAuthor)
+            .set(authorData)
             .addOnSuccessListener {
+                Timber.tag(TAG).d("Author berhasil disimpan ke Firestore")
                 showLoading(false)
                 Toast.makeText(
                     requireContext(),
@@ -206,17 +244,21 @@ class AddAuthorFragment : Fragment() {
                 ).show()
                 clearFields()
             }
-            .addOnFailureListener {
+            .addOnFailureListener { e ->
+                Timber.tag(TAG).e("Error menyimpan author ke Firestore: ${e.message}")
                 showLoading(false)
-                Toast.makeText(requireContext(), "Gagal menambahkan data author!", Toast.LENGTH_SHORT)
+                Toast.makeText(requireContext(), "Gagal menambahkan data author: ${e.message}", Toast.LENGTH_SHORT)
                     .show()
             }
     }
 
     private fun showLoading(isLoading: Boolean) {
-        // Anda perlu menambahkan ProgressBar di layout Anda
-        // binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
         binding.btnSimpanAuthor.isEnabled = !isLoading
+        if (isLoading) {
+            binding.btnSimpanAuthor.text = getString(R.string.saving)
+        } else {
+            binding.btnSimpanAuthor.text = getString(R.string.save)
+        }
     }
 
     private fun clearFields() {
