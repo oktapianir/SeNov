@@ -70,7 +70,7 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/book_content_idcon"
+                    android:hint="@string/book_content_id"
                     android:layout_marginTop="16dp"
                     app:startIconTint="@color/primary"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
