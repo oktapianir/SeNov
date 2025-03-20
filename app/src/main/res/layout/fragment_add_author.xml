@@ -7,7 +7,7 @@
     android:background="@drawable/bg_gradient_card"
     tools:context=".fragment.AddAuthorFragment">
 
-    <!-- Header with back button and title -->
+    <!-- Header with back button and title - tetap di posisi atas -->
     <androidx.cardview.widget.CardView
         android:id="@+id/headerCard"
         android:layout_width="match_parent"
@@ -50,265 +50,275 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 
-    <!-- Author Photo Section -->
-    <androidx.cardview.widget.CardView
-        android:id="@+id/photoCard"
+    <!-- NestedScrollView untuk konten yang bisa di-scroll -->
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="16dp"
-        app:cardCornerRadius="16dp"
-        app:cardElevation="4dp"
-        app:layout_constraintTop_toBottomOf="@id/headerCard">
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintTop_toBottomOf="@id/headerCard"
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="16dp">
+            android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/tvPhotoLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/author_foto"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:textColor="@color/black"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
-
+            <!-- Author Photo Section -->
             <androidx.cardview.widget.CardView
-                android:id="@+id/photoContainer"
-                android:layout_width="120dp"
-                android:layout_height="120dp"
+                android:id="@+id/photoCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="16dp"
-                app:cardCornerRadius="60dp"
+                app:cardCornerRadius="16dp"
                 app:cardElevation="4dp"
-                app:layout_constraintTop_toBottomOf="@id/tvPhotoLabel"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent">
+                app:layout_constraintTop_toTopOf="parent">
 
-                <ImageView
-                    android:id="@+id/ivFotoAuthor"
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/ic_profile_placeholder" />
+                    android:layout_height="wrap_content"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:id="@+id/tvPhotoLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/author_foto"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/photoContainer"
+                        android:layout_width="120dp"
+                        android:layout_height="120dp"
+                        android:layout_marginTop="16dp"
+                        app:cardCornerRadius="60dp"
+                        app:cardElevation="4dp"
+                        app:layout_constraintTop_toBottomOf="@id/tvPhotoLabel"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent">
+
+                        <ImageView
+                            android:id="@+id/ivFotoAuthor"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/ic_profile_placeholder" />
+                    </androidx.cardview.widget.CardView>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnPilihFoto"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/choose_file"
+                        android:textColor="@color/white"
+                        android:layout_marginTop="12dp"
+                        app:iconTint="@color/white"
+                        app:iconGravity="textStart"
+                        app:cornerRadius="12dp"
+                        android:paddingHorizontal="16dp"
+                        android:backgroundTint="@color/black"
+                        app:layout_constraintTop_toBottomOf="@id/photoContainer"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnPilihFoto"
-                android:layout_width="wrap_content"
+            <!-- Author Information Section -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/authorInfoCard"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/choose_file"
-                android:textColor="@color/white"
-                android:layout_marginTop="12dp"
-                app:iconTint="@color/white"
-                app:iconGravity="textStart"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="4dp"
+                app:layout_constraintTop_toBottomOf="@id/photoCard">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp">
+
+                    <!-- Section Title -->
+                    <TextView
+                        android:id="@+id/tvInfoLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/author_info"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+                    <!-- Book ID Field -->
+                    <TextView
+                        android:id="@+id/tvLabelAuthorId"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/author_id"
+                        android:textSize="14sp"
+                        android:textColor="@color/black"
+                        android:layout_marginTop="16dp"
+                        app:layout_constraintTop_toBottomOf="@id/tvInfoLabel"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilAuthorId"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        app:boxStrokeColor="@color/black"
+                        app:boxCornerRadiusBottomEnd="12dp"
+                        app:boxCornerRadiusBottomStart="12dp"
+                        app:boxCornerRadiusTopEnd="12dp"
+                        app:boxCornerRadiusTopStart="12dp"
+                        app:startIconTint="@color/black"
+                        app:layout_constraintTop_toBottomOf="@id/tvLabelAuthorId">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etAuthorId"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/author_enter_id"
+                            android:padding="12dp"
+                            android:inputType="text" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- Name Field -->
+                    <TextView
+                        android:id="@+id/tvLabelName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/name_full"
+                        android:textSize="14sp"
+                        android:textColor="@color/black"
+                        android:layout_marginTop="16dp"
+                        app:layout_constraintTop_toBottomOf="@id/tilAuthorId"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilNamaAuthor"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        app:boxStrokeColor="@color/black"
+                        app:boxCornerRadiusBottomEnd="12dp"
+                        app:boxCornerRadiusBottomStart="12dp"
+                        app:boxCornerRadiusTopEnd="12dp"
+                        app:boxCornerRadiusTopStart="12dp"
+                        app:startIconTint="@color/black"
+                        app:layout_constraintTop_toBottomOf="@id/tvLabelName">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etNamaAuthor"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/name_add_author"
+                            android:padding="12dp"
+                            android:inputType="textPersonName" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- Bio Field -->
+                    <TextView
+                        android:id="@+id/tvLabelBio"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/author_bio"
+                        android:textSize="14sp"
+                        android:textColor="@color/black"
+                        android:layout_marginTop="16dp"
+                        app:layout_constraintTop_toBottomOf="@id/tilNamaAuthor"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilBioAuthor"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        app:boxStrokeColor="@color/black"
+                        app:boxCornerRadiusBottomEnd="12dp"
+                        app:boxCornerRadiusBottomStart="12dp"
+                        app:boxCornerRadiusTopEnd="12dp"
+                        app:boxCornerRadiusTopStart="12dp"
+                        app:layout_constraintTop_toBottomOf="@id/tvLabelBio">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etBioAuthor"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/author_bio"
+                            android:padding="12dp"
+                            android:inputType="textMultiLine"
+                            android:maxLines="5"
+                            android:minLines="3"
+                            android:gravity="top|start"
+                            android:scrollbars="vertical" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- Social Media Field -->
+                    <TextView
+                        android:id="@+id/tvLabelSocial"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/author_social_media"
+                        android:textSize="14sp"
+                        android:textColor="@color/black"
+                        android:layout_marginTop="16dp"
+                        app:layout_constraintTop_toBottomOf="@id/tilBioAuthor"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilSocialMediaAuthor"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        app:boxStrokeColor="@color/black"
+                        app:boxCornerRadiusBottomEnd="12dp"
+                        app:boxCornerRadiusBottomStart="12dp"
+                        app:boxCornerRadiusTopEnd="12dp"
+                        app:boxCornerRadiusTopStart="12dp"
+                        app:startIconTint="@color/black"
+                        app:layout_constraintTop_toBottomOf="@id/tvLabelSocial">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etSocialMediaAuthor"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/author_social_media"
+                            android:padding="12dp"
+                            android:inputType="textUri" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Save Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSimpanAuthor"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:text="@string/save"
+                android:textColor="@android:color/black"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:backgroundTint="@color/lily"
                 app:cornerRadius="12dp"
-                android:paddingHorizontal="16dp"
-                android:backgroundTint="@color/black"
-                app:layout_constraintTop_toBottomOf="@id/photoContainer"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                app:iconGravity="textStart"
+                app:iconTint="@color/white"
+                app:layout_constraintTop_toBottomOf="@id/authorInfoCard"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.cardview.widget.CardView>
-
-    <!-- Author Information Section -->
-    <androidx.cardview.widget.CardView
-        android:id="@+id/authorInfoCard"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
-        app:cardCornerRadius="16dp"
-        app:cardElevation="4dp"
-        app:layout_constraintTop_toBottomOf="@id/photoCard"
-        app:layout_constraintBottom_toTopOf="@id/btnSimpanAuthor">
-
-        <androidx.core.widget.NestedScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="16dp">
-
-                <!-- Section Title -->
-                <TextView
-                    android:id="@+id/tvInfoLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/author_info"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
-
-                <!-- Book ID Field -->
-                <TextView
-                    android:id="@+id/tvLabelAuthorId"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/author_id"
-                    android:textSize="14sp"
-                    android:textColor="@color/black"
-                    android:layout_marginTop="16dp"
-                    app:layout_constraintTop_toBottomOf="@id/tvInfoLabel"
-                    app:layout_constraintStart_toStartOf="parent" />
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/tilAuthorId"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    app:boxStrokeColor="@color/black"
-                    app:boxCornerRadiusBottomEnd="12dp"
-                    app:boxCornerRadiusBottomStart="12dp"
-                    app:boxCornerRadiusTopEnd="12dp"
-                    app:boxCornerRadiusTopStart="12dp"
-                    app:startIconTint="@color/black"
-                    app:layout_constraintTop_toBottomOf="@id/tvLabelAuthorId">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/etAuthorId"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/author_enter_id"
-                        android:padding="12dp"
-                        android:inputType="text" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <!-- Name Field -->
-                <TextView
-                    android:id="@+id/tvLabelName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/name_full"
-                    android:textSize="14sp"
-                    android:textColor="@color/black"
-                    android:layout_marginTop="16dp"
-                    app:layout_constraintTop_toBottomOf="@id/tilAuthorId"
-                    app:layout_constraintStart_toStartOf="parent" />
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/tilNamaAuthor"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    app:boxStrokeColor="@color/black"
-                    app:boxCornerRadiusBottomEnd="12dp"
-                    app:boxCornerRadiusBottomStart="12dp"
-                    app:boxCornerRadiusTopEnd="12dp"
-                    app:boxCornerRadiusTopStart="12dp"
-                    app:startIconTint="@color/black"
-                    app:layout_constraintTop_toBottomOf="@id/tvLabelName">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/etNamaAuthor"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/name_add_author"
-                        android:padding="12dp"
-                        android:inputType="textPersonName" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <!-- Bio Field -->
-                <TextView
-                    android:id="@+id/tvLabelBio"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/author_bio"
-                    android:textSize="14sp"
-                    android:textColor="@color/black"
-                    android:layout_marginTop="16dp"
-                    app:layout_constraintTop_toBottomOf="@id/tilNamaAuthor"
-                    app:layout_constraintStart_toStartOf="parent" />
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/tilBioAuthor"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    app:boxStrokeColor="@color/black"
-                    app:boxCornerRadiusBottomEnd="12dp"
-                    app:boxCornerRadiusBottomStart="12dp"
-                    app:boxCornerRadiusTopEnd="12dp"
-                    app:boxCornerRadiusTopStart="12dp"
-                    app:layout_constraintTop_toBottomOf="@id/tvLabelBio">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/etBioAuthor"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/author_bio"
-                        android:padding="12dp"
-                        android:inputType="textMultiLine"
-                        android:maxLines="5"
-                        android:minLines="3"
-                        android:gravity="top|start"
-                        android:scrollbars="vertical" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <!-- Social Media Field -->
-                <TextView
-                    android:id="@+id/tvLabelSocial"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/author_social_media"
-                    android:textSize="14sp"
-                    android:textColor="@color/black"
-                    android:layout_marginTop="16dp"
-                    app:layout_constraintTop_toBottomOf="@id/tilBioAuthor"
-                    app:layout_constraintStart_toStartOf="parent" />
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/tilSocialMediaAuthor"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    app:boxStrokeColor="@color/black"
-                    app:boxCornerRadiusBottomEnd="12dp"
-                    app:boxCornerRadiusBottomStart="12dp"
-                    app:boxCornerRadiusTopEnd="12dp"
-                    app:boxCornerRadiusTopStart="12dp"
-                    app:startIconTint="@color/black"
-                    app:layout_constraintTop_toBottomOf="@id/tvLabelSocial">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/etSocialMediaAuthor"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/author_social_media"
-                        android:padding="12dp"
-                        android:inputType="textUri" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </androidx.core.widget.NestedScrollView>
-    </androidx.cardview.widget.CardView>
-
-    <!-- Save Button -->
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnSimpanAuthor"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:text="@string/save"
-        android:textColor="@android:color/black"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:backgroundTint="@color/lily"
-        app:cornerRadius="12dp"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginBottom="16dp"
-        app:iconGravity="textStart"
-        app:iconTint="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+    </androidx.core.widget.NestedScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
