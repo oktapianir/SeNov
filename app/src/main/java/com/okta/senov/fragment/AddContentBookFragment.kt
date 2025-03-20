@@ -32,12 +32,13 @@ class AddContentBookFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.btnAddChapter.setOnClickListener {
+            val bookContentId = binding.etBookContentId.text.toString().trim()
             val bookId = binding.etBookId.text.toString().trim()
             val chapterNumber = binding.etChapterNumber.text.toString().trim().toIntOrNull()
             val chapterTitle = binding.etChapterTitle.text.toString().trim()
             val chapterContent = binding.etChapterContent.text.toString().trim()
 
-            if (bookId.isNotEmpty() && chapterNumber != null && chapterTitle.isNotEmpty() && chapterContent.isNotEmpty()) {
+            if (bookContentId.isNotEmpty() && bookId.isNotEmpty() && chapterNumber != null && chapterTitle.isNotEmpty() && chapterContent.isNotEmpty()) {
                 val newChapter = Chapter(
                     number = chapterNumber,
                     title = chapterTitle,
@@ -84,6 +85,7 @@ class AddContentBookFragment : Fragment() {
         }
     }
     private fun clearFields() {
+        binding.etBookContentId.text?.clear()
         binding.etBookId.text?.clear()
         binding.etChapterNumber.text?.clear()
         binding.etChapterTitle.text?.clear()

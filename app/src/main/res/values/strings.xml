@@ -67,6 +67,7 @@
     <string name="add_content">Tambahkan isi cerita</string>
     <string name="see_all">Lihat Semua</string>
     <string name="book_id">Book ID</string>
+    <string name="book_content_id">BookContent ID</string>
     <string name="author_id">Author ID</string>
     <string name="title_chapter">Judul Chapter</string>
     <string name="account_forgot_pass">Lupa Kata Sandi?</string>
