@@ -95,8 +95,10 @@ import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.okta.senov.R
 import com.okta.senov.databinding.FragmentBookReaderBinding
 import com.okta.senov.model.Chapter
@@ -182,6 +184,22 @@ class BookReaderFragment : Fragment(R.layout.fragment_book_reader) {
         // Logging & muat konten buku
         Timber.d("Fetching book content for bookId: $bookId")
         viewModel.loadBookContent(bookId)
+
+        setupBackButton()
+    }
+    private fun setupBackButton() {
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    findNavController().popBackStack()
+                }
+            }
+        )
+
+        binding.backButton.setOnClickListener {
+            findNavController().popBackStack()
+        }
     }
 
     override fun onDestroyView() {
