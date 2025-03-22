@@ -225,6 +225,7 @@ import android.text.TextWatcher
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.okta.senov.R
 import com.okta.senov.adapter.AllBooksAdapter
@@ -260,18 +261,37 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         setupRecyclerViews()
 
         // Inisialisasi Adapter
-        bookAdapter = BookAdapter { bookData ->
-            val book = Book(
-                id = bookData.id,
-                title = bookData.title,
-                authorName = bookData.authorName,
-                category = bookData.category,
-                description = bookData.description,
-                image = bookData.image
-            )
-            val action = HomeFragmentDirections.actionHomeToDetail(book)
-//            binding.popularBooksRecyclerView.findNavController().navigate(action)
-        }
+//        bookAdapter = BookAdapter { bookData ->
+//            val book = Book(
+//                id = bookData.id,
+//                title = bookData.title,
+//                authorName = bookData.authorName,
+//                category = bookData.category,
+//                description = bookData.description,
+//                image = bookData.image
+//            )
+//            val action = HomeFragmentDirections.actionHomeToDetail(book)
+////            binding.popularBooksRecyclerView.findNavController().navigate(action)
+//        }
+        bookAdapter = BookAdapter(
+            onItemClick = { bookData ->
+                val book = Book(
+                    id = bookData.id,
+                    title = bookData.title,
+                    authorName = bookData.authorName,
+                    category = bookData.category,
+                    description = bookData.description,
+                    image = bookData.image
+                )
+                val action = HomeFragmentDirections.actionHomeToDetail(book)
+                findNavController().navigate(action)
+            },
+            onRemoveClick = { book ->
+                // Handle remove action if needed
+                // For example: bookViewModel.removeBook(book.id)
+            }
+        )
+
 
         allBooksAdapter = AllBooksAdapter(emptyList()) { book ->
             val action = HomeFragmentDirections.actionHomeToDetail(book)
