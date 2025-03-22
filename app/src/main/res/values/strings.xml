@@ -98,6 +98,7 @@
     <string name="guest">Guest</string>
     <string name="opener">Silakan login terlebih dahulu</string>
     <string name="strip">-</string>
+    <string name="saving">Menyimpan...</string>
     <string name="logout">Logout</string>
     <string name="google">login_with_google</string>
     <string name="default_web_client_id">1029032182629-5ue6c7lv3lre448s4fcndb7strug9mco.apps.googleusercontent.com</string>
@@ -149,6 +150,14 @@
     <string name="empty_search_illustration">Ilustrasi Pencarian Kosong</string>
     <string name="empty_no_search">Tidak Ada Buku Ditemukan</string>
     <string name="empty_no_search_desc">Coba cari menggunakan kata lain yaa!</string>
-    <string name="saving">Menyimpan...</string>
 
+
+    <string name="faq_help">Bantuan &amp; FAQ</string>
+    <string name="faq_question_1">Bagaimana cara mengubah foto profil?</string>
+    <string name="faq_answer_1">Tap pada foto profil Anda, kemudian pilih foto baru dari galeri atau ambil foto baru menggunakan kamera.</string>
+    <string name="faq_question_2">Bagaimana cara mengubah kata sandi?</string>
+    <string name="faq_answer_2">Kunjungi menu Pengaturan, pilih Keamanan, kemudian tap pada Ubah Kata Sandi dan ikuti petunjuk yang diberikan.</string>
+    <string name="faq_question_3">Apa yang harus dilakukan jika saya lupa kata sandi?</string>
+    <string name="faq_answer_3">Pada halaman login, tap pada "Lupa Kata Sandi" dan ikuti proses reset kata sandi melalui email yang terdaftar.</string>
+    <string name="contact_support">Hubungi Dukungan</string>
 </resources>
