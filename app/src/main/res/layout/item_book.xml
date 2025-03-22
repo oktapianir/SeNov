@@ -31,7 +31,7 @@
 
         <!-- Favorite Button -->
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/buttonGoToDetail"
+            android:id="@+id/btnRemove"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_margin="8dp"
@@ -44,7 +44,7 @@
             app:layout_constraintEnd_toEndOf="@id/bookCoverImageView"
             app:layout_constraintTop_toTopOf="@id/bookCoverImageView"
             app:maxImageSize="16dp"
-            app:srcCompat="@drawable/ic_add"
+            app:srcCompat="@drawable/img_remove"
             app:tint="@color/primary" />
 
         <!-- Book Title -->
