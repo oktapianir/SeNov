@@ -10,9 +10,9 @@ import com.okta.senov.adapter.TopAuthorsAdapter
 import com.okta.senov.adapter.TopBooksAdapter
 import com.okta.senov.databinding.FragmentSearchBinding
 import com.okta.senov.extensions.findNavController
-import com.okta.senov.model.Book
 import com.okta.senov.viewmodel.BookViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @AndroidEntryPoint
 class SearchFragment : Fragment(R.layout.fragment_search) {
@@ -23,28 +23,17 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 
     private val viewModel: BookViewModel by viewModels()
 
-//    private val topAuthors = listOf(
-//        Author("Tere Liye", R.drawable.img_andrea_hirata),
-//        Author("Dewi Lestari", R.drawable.img_andrea_hirata),
-//        Author("Andrea Hirata", R.drawable.img_andrea_hirata),
-//        Author("Fiersa Besari", R.drawable.img_andrea_hirata),
-//        Author("Leila S.Chudori", R.drawable.img_andrea_hirata),
-//        Author("Pidi Baiq", R.drawable.img_andrea_hirata)
-//    )
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentSearchBinding.bind(view)
 
         setupAuthorsRecyclerView()
-
         setupBooksRecyclerView()
-
         setupRecentBooksRecyclerView()
-
         setupObservers()
 
         viewModel.fetchBooksFromApi(getString(R.string.api_key))
+        viewModel.fetchTopAuthorsFromFirebase()
 
         binding.backButton.setOnClickListener {
             binding.backButton.findNavController().navigateUp()
@@ -78,22 +67,11 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     }
 
     private fun setupObservers() {
-//        viewModel.allBooks.observe(viewLifecycleOwner) { books ->
-//            bookAdapter.updateBooks(books)
-//        }
 
-        viewModel.popularBooks.observe(viewLifecycleOwner) { popularBooks ->
-            val recentBooks = popularBooks.map { bookData ->
-                Book(
-                    id = bookData.id,
-                    title = bookData.title,
-                    authorName = bookData.authorName,
-                    category = bookData.category,
-                    description = bookData.description,
-                    image = bookData.image
-                )
-            }
-            recentBookAdapter.updateBooks(recentBooks)
+        viewModel.authors.observe(viewLifecycleOwner) { authors ->
+            Timber.tag("SearchFragment").d("Menerima ${authors.size} authors dari LiveData")
+            authorAdapter.updateAuthors(authors)
         }
+
     }
 }

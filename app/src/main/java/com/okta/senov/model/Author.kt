@@ -8,8 +8,9 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 @Entity(tableName = "authors")
 data class Author(
-    val name: String,
+    val id : String ="",
+    val nameAuthor: String ="",
 //    val imageResId: Int
-    val imageAuthor: String,
-    val biography: String
+    val imageUrl: String ="",
+    val biography: String =""
 ): Parcelable

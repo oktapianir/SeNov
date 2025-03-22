@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.okta.senov.model.Author
 import com.okta.senov.model.Book
 import com.okta.senov.model.BookContent
@@ -154,6 +155,24 @@ class BookViewModel @Inject constructor(
                 _loading.value = false
             }
     }
-
-
+    fun fetchTopAuthorsFromFirebase() {
+        Timber.tag("BookViewModel").d("Mulai mengambil data authors dari Firebase")
+        firestore.collection("authors")
+            .orderBy("nameAuthor", Query.Direction.DESCENDING)
+            .limit(10)
+            .get()
+            .addOnSuccessListener { documents ->
+                Timber.tag("BookViewModel").d("Berhasil mengambil ${documents.size()} authors")
+                val authorsList = mutableListOf<Author>()
+                for (document in documents) {
+                    val author = document.toObject(Author::class.java).copy(id = document.id)
+                    authorsList.add(author)
+                    Timber.tag("BookViewModel").d("Author: ${author.nameAuthor}")
+                }
+                _authors.postValue(authorsList)
+            }
+            .addOnFailureListener { e ->
+                Timber.tag("BookViewModel").e(e, "Error mengambil authors")
+            }
+    }
 }
