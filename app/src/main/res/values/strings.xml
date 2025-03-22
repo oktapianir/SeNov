@@ -60,6 +60,7 @@
     <string name="book_enter_content">Enter Book Content</string>
     <string name="book_enter_category">Enter Book Category</string>
     <string name="book_enter_id">Enter Book ID</string>
+    <string name="book_chapters">2 chapter</string>
     <string name="author_enter_id">Enter Author ID</string>
     <string name="recent">Pencarian</string>
     <string name="notif">Notifikasi</string>
@@ -85,7 +86,7 @@
     <string name="category_romance">Romantis</string>
     <string name="category_mistery">Misteri</string>
     <string name="category_adventure">Adventure</string>
-    <string name="rating">5.0</string>
+    <string name="rating">0.0</string>
     <string name="api_key">8b71325fbf3a43d8a949fd23ce4e2f5a</string>
     <string name="point">•</string>
     <string name="welcome">Selamat Datang!</string>

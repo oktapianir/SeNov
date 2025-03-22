@@ -12,5 +12,9 @@
     <color name="white_72">#B7FFFFFF</color>
     <color name="white_20">#9CFFFFFF</color>
     <color name="chip_background">#F1F3F4</color>
+    <color name="accent">#5D4FEC</color>
+    <color name="accent_light">#D0CCFF</color>
+    <color name="star_gold">#FFC107</color>
+
 
 </resources>
