@@ -14,7 +14,8 @@ import com.okta.senov.model.BookData
 import timber.log.Timber
 
 class BookAdapter(
-    private val onItemClick: (BookData) -> Unit
+    private val onItemClick: (BookData) -> Unit,
+    private val onRemoveClick: (BookData) -> Unit
 ) : ListAdapter<BookData, BookAdapter.BookViewHolder>(DIFF_CALLBACK) {
 
     private val db = FirebaseFirestore.getInstance()
@@ -29,10 +30,17 @@ class BookAdapter(
                 .placeholder(R.drawable.img_book_cover1)
                 .into(binding.bookCoverImageView)
 
+            binding.btnRemove.setOnClickListener {
+                onRemoveClick(book)
+            }
+
+            binding.root.setOnClickListener {
+                onItemClick(book)
+            }
+
             binding.root.setOnClickListener { onItemClick(book) }
             val bookId = "lRvC5g2AX1oPjH8E9qbo"
             fetchBookAuthor(bookId)
-
         }
         private fun fetchBookAuthor(bookId: String) {
             db.collection("authors").document(bookId)
