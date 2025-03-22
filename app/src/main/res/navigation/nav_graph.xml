@@ -56,9 +56,12 @@
         android:name="com.okta.senov.fragment.YourBookFragment"
         android:label="Search"
         tools:layout="@layout/fragment_your_book" >
-    <action
-        android:id="@+id/action_yourbook_to_home"
-        app:destination="@+id/homeFragment" />
+        <action
+            android:id="@+id/action_yourbook_to_home"
+            app:destination="@+id/homeFragment" />
+        <action
+            android:id="@+id/action_yourbook_to_detail"
+            app:destination="@+id/detailFragment" />
     </fragment>
     <!-- Definisi Fragment Profile -->
     <fragment
