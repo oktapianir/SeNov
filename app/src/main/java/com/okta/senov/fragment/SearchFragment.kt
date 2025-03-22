@@ -57,7 +57,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             LinearLayoutManager.HORIZONTAL,
             false
         )
-//        authorAdapter = TopAuthorsAdapter(topAuthors)
+        authorAdapter = TopAuthorsAdapter(emptyList())
         binding.topAuthorsRecycler.adapter = authorAdapter
     }
 
