@@ -41,19 +41,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         binding = FragmentHomeBinding.bind(view)
         setupRecyclerViews()
 
-        // Inisialisasi Adapter
-//        bookAdapter = BookAdapter { bookData ->
-//            val book = Book(
-//                id = bookData.id,
-//                title = bookData.title,
-//                authorName = bookData.authorName,
-//                category = bookData.category,
-//                description = bookData.description,
-//                image = bookData.image
-//            )
-//            val action = HomeFragmentDirections.actionHomeToDetail(book)
-////            binding.popularBooksRecyclerView.findNavController().navigate(action)
-//        }
         bookAdapter = BookAdapter(
             onItemClick = { bookData ->
                 val book = Book(
@@ -91,6 +78,10 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         // Observasi data populer dan update adapter
         bookViewModel.popularBooks.observe(viewLifecycleOwner) { books ->
             bookAdapter.submitList(books)
+        }
+
+        bookViewModel.bookContent.observe(viewLifecycleOwner) { contentList ->
+            allBooksAdapter.setBookContentList(contentList)
         }
 
         // Observasi semua buku dan update adapter
@@ -137,6 +128,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
 
         setupCategoryChips()
+        bookViewModel.fetchAllBookContents()
     }
 
     private fun setupRecyclerViews() {

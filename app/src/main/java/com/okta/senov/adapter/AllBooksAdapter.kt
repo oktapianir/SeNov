@@ -11,6 +11,7 @@ import com.okta.senov.databinding.ItemBookAllbooksBinding
 import com.okta.senov.extensions.findNavController
 import com.okta.senov.fragment.HomeFragmentDirections
 import com.okta.senov.model.Book
+import com.okta.senov.model.BookContent
 import timber.log.Timber
 
 class AllBooksAdapter(
@@ -19,31 +20,12 @@ class AllBooksAdapter(
 ) : RecyclerView.Adapter<AllBooksAdapter.AllBooksViewHolder>() {
 
     private val db = FirebaseFirestore.getInstance()
+    private var bookContentList: List<BookContent> = emptyList()
 
     inner class AllBooksViewHolder(
-        private val binding: ItemBookAllbooksBinding,
+        val binding: ItemBookAllbooksBinding,
         private val onItemClick: (Book) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
-
-        //        fun bind(book: Book) {
-//            binding.apply {
-//                bookTitleTextView.text = book.title
-//                Glide.with(binding.root.context)
-//                    .load(book.coverResourceId)
-//                    .into(bookCoverImageView)
-//
-//                root.setOnClickListener { onItemClick(book) }
-//
-//                buttonGoToDetail.setOnClickListener {
-//                    val navController = binding.root.findNavController()
-//                    val action = HomeFragmentDirections.actionHomeToDetail(book)
-//                    navController.navigate(action)
-//                }
-//            }
-//            val bookId = "lRvC5g2AX1oPjH8E9qbo"
-//            fetchBookAuthor(bookId)
-//        }
-// In AllBooksAdapter.AllBooksViewHolder.bind method
         fun bind(book: Book) {
             binding.apply {
                 bookTitleTextView.text = book.title
@@ -61,7 +43,6 @@ class AllBooksAdapter(
                 if (book.image.isNotEmpty()) {
                     Glide.with(binding.root.context)
                         .load(book.image)
-                        .placeholder(R.drawable.ic_add)
                         .error(R.drawable.ic_book)
                         .into(bookCoverImageView)
 
@@ -100,6 +81,15 @@ class AllBooksAdapter(
                 }
         }
     }
+    private fun getChapterCount(bookId: String): Int {
+        // Assuming you have access to bookContentList
+        val bookContent = bookContentList.find { it.bookId == bookId }
+        return bookContent?.chapters?.size ?: 0
+    }
+    fun setBookContentList(content: List<BookContent>) {
+        bookContentList = content
+        notifyDataSetChanged()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AllBooksViewHolder {
         val binding = ItemBookAllbooksBinding.inflate(
@@ -111,7 +101,12 @@ class AllBooksAdapter(
     }
 
     override fun onBindViewHolder(holder: AllBooksViewHolder, position: Int) {
-        holder.bind(books[position])
+        val book = books[position]
+        holder.bind(book)
+
+        // Set chapter count using binding
+        val chapterCount = getChapterCount(book.id)
+        holder.binding.chaptersTextView.text = "$chapterCount Chapters"
     }
 
     override fun getItemCount() = books.size
