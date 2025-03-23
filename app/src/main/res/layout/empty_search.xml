@@ -2,39 +2,34 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="16dp">
+    android:layout_height="match_parent">
 
-    <!-- Ilustrasi Empty Search -->
     <ImageView
         android:id="@+id/emptySearchIllustration"
         android:layout_width="200dp"
         android:layout_height="200dp"
-        android:layout_marginTop="32dp"
         android:contentDescription="@string/empty_search_illustration"
         android:src="@drawable/img_empty_search"
+        app:layout_constraintBottom_toTopOf="@id/emptySearchTitle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintVertical_bias="0.3" />
+        app:layout_constraintVertical_chainStyle="packed" />
 
-    <!-- Judul Empty State -->
     <TextView
         android:id="@+id/emptySearchTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
         android:fontFamily="@font/cantata_one"
         android:text="@string/empty_no_search"
         android:textColor="@color/black"
         android:textSize="20sp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/emptySearchDescription"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/emptySearchIllustration" />
 
-    <!-- Deskripsi Empty State -->
     <TextView
         android:id="@+id/emptySearchDescription"
         android:layout_width="0dp"
@@ -44,6 +39,7 @@
         android:text="@string/empty_no_search_desc"
         android:textColor="@color/black"
         android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/emptySearchTitle"

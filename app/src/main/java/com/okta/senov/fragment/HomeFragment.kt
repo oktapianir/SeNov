@@ -32,7 +32,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     // Adapter untuk semua buku
     private lateinit var allBooksAdapter: AllBooksAdapter
 
-    // Perbaikan disini: mengganti listOf<Book>() dengan List<Book> = emptyList()
     private var allBookList: List<Book> = emptyList()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -40,6 +39,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         binding = FragmentHomeBinding.bind(view)
         setupRecyclerViews()
+        binding.emptySection.visibility = View.GONE
+        binding.allBooksSection.visibility = View.VISIBLE
 
         bookAdapter = BookAdapter(
             onItemClick = { bookData ->
@@ -55,8 +56,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 findNavController().navigate(action)
             },
             onRemoveClick = { book ->
-                // Handle remove action if needed
-                // For example: bookViewModel.removeBook(book.id)
             }
         )
 
@@ -86,11 +85,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         // Observasi semua buku dan update adapter
         bookViewModel.allBooks.observe(viewLifecycleOwner) { bookDataList ->
-            // Add logging
             Timber.tag("HOME_FRAGMENT").d("Received ${bookDataList.size} books")
 
             val books = bookDataList.map { bookData ->
-                // Log each conversion
                 Timber.tag("DATA_CONVERSION")
                     .d("Converting: ID=${bookData.id}, Title=${bookData.title}")
 
@@ -106,7 +103,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             // Simpan daftar buku ke variabel allBookList
             allBookList = books
 
-            // Log the converted books
             Timber.tag("ADAPTER_UPDATE").d("Setting ${books.size} books to adapter")
 
             // Update adapter
@@ -141,7 +137,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private fun setupSearchFunctionality() {
         binding.searchEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                // Tidak diperlukan implementasi
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -159,7 +154,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         Timber.tag("SEARCH").d("Filtering books with query: '$query'")
 
         if (query.isEmpty()) {
-            // When query is empty, show all books
             allBooksAdapter.setBooks(allBookList)
             binding.emptySection.visibility = View.GONE
             binding.allBooksSection.visibility = View.VISIBLE
@@ -214,7 +208,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         val searchQuery = binding.searchEditText.text.toString().trim()
 
-        // Perbaikan disini: allBooksList -> allBookList
         val filteredBooks = if (category.equals("all", ignoreCase = true)) {
             // Jika kategori "all", tampilkan semua buku yang sesuai dengan query pencarian
             if (searchQuery.isEmpty()) {
@@ -234,5 +227,12 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         // Update adapter dengan hasil filter
         allBooksAdapter.setBooks(filteredBooks)
+        if (filteredBooks.isEmpty()) {
+            binding.emptySection.visibility = View.VISIBLE
+            binding.allBooksSection.visibility = View.GONE
+        } else {
+            binding.emptySection.visibility = View.GONE
+            binding.allBooksSection.visibility = View.VISIBLE
+        }
     }
 }
