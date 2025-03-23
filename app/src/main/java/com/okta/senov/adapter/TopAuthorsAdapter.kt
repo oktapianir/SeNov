@@ -9,7 +9,10 @@ import com.okta.senov.databinding.TopAuthorsBinding
 import com.okta.senov.model.Author
 import timber.log.Timber
 
-class TopAuthorsAdapter(private var authors: List<Author>) :
+class TopAuthorsAdapter(
+    private var authors: List<Author>,
+    private val onAuthorClickListener: (Author) -> Unit
+) :
     RecyclerView.Adapter<TopAuthorsAdapter.AuthorViewHolder>() {
 
     class AuthorViewHolder(val binding: TopAuthorsBinding) : RecyclerView.ViewHolder(binding.root)
@@ -39,6 +42,9 @@ class TopAuthorsAdapter(private var authors: List<Author>) :
                 .into(holder.binding.authorImage)
         } else {
             holder.binding.authorImage.setImageResource(R.drawable.ic_profile_placeholder)
+        }
+        holder.itemView.setOnClickListener{
+            onAuthorClickListener(author)
         }
     }
 

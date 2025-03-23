@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.okta.senov.R
 import com.okta.senov.adapter.TopAuthorsAdapter
@@ -46,7 +47,13 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             LinearLayoutManager.HORIZONTAL,
             false
         )
-        authorAdapter = TopAuthorsAdapter(emptyList())
+//        authorAdapter = TopAuthorsAdapter(emptyList())]
+        authorAdapter = TopAuthorsAdapter(emptyList()) { author ->
+            // Handle the click here
+            val action = SearchFragmentDirections.actionSearchToDetailAuthor(author)
+            findNavController().navigate(action)
+
+        }
         binding.topAuthorsRecycler.adapter = authorAdapter
     }
 

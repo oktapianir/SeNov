@@ -46,10 +46,24 @@
     </fragment>
 
     <fragment
+        android:id="@+id/detailAuthorFragment"
+        android:name="com.okta.senov.fragment.DetailAuthorFragment"
+        android:label="@string/author_bio"
+        tools:layout="@layout/fragment_detail_author">
+        <argument
+            android:name="author"
+            app:argType="com.okta.senov.model.Author" />
+    </fragment>
+
+    <fragment
         android:id="@+id/searchFragment"
         android:name="com.okta.senov.fragment.SearchFragment"
         android:label="Search"
-        tools:layout="@layout/fragment_search" />
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/actionSearchToDetailAuthor"
+            app:destination="@id/detailAuthorFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/YourBookFragment"

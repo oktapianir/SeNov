@@ -37,6 +37,9 @@ class BookViewModel @Inject constructor(
     private val _bookContent = MutableLiveData<List<BookContent>>(emptyList())
     val bookContent: LiveData<List<BookContent>> get() = _bookContent
 
+    private val _selectedAuthor = MutableLiveData<Author>()
+    val selectedAuthor: LiveData<Author> = _selectedAuthor
+
     private val _loading = MutableLiveData<Boolean>()
     val loading: LiveData<Boolean> = _loading
 
@@ -174,5 +177,26 @@ class BookViewModel @Inject constructor(
             .addOnFailureListener { e ->
                 Timber.tag("BookViewModel").e(e, "Error mengambil authors")
             }
+    }
+    // Function to fetch a single author by ID
+    fun fetchAuthorById(authorId: String) {
+        val db = FirebaseFirestore.getInstance()
+        db.collection("authors").document(authorId)
+            .get()
+            .addOnSuccessListener { document ->
+                if (document != null) {
+                    val author = document.toObject(Author::class.java)
+                    _selectedAuthor.value = author!!
+                }else {
+                    Timber.e("Dokumen author tidak ditemukan atau gagal dikonversi.")
+                }
+            }
+            .addOnFailureListener { exception ->
+                Timber.e("Error getting author: $exception")
+            }
+    }
+
+    fun selectAuthor(author: Author) {
+        _selectedAuthor.value = author
     }
 }

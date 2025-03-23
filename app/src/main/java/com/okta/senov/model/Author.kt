@@ -10,7 +10,7 @@ import kotlinx.parcelize.Parcelize
 data class Author(
     val id : String ="",
     val nameAuthor: String ="",
-//    val imageResId: Int
+    val socialMedia: String ="",
     val imageUrl: String ="",
-    val biography: String =""
+    val bioAuthor: String =""
 ): Parcelable

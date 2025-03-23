@@ -22,7 +22,7 @@
     <string name="edit_profile">Edit Profile</string>
     <string name="back">Back</string>
     <string name="grid">Grid</string>
-    <string name="author">Tere Liye</string>
+    <string name="author">J.K Rowling</string>
     <string name="listen_now">Listen Now</string>
     <string name="synopsis">Synopsis</string>
     <string name="description_book">Bulan adalah sebuah cerita tentang seorang gadis bernama Binar yang menjalani perjalanan hidup penuh tantangan. Dengan latar belakang keluarga yang sederhana, Binar memiliki mimpi besar untuk menjadi seseorang yang dapat diandalkan dan memiliki makna dalam hidupnya. Sepanjang perjalanan, ia menemukan arti persahabatan sejati, menghadapi konflik batin, dan menjalani berbagai pengalaman yang mengajarkannya untuk menjadi lebih kuat. Bulan adalah kisah inspiratif tentang ketekunan, persahabatan, dan menemukan jati diri di tengah kesulitan hidup.</string>
@@ -61,7 +61,6 @@
     <string name="book_enter_category">Enter Book Category</string>
     <string name="book_enter_id">Enter Book ID</string>
     <string name="book_chapters">2 chapter</string>
-    <string name="author_enter_id">Enter Author ID</string>
     <string name="recent">Pencarian</string>
     <string name="notif">Notifikasi</string>
     <string name="filter">Filter</string>
@@ -70,7 +69,6 @@
     <string name="see_all">Lihat Semua</string>
     <string name="book_id">Book ID</string>
     <string name="book_content_id">BookContent ID</string>
-    <string name="author_id">Author ID</string>
     <string name="title_chapter">Judul Chapter</string>
     <string name="account_forgot_pass">Lupa Kata Sandi?</string>
     <string name="account_google_sign_in">Atau Login dengan</string>
@@ -129,6 +127,10 @@
     <string name="author_info">Author Informasi</string>
     <string name="author_total">Total Authors</string>
     <string name="author_label">Author</string>
+    <string name="author_example_social_media">\@jk_rowling</string>
+    <string name="author_id">Author ID</string>
+    <string name="author_enter_id">Enter Author ID</string>
+    <string name="author_biography">J.K. Rowling (Joanne Rowling) adalah seorang penulis asal Inggris yang dikenal sebagai pencipta seri Harry Potter. Ia lahir pada 31 Juli 1965 di Yate, Gloucestershire, Inggris.Rowling mengembangkan ide Harry Potter saat dalam perjalanan kereta api dari Manchester ke London pada tahun 1990. Setelah menghadapi berbagai penolakan dari penerbit, novel pertamanya, Harry Potter and the Philosopher’s Stone, akhirnya diterbitkan pada tahun 1997 oleh Bloomsbury.</string>
 
     <string name="register">Register</string>
     <string name="registersentence">Silahkan buat akun anda terlebih dahulu</string>
