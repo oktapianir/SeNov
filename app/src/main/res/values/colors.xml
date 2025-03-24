@@ -15,6 +15,6 @@
     <color name="accent">#5D4FEC</color>
     <color name="accent_light">#D0CCFF</color>
     <color name="star_gold">#FFC107</color>
-
+<color name="icon_color">#5F4099</color>
 
 </resources>

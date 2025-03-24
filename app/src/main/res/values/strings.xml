@@ -52,6 +52,7 @@
     <string name="book_collection">Book Collection</string>
     <string name="book_cover">Book Cover</string>
     <string name="book_information">Book Information</string>
+    <string name="book_chapter_information">Book Chapter Information</string>
     <string name="book_enter_title">Enter Book Title</string>
     <string name="book_description">Book Description</string>
     <string name="book_enter_description">Enter Book Description</string>
@@ -60,15 +61,19 @@
     <string name="book_enter_content">Enter Book Content</string>
     <string name="book_enter_category">Enter Book Category</string>
     <string name="book_enter_id">Enter Book ID</string>
+    <string name="book_enter_nomor_chapter">Enter Nomor Chapter</string>
+    <string name="book_enter_title_chapter">Enter Judul Chapter</string>
+    <string name="book_enter_chapter">Enter Book Chapter</string>
     <string name="book_chapters">2 chapter</string>
+    <string name="exp_number">24</string>
     <string name="recent">Pencarian</string>
     <string name="notif">Notifikasi</string>
     <string name="filter">Filter</string>
-    <string name="content">Isi Content</string>
+    <string name="content">Isi Chapter</string>
     <string name="add_content">Tambahkan isi cerita</string>
     <string name="see_all">Lihat Semua</string>
     <string name="book_id">Book ID</string>
-    <string name="book_content_id">BookContent ID</string>
+    <string name="book_content_id">Book Content ID</string>
     <string name="title_chapter">Judul Chapter</string>
     <string name="account_forgot_pass">Lupa Kata Sandi?</string>
     <string name="account_google_sign_in">Atau Login dengan</string>
@@ -112,6 +117,7 @@
     <string name="title_feature_add_content_book">Tambah Cerita</string>
     <string name="titla_MA_admin">Management Actions</string>
     <string name="title_feature_add_book">Tambah Buku Baru</string>
+    <string name="title_feature_add_book_content">Tambah Chapter Buku</string>
 
 
     <string name="name_add_author">Nama Author</string>
@@ -146,6 +152,7 @@
     <string name="error_authentication_failed">Authentication failed.</string>
     <string name="error_google_sign_in_failed">Google sign-in failed</string>
     <string name="desc_empty">Deskripsi tidak tersedia</string>
+    <string name="desc_admin">Berikut data yang kami sajikan untuk anda sebagai admin Seputar Novel</string>
     <string name="error">Error: %1$s</string>
     <string name="empty_chapter">Tidak ada bab yang tersedia.</string>
     <string name="empty_book">Tidak ada konten buku yang ditemukan.</string>

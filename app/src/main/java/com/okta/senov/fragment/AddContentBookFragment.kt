@@ -5,7 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.google.firebase.firestore.FirebaseFirestore
 import com.okta.senov.databinding.FragmentAddContentBookBinding
 import com.okta.senov.model.BookContent
@@ -25,6 +27,7 @@ class AddContentBookFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentAddContentBookBinding.inflate(inflater, container, false)
+        setupBackButton()
         return binding.root
     }
 
@@ -90,6 +93,20 @@ class AddContentBookFragment : Fragment() {
         binding.etChapterNumber.text?.clear()
         binding.etChapterTitle.text?.clear()
         binding.etChapterContent.text?.clear()
+    }
+    private fun setupBackButton() {
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    findNavController().popBackStack()
+                }
+            }
+        )
+
+        binding.btnBack.setOnClickListener {
+            findNavController().popBackStack()
+        }
     }
 
     override fun onDestroyView() {
