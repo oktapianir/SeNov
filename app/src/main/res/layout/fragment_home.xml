@@ -27,25 +27,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/abril_fatface"
-                android:text="@string/DigiNov"
+                android:text="@string/senov"
                 android:textColor="@color/black"
                 android:textSize="24sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-
-            <!-- Ikon Notifikasi -->
-            <ImageView
-                android:id="@+id/notificationIcon"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_marginEnd="16dp"
-                android:contentDescription="@string/notif"
-                android:src="@drawable/ic_notifications"
-                app:layout_constraintBottom_toBottomOf="@id/appLogo"
-                app:layout_constraintEnd_toStartOf="@id/profileImage"
-                app:layout_constraintTop_toTopOf="@id/appLogo"
-                app:tint="@color/primary" />
 
             <!-- Profile Image dengan border -->
             <com.google.android.material.imageview.ShapeableImageView
