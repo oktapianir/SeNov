@@ -2,6 +2,7 @@
     <string name="app_name">SeNov</string>
     <string name="profile_image">profile image</string>
     <string name="author_name">Author Name</string>
+    <string name="author_wording">Author</string>
     <string name="category">Category</string>
     <string name="_19_99">$19.99</string>
     <string name="_12_99">$12.99</string>
