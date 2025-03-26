@@ -40,6 +40,9 @@ class BookViewModel @Inject constructor(
     private val _selectedAuthor = MutableLiveData<Author>()
     val selectedAuthor: LiveData<Author> = _selectedAuthor
 
+    private val _searchResults = MutableLiveData<List<Book>>()
+    val searchResults: LiveData<List<Book>> = _searchResults
+
     private val _loading = MutableLiveData<Boolean>()
     val loading: LiveData<Boolean> = _loading
 
@@ -199,4 +202,46 @@ class BookViewModel @Inject constructor(
     fun selectAuthor(author: Author) {
         _selectedAuthor.value = author
     }
-}
+    fun searchBooks(query: String) {
+        Timber.d("Search initiated with query: '$query'")
+
+        // Enhanced logging and matching
+        firestore.collection("Books")
+            .get()
+            .addOnSuccessListener { snapshot ->
+                Timber.d("Total books for search: ${snapshot.size()}")
+
+                // More detailed logging of book details
+                snapshot.documents.forEach { document ->
+                    val book = document.toObject(Book::class.java)
+                    Timber.d("Book Details - Title: ${book?.title}, Author: ${book?.authorName}")
+                }
+
+                // More flexible search matching
+                val lowercaseQuery = query.lowercase()
+                val searchResults = snapshot.documents.filter { document ->
+                    val book = document.toObject(Book::class.java)
+                    book?.let {
+                        it.title.lowercase().contains(lowercaseQuery) ||
+                                it.authorName.lowercase().contains(lowercaseQuery) ||
+                                it.category.lowercase().contains(lowercaseQuery)
+                    } ?: false
+                }
+
+                // Rest of the search implementation...
+            }
+    }
+    // Diagnostic method to check Firestore connection and collection
+    fun diagnosticFirestoreCheck() {
+        firestore.collection("Books")
+            .get()
+            .addOnSuccessListener { snapshot ->
+                Timber.d("Diagnostic Check - Total Books: ${snapshot.size()}")
+                snapshot.documents.forEach { document ->
+                    Timber.d("Diagnostic - Document: ${document.id}, Data: ${document.data}")
+                }
+            }
+            .addOnFailureListener { exception ->
+                Timber.e(exception, "Diagnostic Check Failed")
+            }
+    }}
