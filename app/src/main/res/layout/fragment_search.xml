@@ -124,24 +124,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:fontFamily="@font/amarante"
-                android:text="@string/top_authors_search"
+                android:text="@string/author_wording"
                 android:textColor="@color/black"
                 android:textSize="18sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/seeAllAuthors"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="20dp"
-                android:fontFamily="@font/amarante"
-                android:text="@string/see_all"
-                android:textColor="@color/black"
-                android:textSize="14sp"
-                app:layout_constraintBottom_toBottomOf="@id/topAuthorsLabel"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/topAuthorsLabel" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/topAuthorsRecycler"
@@ -154,91 +141,36 @@
                 app:layout_constraintTop_toBottomOf="@+id/topAuthorsLabel" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <!-- Recent Books Section -->
+        <!-- Search Results Section -->
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/recentBooksSection"
+            android:id="@+id/searchResultSection"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             app:layout_constraintTop_toBottomOf="@id/authorsSection">
 
             <TextView
-                android:id="@+id/recentBooksLabel"
+                android:id="@+id/searchResultLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:fontFamily="@font/amarante"
-                android:text="@string/recent_search"
+                android:text="@string/recent"
                 android:textColor="@color/black"
                 android:textSize="18sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/seeAllRecent"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="20dp"
-                android:fontFamily="@font/amarante"
-                android:text="@string/see_all"
-                android:textColor="@color/black"
-                android:textSize="14sp"
-                app:layout_constraintBottom_toBottomOf="@id/recentBooksLabel"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/recentBooksLabel" />
-
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recentBooksRecycler"
+                android:id="@+id/searchResultRecycler"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
+                android:visibility="gone"
                 android:clipToPadding="false"
                 android:paddingStart="20dp"
                 android:paddingEnd="20dp"
-                app:layout_constraintTop_toBottomOf="@+id/recentBooksLabel" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <!-- Top Books Section -->
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/topBooksSection"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:paddingBottom="24dp"
-            app:layout_constraintTop_toBottomOf="@id/recentBooksSection">
-
-            <TextView
-                android:id="@+id/topBooksLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:fontFamily="@font/amarante"
-                android:text="@string/top_book_search"
-                android:textColor="@color/black"
-                android:textSize="18sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/seeAllTop"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="20dp"
-                android:fontFamily="@font/amarante"
-                android:text="@string/see_all"
-                android:textColor="@color/black"
-                android:textSize="14sp"
-                app:layout_constraintBottom_toBottomOf="@id/topBooksLabel"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/topBooksLabel" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/topBooksRecycler"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="16dp"
-                app:layout_constraintTop_toBottomOf="@+id/topBooksLabel" />
+                app:layout_constraintTop_toBottomOf="@+id/searchResultLabel" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
