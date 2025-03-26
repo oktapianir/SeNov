@@ -160,6 +160,8 @@
     <string name="empty_search_illustration">Ilustrasi Pencarian Kosong</string>
     <string name="empty_no_search">Tidak ada buku yang ditemukan</string>
     <string name="empty_no_search_desc">Coba cari menggunakan kata lain yaa!</string>
+    <string name="empty_your_book">Koleksi buku anda masih kosong</string>
+    <string name="empty_your_book_desc">Silahkan jelajahi dan tambahkan data buku pada koleksi anda!</string>
 
 
     <string name="faq_help">Bantuan &amp; FAQ</string>

@@ -5,7 +5,7 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import com.okta.senov.R
 import com.okta.senov.adapter.BookAdapter
 import com.okta.senov.databinding.FragmentYourBookBinding
@@ -20,47 +20,29 @@ class YourBookFragment : Fragment(R.layout.fragment_your_book) {
     private var _binding: FragmentYourBookBinding? = null
     private val binding get() = _binding!!
 
-    // Use by viewModels() instead of activityViewModels() to ensure consistency with Hilt
     private val yourBookViewModel: YourBookViewModel by viewModels()
     private lateinit var adapter: BookAdapter
-//    private lateinit var adapter: YourBookAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         _binding = FragmentYourBookBinding.bind(view)
         setupRecyclerView()
-        binding.icBack.setOnClickListener {
-            findNavController().navigate(R.id.homeFragment)
-        }
-
-
-        // Then set up observation
+        setupClickListeners()
         observeViewModel()
 
         Timber.tag("YourBookFragment")
             .d("onViewCreated: Refreshed books count = ${yourBookViewModel.yourBooks.value?.size ?: 0}")
     }
 
-//    private fun setupRecyclerView() {
-//        adapter = BookAdapter { book ->
-//            Toast.makeText(requireContext(), "Clicked: ${book.title}", Toast.LENGTH_SHORT).show()
-//        }
-//
-//        binding.yourBookRecyclerView.apply {
-//            layoutManager = LinearLayoutManager(requireContext())
-//            adapter = this@YourBookFragment.adapter
-//            setHasFixedSize(true)
-//        }
-//    }
+    private fun setupClickListeners() {
+        binding.icBack.setOnClickListener {
+            findNavController().navigate(R.id.homeFragment)
+        }
+    }
 
     private fun setupRecyclerView() {
         adapter = BookAdapter(
-//            onItemClick = { book ->
-//                // Navigate to detail fragment
-//                val action = YourBookFragmentDirections.actionYourbookToDetail(book)
-//                findNavController().navigate(action)
-//            },
             onItemClick = { bookData ->
                 val book = Book(
                     id = bookData.id,
@@ -74,13 +56,17 @@ class YourBookFragment : Fragment(R.layout.fragment_your_book) {
                 findNavController().navigate(action)
             },
             onRemoveClick = { book ->
-                // Remove book from bookmarks
                 yourBookViewModel.removeBook(book.id)
             }
         )
 
         binding.yourBookRecyclerView.apply {
-            layoutManager = LinearLayoutManager(requireContext())
+            layoutManager = GridLayoutManager(
+                requireContext(),
+                2,
+                GridLayoutManager.VERTICAL,
+                false
+            )
             adapter = this@YourBookFragment.adapter
             setHasFixedSize(true)
         }
@@ -88,20 +74,19 @@ class YourBookFragment : Fragment(R.layout.fragment_your_book) {
 
     private fun observeViewModel() {
         yourBookViewModel.yourBooks.observe(viewLifecycleOwner) { bookDataList ->
-            val books = bookDataList.map { bookData ->
-                Book(
-                    id = bookData.id,
-                    title = bookData.title,
-                    authorName = bookData.authorName,
-                    category = bookData.category,
-                    description = bookData.description
-                )
-            }
+            // Submit list to adapter
             adapter.submitList(bookDataList)
+
+            // Handle empty state
+            if (bookDataList.isEmpty()) {
+                binding.yourBookRecyclerView.visibility = View.GONE
+                binding.emptyStateLayout.visibility = View.VISIBLE
+            } else {
+                binding.yourBookRecyclerView.visibility = View.VISIBLE
+                binding.emptyStateLayout.visibility = View.GONE
+            }
         }
-
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()
