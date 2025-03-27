@@ -94,7 +94,7 @@
     <string name="api_key">8b71325fbf3a43d8a949fd23ce4e2f5a</string>
     <string name="point">•</string>
     <string name="welcome">Selamat Datang!</string>
-    <string name="mail">Email</string>
+    <string name="mail">Alamat Email</string>
     <string name="password">Password</string>
     <string name="sentence">Silahkan masuk ke akun Anda</string>
     <string name="account">Belum punya akun?</string>
@@ -119,6 +119,7 @@
     <string name="titla_MA_admin">Management Actions</string>
     <string name="title_feature_add_book">Tambah Buku Baru</string>
     <string name="title_feature_add_book_content">Tambah Chapter Buku</string>
+    <string name="title_support_section">Pusat Bantuan</string>
 
 
     <string name="name_add_author">Nama Author</string>
@@ -126,7 +127,7 @@
     <string name="name_develop">Oktapiani</string>
     <string name="name_book">Bulan</string>
     <string name="name_book_to">Karya</string>
-    <string name="name_full">Full Name</string>
+    <string name="name_full">Nama Lengkap</string>
 
     <string name="author_bio">Biography</string>
     <string name="author_social_media">Social Media</string>
@@ -169,4 +170,9 @@
     <string name="faq_answer_1">1.Login terlebih dahulu untuk bisa menambahkan dan membaca buku yang tersedia.
     2.Pengguna tanpa melaukan login dan register hanya dapat melihat data buku saja tanpa bisa mengguankan fitur baca dan bookmark.</string>
     <string name="contact_support">Hubungi Dukungan</string>
+    <string name="support_ask">Butuh Bantuan?</string>
+    <string name="support_ask_desc">Kami siap membantu Anda menyelesaikan masalah</string>
+    <string name="support_category_problem">Kategori Masalah</string>
+    <string name="support_category_problem_desc">Jelaskan Masalah Anda</string>
+    <string name="support_solution">Kirim Permintaan Bantuan</string>
 </resources>
