@@ -108,4 +108,7 @@ dependencies {
     //chucker
     implementation (libs.library)
     releaseImplementation (libs.library.no.op)
+
+    //pdf
+    implementation (libs.itext7.core)
 }
