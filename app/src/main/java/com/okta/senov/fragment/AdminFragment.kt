@@ -12,11 +12,13 @@ import com.okta.senov.databinding.FragmentAdminBinding
 import com.okta.senov.extensions.findNavController
 import timber.log.Timber
 import androidx.core.content.edit
+import com.google.firebase.firestore.FirebaseFirestore
 
 class AdminFragment : Fragment(R.layout.fragment_admin) {
 
     private var _binding: FragmentAdminBinding? = null
     private val binding get() = _binding!!
+    private val db = FirebaseFirestore.getInstance()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,6 +38,11 @@ class AdminFragment : Fragment(R.layout.fragment_admin) {
         binding.cardLogout.setOnClickListener {
             logout()
         }
+        //fungsi untuk mengambil jumlah keseluruhan data author
+        fetchAuthorsCount()
+
+        //fungsi untuk mengambil jumlah keseluran data buku
+        fetchBooksCount()
         return binding.root
     }
     private fun logout() {
@@ -107,6 +114,45 @@ class AdminFragment : Fragment(R.layout.fragment_admin) {
             Toast.LENGTH_SHORT
         ).show()
     }
+    private fun fetchAuthorsCount() {
+        db.collection("authors")
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                val authorsCount = querySnapshot.size()
+                binding.tvAuthorCount.text = authorsCount.toString()
+
+                Timber.tag("AdminFragment").d("Total authors: $authorsCount")
+            }
+            .addOnFailureListener { exception ->
+                Timber.tag("AdminFragment").e(exception, "Error fetching authors count")
+                binding.tvAuthorCount.text = "0"
+                Toast.makeText(
+                    requireContext(),
+                    "Gagal mengambil jumlah penulis",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+    }
+    private fun fetchBooksCount() {
+        db.collection("Books")
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                val booksCount = querySnapshot.size()
+                binding.tvBookCount.text = booksCount.toString()
+
+                Timber.tag("AdminFragment").d("Total books: $booksCount")
+            }
+            .addOnFailureListener { exception ->
+                Timber.tag("AdminFragment").e(exception, "Error fetching books count")
+                binding.tvBookCount.text = "0"
+                Toast.makeText(
+                    requireContext(),
+                    "Gagal mengambil jumlah buku",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+    }
+
 
     override fun onDestroyView() {
         Timber.tag("AdminFragment").d("onDestroyView called")
