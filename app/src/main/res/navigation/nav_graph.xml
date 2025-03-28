@@ -143,6 +143,9 @@
         <action
             android:id="@+id/action_adminFragment_to_addContentBookFragment"
             app:destination="@id/addContentBookFragment"/>
+        <action
+            android:id="@+id/action_adminFragment_to_loginFragment"
+            app:destination="@+id/loginfragment"/>
     </fragment>
 
     <fragment
