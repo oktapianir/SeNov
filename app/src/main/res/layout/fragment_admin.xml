@@ -473,7 +473,7 @@
                         android:layout_height="match_parent"
                         android:layout_marginStart="12dp"
                         android:background="@null"
-                        android:hint="@string/search_icon"
+                        android:hint="@string/search"
                         android:inputType="text"
                         android:textColorHint="@color/black"
                         android:textSize="14sp" />
