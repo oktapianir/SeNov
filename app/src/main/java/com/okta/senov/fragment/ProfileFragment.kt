@@ -53,9 +53,15 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         if (currentUser != null) {
             binding.tvUsername.text = currentUser.displayName ?: "Anonymous"
             binding.tvEmail.text = currentUser.email ?: "Email tidak tersedia"
+
+            // Sembunyikan tombol login dan register
+            binding.loginButtonsContainer.visibility = View.GONE
         } else {
             binding.tvUsername.text = getString(R.string.guest)
             binding.tvEmail.text = getString(R.string.opener)
+
+            // Tampilkan tombol login dan register
+            binding.loginButtonsContainer.visibility = View.VISIBLE
         }
 
         binding.icBack.setOnClickListener {
