@@ -89,6 +89,10 @@ class BookReaderFragment : Fragment(R.layout.fragment_book_reader) {
                     checkStoragePermissionAndDownload()
                     true
                 }
+                R.id.ratingFragment -> {
+                    findNavController().navigate(R.id.ratingFragment)
+                    true
+                }
                 else -> false
             }
         }

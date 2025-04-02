@@ -191,4 +191,15 @@
             app:destination="@id/adminFragment" />
     </fragment>
 
+    <fragment
+        android:id="@+id/ratingFragment"
+        android:name="com.okta.senov.fragment.RatingFragment"
+        android:label="Rating"
+        tools:layout="@layout/fragment_rating" >
+    <argument
+        android:name="BOOK_ID"
+        app:argType="string"
+        app:nullable="false" />
+    </fragment>
+
 </navigation>

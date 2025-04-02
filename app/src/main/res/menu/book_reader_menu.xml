@@ -1,8 +1,11 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/action_download"
         android:icon="@drawable/ic_download"
-        android:title="@string/title_download_pdf"
-        app:showAsAction="always" />
+        android:title="@string/title_download_pdf" />
+    <item
+        android:id="@+id/ratingFragment"
+        android:icon="@drawable/ic_add"
+        android:title="@string/add_rating" />
+
 </menu>
