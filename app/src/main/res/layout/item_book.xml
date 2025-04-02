@@ -29,7 +29,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:shapeAppearanceOverlay="@style/RoundedImageStyle" />
 
-        <!-- Favorite Button -->
+        <!-- delete Button -->
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/btnRemove"
             android:layout_width="32dp"
@@ -45,7 +45,7 @@
             app:layout_constraintTop_toTopOf="@id/bookCoverImageView"
             app:maxImageSize="16dp"
             app:srcCompat="@drawable/img_remove"
-            app:tint="@color/primary" />
+            app:tint="@color/negative" />
 
         <!-- Book Title -->
         <TextView
