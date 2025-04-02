@@ -209,7 +209,8 @@ class AddBookFragment : Fragment(R.layout.fragment_add_book) {
         )
 
         db.collection("Books")
-            .add(bookData)
+            .document(idBook)
+            .set(bookData)
             .addOnSuccessListener {
                 Toast.makeText(
                     requireContext(),
