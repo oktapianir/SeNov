@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingVertical="12dp"
-    android:paddingHorizontal="16dp">
+    android:paddingHorizontal="16dp"
+    android:paddingVertical="12dp">
 
     <!-- Book Cover with Shadow and Gradient Overlay -->
     <com.google.android.material.imageview.ShapeableImageView
@@ -37,12 +36,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:ellipsize="end"
+            android:fontFamily="@font/amarante"
+            android:letterSpacing="0.01"
             android:maxLines="2"
             android:textColor="@color/black"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:fontFamily="@font/amarante"
-            android:letterSpacing="0.01"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -58,7 +57,6 @@
             android:maxLines="1"
             android:textColor="@color/black"
             android:textSize="13sp"
-            android:fontFamily="@font/amarante"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/bookTitleTextView"
@@ -69,15 +67,15 @@
             android:id="@+id/genreChip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="4dp"
+            android:fontFamily="@font/amarante"
             android:textColor="@color/accent"
             android:textSize="12sp"
-            android:fontFamily="@font/amarante"
             app:chipBackgroundColor="@color/chip_background"
+            app:chipCornerRadius="12dp"
             app:chipMinHeight="24dp"
             app:chipStrokeColor="@color/accent_light"
             app:chipStrokeWidth="0.5dp"
-            app:chipCornerRadius="12dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/bookAuthorTextView"
             tools:text="Fantasy" />
@@ -88,34 +86,33 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
             android:background="@drawable/bg_chapters"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
             android:paddingHorizontal="8dp"
             android:paddingVertical="4dp"
+            app:layout_constraintBottom_toBottomOf="@id/genreChip"
             app:layout_constraintStart_toEndOf="@id/genreChip"
-            app:layout_constraintTop_toTopOf="@id/genreChip"
-            app:layout_constraintBottom_toBottomOf="@id/genreChip">
+            app:layout_constraintTop_toTopOf="@id/genreChip">
 
             <ImageView
                 android:layout_width="14dp"
                 android:layout_height="14dp"
+                android:contentDescription="@string/book_chapters"
                 android:src="@drawable/ic_book"
-                app:tint="@color/accent"
-                android:contentDescription="@string/book_chapters" />
+                app:tint="@color/accent" />
 
             <TextView
                 android:id="@+id/chaptersTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
-                android:fontFamily="@font/amarante"
+                android:text="@string/book_chapters"
                 android:textColor="@color/black"
-                android:textSize="11sp"
-                android:text="@string/book_chapters"/>
+                android:textSize="11sp" />
         </LinearLayout>
 
-        <!-- Rating & Detail Button Section -->
+        <!-- Recommendation Count & Detail Button Section -->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -123,9 +120,9 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/genreChip">
 
-            <!-- Rating with 5 stars -->
+            <!-- Recommendation count with thumbs up icon -->
             <LinearLayout
-                android:id="@+id/ratingContainer"
+                android:id="@+id/recommendationContainer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
@@ -134,61 +131,22 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <!-- 5 individual stars for better control -->
+                <!-- Thumbs up icon -->
                 <ImageView
-                    android:id="@+id/star1"
-                    android:layout_width="14dp"
-                    android:layout_height="14dp"
-                    android:contentDescription="@string/rating"
-                    android:src="@drawable/ic_star"
-                    app:tint="@color/star_gold" />
-
-                <ImageView
-                    android:id="@+id/star2"
-                    android:layout_width="14dp"
-                    android:layout_height="14dp"
-                    android:layout_marginStart="1dp"
-                    android:contentDescription="@string/rating"
-                    android:src="@drawable/ic_star"
-                    app:tint="@color/star_gold" />
-
-                <ImageView
-                    android:id="@+id/star3"
-                    android:layout_width="14dp"
-                    android:layout_height="14dp"
-                    android:layout_marginStart="1dp"
-                    android:contentDescription="@string/rating"
-                    android:src="@drawable/ic_star"
-                    app:tint="@color/star_gold" />
-
-                <ImageView
-                    android:id="@+id/star4"
-                    android:layout_width="14dp"
-                    android:layout_height="14dp"
-                    android:layout_marginStart="1dp"
-                    android:contentDescription="@string/rating"
-                    android:src="@drawable/ic_star"
-                    app:tint="@color/star_gold" />
-
-                <ImageView
-                    android:id="@+id/star5"
-                    android:layout_width="14dp"
-                    android:layout_height="14dp"
-                    android:layout_marginStart="1dp"
-                    android:contentDescription="@string/rating"
-                    android:src="@drawable/ic_star"
-                    app:tint="@color/star_gold" />
+                    android:id="@+id/thumbsUpIcon"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/img_thumbs_up"
+                    app:tint="@color/black" />
 
                 <TextView
-                    android:id="@+id/ratingTextView"
+                    android:id="@+id/recommendCountTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
-                    android:fontFamily="@font/amarante"
                     android:textColor="@color/black"
                     android:textSize="13sp"
-                    android:textStyle="bold"
-                    android:text="@string/rating"/>
+                    tools:text="24 Rekomendasi" />
             </LinearLayout>
 
             <!-- Detail Button with modern styling -->
@@ -196,19 +154,23 @@
                 android:id="@+id/buttonGoToDetail"
                 android:layout_width="wrap_content"
                 android:layout_height="32dp"
-                android:fontFamily="@font/amarante"
-                android:paddingHorizontal="16dp"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
                 android:text="@string/go_to_detail"
+                android:fontFamily="@font/cantata_one"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
-                android:textSize="12sp"
+                android:textSize="10sp"
                 app:backgroundTint="@color/accent"
-                app:cornerRadius="16dp"
+                app:cornerRadius="8dp"
                 app:elevation="2dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:rippleColor="@color/black" />
+                app:rippleColor="@color/black"
+                tools:ignore="SmallSp" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
