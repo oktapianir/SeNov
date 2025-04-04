@@ -1,5 +1,6 @@
 package com.okta.senov.fragment
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +15,7 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.okta.senov.databinding.FragmentRatingBinding
 import com.okta.senov.R
+import timber.log.Timber
 
 
 class RatingFragment : Fragment() {
@@ -31,6 +33,7 @@ class RatingFragment : Fragment() {
         return binding.root
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -38,10 +41,11 @@ class RatingFragment : Fragment() {
         firestore = FirebaseFirestore.getInstance()
         auth = FirebaseAuth.getInstance()
 
-        // Ambil bookId dari argument fragment (pastikan sudah dikirim saat navigasi ke fragment ini)
-        arguments?.let {
-            bookId = it.getString("BOOK_ID", "")
-        }
+        // Ambil bookId dari argument fragment
+        val args = RatingFragmentArgs.fromBundle(requireArguments())
+        bookId = args.BOOKID
+        Timber.tag("RatingFragment").d("Received bookId: $bookId")
+
 
         // Ambil data buku untuk ditampilkan
         if (bookId.isNotEmpty()) {
@@ -61,16 +65,16 @@ class RatingFragment : Fragment() {
     }
 
     private fun loadBookData(bookId: String) {
-        firestore.collection("books").document(bookId)
+        firestore.collection("Books").document(bookId)
             .get()
             .addOnSuccessListener { document ->
                 if (document != null && document.exists()) {
                     // Isi data buku ke UI
-                    binding.tvBookTitle.text = document.getString("title") ?: "Judul Buku"
-                    binding.tvAuthor.text = document.getString("author") ?: "Penulis"
+                    binding.tvBookTitle.text = document.getString("titleBook") ?: "Judul Buku"
+                    binding.tvAuthor.text = document.getString("nameAuthor") ?: "Penulis"
 
                     // Load gambar sampul buku menggunakan Glide jika ada URL gambar
-                    document.getString("coverUrl")?.let { coverUrl ->
+                    document.getString("fotoUrl")?.let { coverUrl ->
                         if (coverUrl.isNotEmpty()) {
                             Glide.with(requireContext())
                                 .load(coverUrl)

@@ -90,7 +90,8 @@ class BookReaderFragment : Fragment(R.layout.fragment_book_reader) {
                     true
                 }
                 R.id.ratingFragment -> {
-                    findNavController().navigate(R.id.ratingFragment)
+                    val action = BookReaderFragmentDirections.actionBookReaderFragmentToRatingFragment(bookId)
+                    findNavController().navigate(action)
                     true
                 }
                 else -> false
