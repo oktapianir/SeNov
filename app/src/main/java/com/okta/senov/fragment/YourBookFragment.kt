@@ -31,8 +31,23 @@ class YourBookFragment : Fragment(R.layout.fragment_your_book) {
         setupClickListeners()
         observeViewModel()
 
+        refreshData()
+
         Timber.tag("YourBookFragment")
             .d("onViewCreated: Refreshed books count = ${yourBookViewModel.yourBooks.value?.size ?: 0}")
+    }
+    // Menambahkan method untuk memperbarui data
+    private fun refreshData() {
+        yourBookViewModel.fetchBookmarkedBooks()
+        observeViewModel()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // Refresh data saat fragment kembali menjadi aktif
+        refreshData()
+        Timber.tag("YourBookFragment")
+            .d("onResume: Refreshing books data")
     }
 
     private fun setupClickListeners() {
@@ -55,8 +70,13 @@ class YourBookFragment : Fragment(R.layout.fragment_your_book) {
                 val action = YourBookFragmentDirections.actionYourbookToDetail(book)
                 findNavController().navigate(action)
             },
+//            onRemoveClick = { book ->
+//                yourBookViewModel.removeBook(book.id)
+//            }
             onRemoveClick = { book ->
                 yourBookViewModel.removeBook(book.id)
+                // Langsung refresh data setelah menghapus bookmark
+                refreshData()
             }
         )
 

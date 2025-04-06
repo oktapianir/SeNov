@@ -11,7 +11,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.Timestamp
 import com.okta.senov.R
 import com.okta.senov.databinding.FragmentDetailBinding
 import com.okta.senov.model.Book
@@ -41,6 +43,17 @@ class DetailFragment : Fragment() {
         setupBookDetails(book)
         setupButtons(book)
         checkIfBookmarked(book.id)
+
+        // Initialize user bookmark collection if user is logged in
+        FirebaseAuth.getInstance().currentUser?.let { user ->
+            initializeBookmarkCollection(user.uid)
+        }
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        Timber.tag("Auth").d("Current user: ${currentUser?.uid ?: "Not logged in"}")
+        if (currentUser == null) {
+            // User not authenticated, show appropriate UI
+            showToast("You must be logged in to use bookmarks")
+        }
     }
 
     private fun setupButtons(book: Book) {
@@ -66,6 +79,53 @@ class DetailFragment : Fragment() {
         }
     }
 
+    private fun initializeBookmarkCollection(userId: String) {
+        // Create user document if it doesn't exist
+        val userDocRef = db.collection("users").document(userId)
+
+        userDocRef.get()
+            .addOnSuccessListener { document ->
+                if (!document.exists()) {
+                    // Create user document with basic data
+                    val userData = hashMapOf(
+                        "userId" to userId,
+                        "createdAt" to Timestamp.now(),
+                        "bookmarksCount" to 0
+                    )
+
+                    userDocRef.set(userData)
+                        .addOnSuccessListener {
+                            Timber.tag("Firestore").d("User document created successfully")
+
+                            // Create an empty document in bookmarks subcollection to ensure it exists
+                            userDocRef.collection("bookmarks").document("placeholder")
+                                .set(hashMapOf("placeholder" to true))
+                                .addOnSuccessListener {
+                                    Timber.tag("Firestore").d("Bookmarks collection initialized")
+                                    // Delete the placeholder after creating the collection
+                                    userDocRef.collection("bookmarks").document("placeholder")
+                                        .delete()
+                                }
+                        }
+                        .addOnFailureListener { e ->
+                            Timber.tag("Firestore").e("Error creating user document: ${e.message}")
+                        }
+                } else {
+                    // Make sure bookmarks collection exists for existing users too
+                    userDocRef.collection("bookmarks").document("placeholder")
+                        .set(hashMapOf("placeholder" to true))
+                        .addOnSuccessListener {
+                            Timber.tag("Firestore").d("Bookmarks collection initialized/verified")
+                            // Delete the placeholder after verifying/creating the collection
+                            userDocRef.collection("bookmarks").document("placeholder").delete()
+                        }
+                }
+            }
+            .addOnFailureListener { e ->
+                Timber.tag("Firestore").e("Error checking user document: ${e.message}")
+            }
+    }
+
     // Check if book is already bookmarked
     private fun checkIfBookmarked(bookId: String) {
         val userId = FirebaseAuth.getInstance().currentUser?.uid
@@ -86,22 +146,51 @@ class DetailFragment : Fragment() {
     // Save book to user's bookmarks
     private fun saveBookmark(book: Book) {
         val userId = FirebaseAuth.getInstance().currentUser?.uid
+
+        Timber.tag("BookmarkDebug").d("Current user ID: $userId")
+
         if (userId != null) {
+            // Add timestamp when bookmark was created
+            val bookData = book.toMap().toMutableMap().apply {
+                put("bookmarkedAt", Timestamp.now())
+            }
+
+            Timber.tag("BookmarkDebug").d("Book data to save: $bookData")
+            Timber.tag("BookmarkDebug").d("Saving to path: users/$userId/bookmarks/${book.id}")
+
+            // Save book to bookmarks collection
             db.collection("users").document(userId)
                 .collection("bookmarks").document(book.id)
-                .set(book)
+                .set(bookData)
                 .addOnSuccessListener {
                     isBookmarked = true
                     updateBookmarkIcon()
+
+                    Timber.tag("BookmarkDebug")
+                        .d("SUCCESS: Document written at users/$userId/bookmarks/${book.id}")
+
+                    // Update bookmark counter in user document
+                    db.collection("users").document(userId)
+                        .update("bookmarksCount", FieldValue.increment(1))
+                        .addOnSuccessListener {
+                            Timber.tag("Bookmark").d("Bookmark counter updated")
+                        }
+                        .addOnFailureListener { e ->
+                            Timber.tag("Bookmark")
+                                .e("Error updating bookmark counter: ${e.message}")
+                        }
+
                     showToast("Book added to your collection")
                     Timber.tag("Bookmark").d("Book bookmarked: ${book.title}")
                 }
                 .addOnFailureListener { e ->
-                    Timber.tag("Bookmark").e("Error adding bookmark: ${e.message}")
+                    Timber.tag("BookmarkDebug")
+                        .e("FAILURE: Error adding bookmark: ${e.message}, ${e.stackTraceToString()}")
                     showToast("Failed to bookmark book")
                 }
         } else {
             // Handle case where user is not logged in
+            Timber.tag("BookmarkDebug").e("User is not logged in!")
             showToast("Please login first!!")
         }
     }
@@ -116,6 +205,18 @@ class DetailFragment : Fragment() {
                 .addOnSuccessListener {
                     isBookmarked = false
                     updateBookmarkIcon()
+
+                    // Update counter bookmark di dokumen user
+                    db.collection("users").document(userId)
+                        .update("bookmarksCount", FieldValue.increment(-1))
+                        .addOnSuccessListener {
+                            Timber.tag("Bookmark").d("Bookmark counter updated")
+                        }
+                        .addOnFailureListener { e ->
+                            Timber.tag("Bookmark")
+                                .e("Error updating bookmark counter: ${e.message}")
+                        }
+
                     showToast("Book removed from your collection")
                     Timber.tag("Bookmark").d("Book removed from bookmarks: $bookId")
                 }
@@ -123,6 +224,35 @@ class DetailFragment : Fragment() {
                     Timber.tag("Bookmark").e("Error removing bookmark: ${e.message}")
                     showToast("Failed to remove bookmark")
                 }
+        }
+    }
+
+    // Get all bookmarks for current user
+    fun getAllBookmarks(callback: (List<Book>) -> Unit) {
+        val userId = FirebaseAuth.getInstance().currentUser?.uid
+        if (userId != null) {
+            db.collection("users").document(userId)
+                .collection("bookmarks")
+                .orderBy("bookmarkedAt") // Sort by bookmark date
+                .get()
+                .addOnSuccessListener { result ->
+                    val bookmarkList = ArrayList<Book>()
+                    for (document in result) {
+                        try {
+                            val book = document.toObject(Book::class.java)
+                            bookmarkList.add(book)
+                        } catch (e: Exception) {
+                            Timber.tag("Bookmark").e("Error converting document: ${e.message}")
+                        }
+                    }
+                    callback(bookmarkList)
+                }
+                .addOnFailureListener { e ->
+                    Timber.tag("Bookmark").e("Error getting bookmarks: ${e.message}")
+                    callback(emptyList())
+                }
+        } else {
+            callback(emptyList())
         }
     }
 
@@ -229,6 +359,17 @@ class DetailFragment : Fragment() {
             val action = DetailFragmentDirections.actionDetailToBookreader(bookContent)
             findNavController().navigate(action)
         }
+    }
+
+    // Helper extension function to convert Book to Map for Firestore
+    private fun Book.toMap(): Map<String, Any?> {
+        return mapOf(
+            "id" to id,
+            "title" to title,
+            "authorName" to authorName,
+            "description" to description,
+            "image" to image
+        )
     }
 
     override fun onDestroyView() {
