@@ -87,19 +87,18 @@
                         android:textColor="@color/black"
                         android:textColorHint="@color/black"
                         android:textSize="16sp"
-                        app:layout_constraintEnd_toStartOf="@id/filterIcon"
                         app:layout_constraintStart_toEndOf="@id/searchIcon" />
 
-                    <ImageView
-                        android:id="@+id/filterIcon"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:contentDescription="@string/filter"
-                        android:src="@drawable/ic_filter"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:tint="@color/black" />
+<!--                    <ImageView-->
+<!--                        android:id="@+id/filterIcon"-->
+<!--                        android:layout_width="24dp"-->
+<!--                        android:layout_height="24dp"-->
+<!--                        android:contentDescription="@string/filter"-->
+<!--                        android:src="@drawable/ic_filter"-->
+<!--                        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                        app:layout_constraintEnd_toEndOf="parent"-->
+<!--                        app:layout_constraintTop_toTopOf="parent"-->
+<!--                        app:tint="@color/black" />-->
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
 
