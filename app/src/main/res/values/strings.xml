@@ -67,7 +67,7 @@
     <string name="book_enter_title_chapter">Enter Judul Chapter</string>
     <string name="book_enter_chapter">Enter Book Chapter</string>
     <string name="book_chapters">2 chapter</string>
-    <string name="exp_number">24</string>
+    <string name="exp_number">0</string>
     <string name="recent">Pencarian</string>
     <string name="notif">Notifikasi</string>
     <string name="filter">Filter</string>
@@ -91,6 +91,14 @@
     <string name="clear_all">Clear All</string>
     <string name="trending_now">Trending Now</string>
     <string name="all">All</string>
+    <string name="analytics_overview">Analytics Overview</string>
+    <string name="weekly">Minggu</string>
+    <string name="monthly">Bulan</string>
+    <string name="yearly">Tahun</string>
+    <string name="user_activity">Grafik Seputar Novel</string>
+    <string name="app_usage_metrics">berikut data grafik berdasarkan...</string>
+    <string name="content_distribution">Content Distribution</string>
+    <string name="top_categories_and_books">Top Categories and Books </string>
     <string name="fiction">Fiksi</string>
     <string name="fantacy">Fantasi</string>
     <string name="adventure">Petualangan</string>"
