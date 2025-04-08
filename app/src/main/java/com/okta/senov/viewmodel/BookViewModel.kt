@@ -1,5 +1,6 @@
 package com.okta.senov.viewmodel
 
+//import android.media.Rating
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -15,6 +16,7 @@ import com.okta.senov.repository.BookRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import com.okta.senov.model.Rating
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -42,6 +44,10 @@ class BookViewModel @Inject constructor(
 
     private val _searchResults = MutableLiveData<List<Book>>()
     val searchResults: LiveData<List<Book>> = _searchResults
+
+    // Add a new LiveData for book ratings
+    private val _bookRatings = MutableLiveData<Map<String, Float>>()
+    val bookRatings: LiveData<Map<String, Float>> = _bookRatings
 
     private val _loading = MutableLiveData<Boolean>()
     val loading: LiveData<Boolean> = _loading
@@ -161,6 +167,7 @@ class BookViewModel @Inject constructor(
                 _loading.value = false
             }
     }
+
     fun fetchTopAuthorsFromFirebase() {
         Timber.tag("BookViewModel").d("Mulai mengambil data authors dari Firebase")
         firestore.collection("authors")
@@ -181,6 +188,7 @@ class BookViewModel @Inject constructor(
                 Timber.tag("BookViewModel").e(e, "Error mengambil authors")
             }
     }
+
     // Function to fetch a single author by ID
     fun fetchAuthorById(authorId: String) {
         val db = FirebaseFirestore.getInstance()
@@ -190,7 +198,7 @@ class BookViewModel @Inject constructor(
                 if (document != null) {
                     val author = document.toObject(Author::class.java)
                     _selectedAuthor.value = author!!
-                }else {
+                } else {
                     Timber.e("Dokumen author tidak ditemukan atau gagal dikonversi.")
                 }
             }
@@ -202,6 +210,7 @@ class BookViewModel @Inject constructor(
     fun selectAuthor(author: Author) {
         _selectedAuthor.value = author
     }
+
     fun searchBooks(query: String) {
         Timber.d("Search initiated with query: '$query'")
 
@@ -231,6 +240,7 @@ class BookViewModel @Inject constructor(
                 // Rest of the search implementation...
             }
     }
+
     // Diagnostic method to check Firestore connection and collection
     fun diagnosticFirestoreCheck() {
         firestore.collection("Books")
@@ -244,4 +254,57 @@ class BookViewModel @Inject constructor(
             .addOnFailureListener { exception ->
                 Timber.e(exception, "Diagnostic Check Failed")
             }
-    }}
+    }
+
+    // Ensure the fetchRatingsFromFirestore method logs more data
+    fun fetchRatingsFromFirestore() {
+        viewModelScope.launch {
+            try {
+                Timber.d("Starting to fetch ratings from Firestore")
+                val ratingsRef = FirebaseFirestore.getInstance().collection("ratings")
+
+                ratingsRef.get().addOnSuccessListener { result ->
+                    Timber.d("Retrieved ${result.size()} rating documents")
+
+                    // Debug: Print all raw ratings data
+                    for (document in result) {
+                        val data = document.data
+                        Timber.d("Raw rating data: $data")
+                    }
+
+                    val ratingsMap = mutableMapOf<String, MutableList<Float>>()
+
+                    for (document in result) {
+                        val rating = document.toObject(Rating::class.java)
+
+                        // Use correct field name 'rating' instead of 'ratingValue'
+                        Timber.d("Rating document: bookId=${rating.bookId}, value=${rating.rating}")
+
+                        if (!ratingsMap.containsKey(rating.bookId)) {
+                            ratingsMap[rating.bookId] = mutableListOf()
+                        }
+
+                        // Add the rating value (using 'rating' field)
+                        ratingsMap[rating.bookId]?.add(rating.rating)
+                    }
+
+                    Timber.d("Compiled ratings for ${ratingsMap.size} unique books")
+
+                    // Calculate average rating for each book
+                    val avgRatings = mutableMapOf<String, Float>()
+                    ratingsMap.forEach { (bookId, ratings) ->
+                        avgRatings[bookId] = ratings.average().toFloat()
+                        Timber.d("Book $bookId average rating: ${avgRatings[bookId]}")
+                    }
+
+                    _bookRatings.value = avgRatings
+                    Timber.d("Published ${avgRatings.size} average ratings to LiveData")
+                }.addOnFailureListener { exception ->
+                    Timber.e(exception, "Error getting ratings")
+                }
+            } catch (e: Exception) {
+                Timber.e(e, "Error fetching ratings")
+            }
+        }
+    }
+}

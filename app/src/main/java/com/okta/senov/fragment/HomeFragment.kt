@@ -4,13 +4,16 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.okta.senov.R
 import com.okta.senov.adapter.AllBooksAdapter
 import com.okta.senov.adapter.BookAdapter
+import com.okta.senov.databinding.DialogFilterSortBinding
 import com.okta.senov.databinding.FragmentHomeBinding
 import com.okta.senov.extensions.findNavController
 import com.okta.senov.model.Book
@@ -33,6 +36,11 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private lateinit var allBooksAdapter: AllBooksAdapter
 
     private var allBookList: List<Book> = emptyList()
+    private val SORT_NONE = 0
+    private val SORT_HIGH_TO_LOW = 1
+    private val SORT_LOW_TO_HIGH = 2
+    private var currentSortMode = SORT_NONE
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -108,6 +116,13 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             // Update adapter
             allBooksAdapter.setBooks(books)
         }
+        bookViewModel.bookRatings.observe(viewLifecycleOwner) { ratings ->
+            Timber.d("Ratings updated: ${ratings.size} items")
+            // Re-sort jika sudah ada filter yang aktif
+            if (currentSortMode != SORT_NONE) {
+                sortBooksByRating(currentSortMode == SORT_HIGH_TO_LOW)
+            }
+        }
         setupSearchFunctionality()
 
         // Navigasi ke halaman lain
@@ -122,9 +137,14 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         binding.yourBook.setOnClickListener {
             binding.yourBook.findNavController().navigate(R.id.action_home_to_yourbook)
         }
+        // click listener for filter icon
+        binding.filterIcon.setOnClickListener {
+            showFilterDialog()
+        }
 
         setupCategoryChips()
         bookViewModel.fetchAllBookContents()
+        bookViewModel.fetchRatingsFromFirestore()
     }
 
     private fun setupRecyclerViews() {
@@ -234,5 +254,90 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             binding.emptySection.visibility = View.GONE
             binding.allBooksSection.visibility = View.VISIBLE
         }
+    }
+
+    private fun showFilterDialog() {
+        val dialog = BottomSheetDialog(requireContext())
+        val dialogBinding = DialogFilterSortBinding.inflate(layoutInflater)
+        dialog.setContentView(dialogBinding.root)
+
+        // Check if ratings are available
+        val ratingsAvailable = bookViewModel.bookRatings.value?.isNotEmpty() == true
+
+        if (!ratingsAvailable) {
+            Timber.d("Ratings not available yet, showing toast")
+            Toast.makeText(requireContext(), "Please wait, loading ratings...", Toast.LENGTH_SHORT)
+                .show()
+            // Make sure to fetch ratings
+            bookViewModel.fetchRatingsFromFirestore()
+        }
+
+        dialogBinding.btnApplyFilter.setOnClickListener {
+            val selectedRadioButtonId = dialogBinding.radioGroupSort.checkedRadioButtonId
+            when (selectedRadioButtonId) {
+                R.id.radioHighestRating -> sortBooksByRating(true)
+                R.id.radioLowestRating -> sortBooksByRating(false)
+            }
+            dialog.dismiss()
+        }
+
+        dialog.show()
+    }
+
+    private fun sortBooksByRating(highToLow: Boolean) {
+        // Update the current sort mode
+        currentSortMode = if (highToLow) SORT_HIGH_TO_LOW else SORT_LOW_TO_HIGH
+
+        // Get ratings data
+        val ratingsMap = bookViewModel.bookRatings.value
+
+        // Log all available ratings
+        Timber.d("Available ratings: ${ratingsMap?.size ?: 0}")
+        ratingsMap?.forEach { (bookId, rating) ->
+            Timber.d("Rating for book $bookId: $rating")
+        }
+
+        // Log all book IDs to verify match
+        Timber.d("Available books: ${allBookList.size}")
+        allBookList.forEach { book ->
+            Timber.d("Book ID: ${book.id}, Title: ${book.title}")
+        }
+
+        // Check if we have any non-zero ratings
+        val hasValidRatings = ratingsMap?.any { it.value > 0f } == true
+
+        if (!hasValidRatings) {
+            Toast.makeText(requireContext(), "No ratings available for sorting", Toast.LENGTH_SHORT)
+                .show()
+            return
+        }
+
+        // Create sorted list
+        val sortedList = ArrayList(allBookList)
+
+        // Sort based on ratings (with fallback for missing ratings)
+        if (highToLow) {
+            sortedList.sortByDescending { book -> ratingsMap.get(book.id) ?: 0f }
+        } else {
+            sortedList.sortBy { book -> ratingsMap.get(book.id) ?: 0f }
+        }
+
+        // Update adapter with sorted list
+        allBooksAdapter.setBooks(sortedList)
+
+        // Debug log all books with their ratings
+        sortedList.forEachIndexed { index, book ->
+            val rating = ratingsMap?.get(book.id) ?: 0f
+            Timber.d("Sorted book $index: ${book.title} - ID: ${book.id} - Rating: $rating")
+        }
+
+        // Scroll to top
+        binding.allBooksRecyclerView.scrollToPosition(0)
+
+//        Toast.makeText(
+//            requireContext(),
+//            "Books sorted by ${if (highToLow) "highest" else "lowest"} rating",
+//            Toast.LENGTH_SHORT
+//        ).show()
     }
 }

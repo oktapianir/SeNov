@@ -63,6 +63,9 @@
         <action
             android:id="@+id/actionSearchToDetailAuthor"
             app:destination="@id/detailAuthorFragment" />
+        <action
+            android:id="@+id/actionSearchToDetailBook"
+            app:destination="@id/detailFragment"/>
     </fragment>
 
     <fragment
