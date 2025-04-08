@@ -88,13 +88,6 @@
                     android:textColorHint="@color/black"
                     android:textSize="14sp" />
 
-                <ImageView
-                    android:id="@+id/filterButton"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_marginStart="8dp"
-                    android:contentDescription="@string/filter"
-                    android:src="@drawable/ic_filter" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
