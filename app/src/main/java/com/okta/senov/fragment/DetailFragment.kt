@@ -50,10 +50,10 @@ class DetailFragment : Fragment() {
         }
         val currentUser = FirebaseAuth.getInstance().currentUser
         Timber.tag("Auth").d("Current user: ${currentUser?.uid ?: "Not logged in"}")
-        if (currentUser == null) {
-            // User not authenticated, show appropriate UI
-            showToast("You must be logged in to use bookmarks")
-        }
+//        if (currentUser == null) {
+//            // User not authenticated, show appropriate UI
+//            showToast("You must be logged in to use bookmarks")
+//        }
     }
 
     private fun setupButtons(book: Book) {

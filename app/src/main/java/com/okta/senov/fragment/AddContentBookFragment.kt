@@ -166,11 +166,11 @@ class AddContentBookFragment : Fragment() {
                     // Notify adapter about data changes
                     bookAdapter.notifyDataSetChanged()
 
-                    Toast.makeText(
-                        requireContext(),
-                        "Loaded ${bookDisplayList.size} books",
-                        Toast.LENGTH_SHORT
-                    ).show()
+//                    Toast.makeText(
+//                        requireContext(),
+//                        "Loaded ${bookDisplayList.size} books",
+//                        Toast.LENGTH_SHORT
+//                    ).show()
                 }
             } catch (e: Exception) {
                 Timber.tag("AddContentBook").e(e, "Error loading books")
