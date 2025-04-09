@@ -45,6 +45,8 @@
     <string name="top_authors_search">Top Authors Search</string>
     <string name="top_book_search">Top Book Search</string>
     <string name="exp_number">0</string>
+    <string name="exp_number_grafik_year">2025</string>
+    <string name="exp_number_grafik_another_year">2024</string>
     <string name="recent">Pencarian</string>
     <string name="notif">Notifikasi</string>
     <string name="filter">Filter</string>
@@ -123,13 +125,17 @@
 
     <string name="title_feature_add_author">Tambah Author</string>
     <string name="title_feature_add_content_book">Tambah Cerita</string>
-    <string name="titla_MA_admin">Management Actions</string>
+    <string name="title_MA_admin">Pengelolaan Fitur</string>
     <string name="title_feature_add_book">Tambah Buku Baru</string>
     <string name="title_feature_add_book_content">Tambah Chapter Buku</string>
     <string name="title_support_section">Pusat Bantuan</string>
     <string name="title_download_pdf">Download</string>
     <string name="title_sort">Urutkan berdasarkan Rating</string>
     <string name="title_chapter">Judul Chapter</string>
+    <string name="title_grafik">Statistik</string>
+    <string name="title_avarage_grafik">Rata-rata Buku Dibaca</string>
+    <string name="title_motnly_avarage">Rata-rata Pembaca Bulanan</string>
+    <string name="title_daily_avarage">Rata-rata pembaca harian</string>
 
     <string name="add_content">Tambahkan isi cerita</string>
     <string name="add_rating">Tambah Penilaian buku</string>
