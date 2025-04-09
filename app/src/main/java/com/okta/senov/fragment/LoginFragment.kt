@@ -76,11 +76,11 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                 Timber.tag("LoginFragment").d("Google sign-in button clicked")
                 signInWithGoogle()
             }
-//            icBack.setOnClickListener {
-//                Timber.tag("LoginFragment").d("Back button clicked")
+            icBack.setOnClickListener {
+                Timber.tag("LoginFragment").d("Back button clicked")
 //                findNavController().navigate(R.id.action_loginFragment_to_fragmentProfile)
-//            }
-            setupBackButton()
+                handleBackNavigation()
+            }
             registerButton.setOnClickListener {
                 Timber.tag("LoginFragment").d("Register button clicked")
                 findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
@@ -90,6 +90,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                 handleNormalLogin()
             }
         }
+        setupBackButton()
     }
 
 //    private fun handleNormalLogin() {
@@ -138,11 +139,11 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                 }
         } catch (e: Exception) {
             Timber.tag("LoginFragment").e(e, "Error during normal login")
-            Toast.makeText(
-                requireContext(),
-                "Terjadi kesalahan: ${e.message}",
-                Toast.LENGTH_LONG
-            ).show()
+//            Toast.makeText(
+//                requireContext(),
+//                "Terjadi kesalahan: ${e.message}",
+//                Toast.LENGTH_LONG
+//            ).show()
         }
     }
 
@@ -180,11 +181,11 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                 Timber.tag("LoginFragment").e(e, "Error observing login state")
                 binding.progressBar.isVisible = true
                 binding.loginButton.isEnabled = true
-                Toast.makeText(
-                    requireContext(),
-                    "Terjadi kesalahan: ${e.message}",
-                    Toast.LENGTH_LONG
-                ).show()
+//                Toast.makeText(
+//                    requireContext(),
+//                    "Terjadi kesalahan: ${e.message}",
+//                    Toast.LENGTH_LONG
+//                ).show()
             }
         }
     }
@@ -254,14 +255,6 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         Toast.makeText(
             requireContext(),
             getString(messageResId),
-            Toast.LENGTH_SHORT
-        ).show()
-    }
-
-    private fun showToastMessage(messageResId: Int, vararg formatArgs: Any?) {
-        Toast.makeText(
-            requireContext(),
-            getString(messageResId, *formatArgs),
             Toast.LENGTH_SHORT
         ).show()
     }
@@ -363,6 +356,18 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                 Timber.tag("LoginFragment").e(e, "Error creating user data")
             }
     }
+    private fun handleBackNavigation() {
+        // Get the origin fragment from arguments
+        val originFragment = arguments?.getString("origin_fragment") ?: "profile"
+
+        when (originFragment) {
+            "bookReader" -> findNavController().navigate(R.id.action_loginFragment_to_bookReaderFragment)
+            "profile" -> findNavController().navigate(R.id.action_loginFragment_to_fragmentProfile)
+            // Add other cases as needed
+            else -> findNavController().navigate(R.id.action_loginFragment_to_fragmentProfile)
+        }
+    }
+
     private fun setupBackButton() {
         requireActivity().onBackPressedDispatcher.addCallback(
             viewLifecycleOwner,

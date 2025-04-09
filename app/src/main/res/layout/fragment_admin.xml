@@ -190,53 +190,6 @@
                                 android:textSize="32sp" />
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
-
-                    <!-- Categories Card -->
-<!--                    <com.google.android.material.card.MaterialCardView-->
-<!--                        android:id="@+id/cardCategories"-->
-<!--                        android:layout_width="180dp"-->
-<!--                        android:layout_height="100dp"-->
-<!--                        app:cardBackgroundColor="@color/accent"-->
-<!--                        app:cardCornerRadius="16dp"-->
-<!--                        app:cardElevation="2dp">-->
-
-<!--                        <LinearLayout-->
-<!--                            android:layout_width="match_parent"-->
-<!--                            android:layout_height="match_parent"-->
-<!--                            android:orientation="vertical"-->
-<!--                            android:padding="16dp">-->
-
-<!--                            <LinearLayout-->
-<!--                                android:layout_width="match_parent"-->
-<!--                                android:layout_height="wrap_content"-->
-<!--                                android:orientation="horizontal">-->
-
-<!--                                <TextView-->
-<!--                                    android:layout_width="0dp"-->
-<!--                                    android:layout_height="wrap_content"-->
-<!--                                    android:layout_weight="1"-->
-<!--                                    android:text="Categories"-->
-<!--                                    android:textColor="@color/white"-->
-<!--                                    android:textSize="14sp" />-->
-
-<!--                                <ImageView-->
-<!--                                    android:layout_width="24dp"-->
-<!--                                    android:layout_height="24dp"-->
-<!--                                    android:src="@drawable/ic_book"-->
-<!--                                    app:tint="@color/white" />-->
-<!--                            </LinearLayout>-->
-
-<!--                            <TextView-->
-<!--                                android:id="@+id/tvCategoryCount"-->
-<!--                                android:layout_width="wrap_content"-->
-<!--                                android:layout_height="wrap_content"-->
-<!--                                android:layout_marginTop="8dp"-->
-<!--                                android:fontFamily="@font/amarante"-->
-<!--                                android:text="12"-->
-<!--                                android:textColor="@color/white"-->
-<!--                                android:textSize="32sp" />-->
-<!--                        </LinearLayout>-->
-<!--                    </com.google.android.material.card.MaterialCardView>-->
                 </LinearLayout>
             </HorizontalScrollView>
 
@@ -247,7 +200,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="28dp"
                 android:fontFamily="@font/cantata_one"
-                android:text="@string/titla_MA_admin"
+                android:text="@string/title_MA_admin"
                 android:textColor="@color/black"
                 android:textSize="18sp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -365,7 +318,8 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="12dp" android:text="@string/title_feature_add_book"
+                            android:layout_marginTop="12dp"
+                            android:text="@string/title_feature_add_book"
                             android:textAlignment="center"
                             android:textColor="@color/black"
                             android:textSize="14sp" />
@@ -420,82 +374,215 @@
                 </com.google.android.material.card.MaterialCardView>
             </LinearLayout>
 
-            <!-- Book Collection Section -->
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/bookCollectionSection"
-                android:layout_width="match_parent"
+            <!-- Reading Statistics Graph Section -->
+            <TextView
+                android:id="@+id/tvReadingStatsTitle"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="28dp"
-                app:layout_constraintTop_toBottomOf="@id/layoutActions">
+                android:fontFamily="@font/cantata_one"
+                android:text="@string/title_grafik"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/layoutActions" />
 
-                <TextView
-                    android:id="@+id/tvBookListTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/cantata_one"
-                    android:text="@string/book_collection"
-                    android:textColor="@color/black"
-                    android:textSize="18sp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+            <TextView
+                android:id="@+id/tvReadingStatsSubtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/title_avarage_grafik"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvReadingStatsTitle" />
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <!-- Search Bar -->
-            <androidx.cardview.widget.CardView
-                android:id="@+id/searchCard"
+            <!-- Graph Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardGraph"
                 android:layout_width="match_parent"
-                android:layout_height="56dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 app:cardBackgroundColor="@color/white"
                 app:cardCornerRadius="16dp"
-                app:cardElevation="0dp"
-                app:strokeColor="@color/white_72"
-                app:strokeWidth="1dp"
-                app:layout_constraintTop_toBottomOf="@id/bookCollectionSection">
+                app:cardElevation="2dp"
+                app:layout_constraintTop_toBottomOf="@id/tvReadingStatsSubtitle">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingHorizontal="16dp">
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/ic_search"
-                        app:tint="@color/black" />
-
-                    <EditText
-                        android:id="@+id/editTextSearch"
+                    <!-- Graph Title -->
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="12dp"
-                        android:background="@null"
-                        android:hint="@string/search"
-                        android:inputType="text"
-                        android:textColorHint="@color/black"
-                        android:textSize="14sp" />
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
 
-            <!-- Book List -->
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerViewNovel"
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/title_motnly_avarage"
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvYearSelector"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/exp_number_grafik_year"
+                            android:textColor="@color/lily"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <FrameLayout
+                        android:id="@+id/chartContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="240dp"
+                        android:layout_marginTop="16dp" />
+
+                    <!-- Legend Row -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <!-- Current Year Legend -->
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="16dp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <View
+                                android:layout_width="12dp"
+                                android:layout_height="12dp"
+                                android:background="@color/lily" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:text="@string/exp_number_grafik_year"
+                                android:textColor="@color/black"
+                                android:textSize="12sp" />
+                        </LinearLayout>
+
+                        <!-- Previous Year Legend -->
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <View
+                                android:layout_width="12dp"
+                                android:layout_height="12dp"
+                                android:background="@color/white_72" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:text="@string/exp_number_grafik_another_year"
+                                android:textColor="@color/black"
+                                android:textSize="12sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Average Stats Cards -->
+            <LinearLayout
+                android:id="@+id/avgStatsContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:clipToPadding="false"
-                android:nestedScrollingEnabled="false"
-                android:overScrollMode="never"
+                android:orientation="horizontal"
                 android:paddingBottom="80dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/searchCard"
-                tools:itemCount="3"
-                tools:listitem="@layout/item_book_allbooks" />
+                app:layout_constraintTop_toBottomOf="@id/cardGraph">
+
+                <!-- Daily Average -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:layout_weight="1"
+                    app:cardBackgroundColor="@color/white"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="2dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/title_daily_avarage"
+                            android:textColor="@color/black"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/tvDailyAvg"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:fontFamily="@font/amarante"
+                            android:text="@string/rating"
+                            android:textColor="@color/black"
+                            android:textSize="24sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Monthly Average -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    app:cardBackgroundColor="@color/lily"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="2dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/title_motnly_avarage"
+                            android:textColor="@color/white"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/tvMonthlyAvg"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:fontFamily="@font/amarante"
+                            android:text="@string/rating"
+                            android:textColor="@color/white"
+                            android:textSize="24sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>

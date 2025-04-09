@@ -11,8 +11,13 @@ import com.okta.senov.R
 import com.okta.senov.databinding.FragmentAdminBinding
 import com.okta.senov.extensions.findNavController
 import timber.log.Timber
-import androidx.core.content.edit
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+
+//import com.jjoe64.graphview.GraphView
+//import com.jjoe64.graphview.helper.StaticLabelsFormatter
+//import com.jjoe64.graphview.series.DataPoint
+//import com.jjoe64.graphview.series.LineGraphSeries
 
 class AdminFragment : Fragment(R.layout.fragment_admin) {
 
@@ -27,13 +32,16 @@ class AdminFragment : Fragment(R.layout.fragment_admin) {
         Timber.tag("AdminFragment").d("onCreateView called")
         _binding = FragmentAdminBinding.inflate(inflater, container, false)
         binding.btnTambahAuthor.setOnClickListener {
-            binding.btnTambahAuthor.findNavController().navigate(R.id.action_adminFragment_to_addauthorFragment)
+            binding.btnTambahAuthor.findNavController()
+                .navigate(R.id.action_adminFragment_to_addauthorFragment)
         }
         binding.btnTambahIsiContent.setOnClickListener {
-            binding.btnTambahIsiContent.findNavController().navigate(R.id.action_adminFragment_to_addBookFragment)
+            binding.btnTambahIsiContent.findNavController()
+                .navigate(R.id.action_adminFragment_to_addBookFragment)
         }
         binding.btnAddBookContent.setOnClickListener {
-            binding.btnAddBookContent.findNavController().navigate(R.id.action_adminFragment_to_addContentBookFragment)
+            binding.btnAddBookContent.findNavController()
+                .navigate(R.id.action_adminFragment_to_addContentBookFragment)
         }
         binding.cardLogout.setOnClickListener {
             logout()
@@ -45,21 +53,61 @@ class AdminFragment : Fragment(R.layout.fragment_admin) {
         fetchBooksCount()
         return binding.root
     }
+
+    //    private fun logout() {
+//        try {
+//            // 1. Hapus token autentikasi
+//            clearAuthToken()
+//
+//            // 2. Hapus data sesi sementara
+//            clearTemporarySessionData()
+//
+//            // 3. Reset status login
+//            resetLoginState()
+//
+//            // 4. Navigasi ke halaman login
+//            navigateToLoginFragment()
+//
+//            // 5. Tampilkan pesan logout berhasil
+//            showLogoutSuccessMessage()
+//
+//        } catch (e: Exception) {
+//            Timber.e(e, "Logout failed")
+//            showLogoutErrorMessage()
+//        }
+//    }
     private fun logout() {
         try {
-            // 1. Hapus token autentikasi
-            clearAuthToken()
+            // 1. Sign out dari Firebase Authentication
+            FirebaseAuth.getInstance().signOut()
 
-            // 2. Hapus data sesi sementara
-            clearTemporarySessionData()
+            // 2. Hapus SEMUA data autentikasi dan profil pengguna
+            val tokenPrefs =
+                requireContext().getSharedPreferences("AuthTokenPrefs", Context.MODE_PRIVATE)
+            tokenPrefs.edit().clear().apply()
 
-            // 3. Reset status login
-            resetLoginState()
+            // 3. Hapus SEMUA data sesi
+            val sessionPrefs =
+                requireContext().getSharedPreferences("UserSessionPrefs", Context.MODE_PRIVATE)
+            sessionPrefs.edit().clear().apply()
 
-            // 4. Navigasi ke halaman login
+            // 4. Reset status login sepenuhnya
+            val loginStatePrefs =
+                requireContext().getSharedPreferences("LoginState", Context.MODE_PRIVATE)
+            loginStatePrefs.edit().clear().apply()
+
+            // 5. Hapus data profil pengguna
+            val userProfilePrefs =
+                requireContext().getSharedPreferences("UserProfilePrefs", Context.MODE_PRIVATE)
+            userProfilePrefs.edit().clear().apply()
+
+            // 6. Hapus cache pengguna lainnya jika ada
+            // Tambahkan SharedPreferences lain yang mungkin menyimpan data user
+
+            // 7. Navigasi ke fragment login
             navigateToLoginFragment()
 
-            // 5. Tampilkan pesan logout berhasil
+            // 8. Tampilkan pesan berhasil
             showLogoutSuccessMessage()
 
         } catch (e: Exception) {
@@ -68,35 +116,15 @@ class AdminFragment : Fragment(R.layout.fragment_admin) {
         }
     }
 
-    private fun clearAuthToken() {
-        // Hapus token autentikasi tetapi simpan informasi akun dasar
-        val tokenPrefs = requireContext().getSharedPreferences("AuthTokenPrefs", Context.MODE_PRIVATE)
-        tokenPrefs.edit() { remove("access_token").remove("refresh_token") }
-    }
-
-    private fun clearTemporarySessionData() {
-        // Hapus data sesi sementara
-        val sessionPrefs = requireContext().getSharedPreferences("UserSessionPrefs", Context.MODE_PRIVATE)
-        sessionPrefs.edit() {
-            remove("last_login_timestamp")
-            remove("current_session_id")
-            remove("device_info")
-            // Tambahkan data sesi sementara lain yang ingin Anda hapus
-        }
-    }
-
-    private fun resetLoginState() {
-        // Reset status login tanpa menghapus informasi akun
-        val loginStatePrefs = requireContext().getSharedPreferences("LoginState", Context.MODE_PRIVATE)
-        loginStatePrefs.edit() {
-            putBoolean("isLoggedIn", false)
-            // Tetap simpan username atau informasi akun dasar
-            // contoh: putString("username", "namapengguna")
-        }
-    }
-
     private fun navigateToLoginFragment() {
-        binding.cardLogout.findNavController().navigate(R.id.action_adminFragment_to_loginFragment)
+        // Navigasi dengan menghapus AdminFragment dari back stack
+        binding.cardLogout.findNavController().navigate(
+            R.id.action_adminFragment_to_loginFragment,
+            null,
+            androidx.navigation.NavOptions.Builder()
+                .setPopUpTo(R.id.adminFragment, true)
+                .build()
+        )
     }
 
     private fun showLogoutSuccessMessage() {
@@ -114,6 +142,7 @@ class AdminFragment : Fragment(R.layout.fragment_admin) {
             Toast.LENGTH_SHORT
         ).show()
     }
+
     private fun fetchAuthorsCount() {
         db.collection("authors")
             .get()
@@ -133,6 +162,7 @@ class AdminFragment : Fragment(R.layout.fragment_admin) {
                 ).show()
             }
     }
+
     private fun fetchBooksCount() {
         db.collection("Books")
             .get()
@@ -152,7 +182,75 @@ class AdminFragment : Fragment(R.layout.fragment_admin) {
                 ).show()
             }
     }
-
+//    private fun setupChart() {
+//        // Buat GraphView
+//        val graphView = GraphView(requireContext())
+//        binding.chartContainer.removeAllViews()
+//        binding.chartContainer.addView(graphView)
+//
+//        // Series untuk 2025
+//        val series2025 = LineGraphSeries(arrayOf(
+//            DataPoint(0.0, 10.0),
+//            DataPoint(1.0, 15.0),
+//            DataPoint(2.0, 12.0),
+//            DataPoint(3.0, 18.0),
+//            DataPoint(4.0, 22.0),
+//            DataPoint(5.0, 17.0),
+//            DataPoint(6.0, 19.0),
+//            DataPoint(7.0, 23.0),
+//            DataPoint(8.0, 20.0),
+//            DataPoint(9.0, 25.0),
+//            DataPoint(10.0, 19.0),
+//            DataPoint(11.0, 24.0)
+//        ))
+//
+//        // Series untuk 2024
+//        val series2024 = LineGraphSeries(arrayOf(
+//            DataPoint(0.0, 8.0),
+//            DataPoint(1.0, 10.0),
+//            DataPoint(2.0, 9.0),
+//            DataPoint(3.0, 14.0),
+//            DataPoint(4.0, 15.0),
+//            DataPoint(5.0, 13.0),
+//            DataPoint(6.0, 16.0),
+//            DataPoint(7.0, 18.0),
+//            DataPoint(8.0, 17.0),
+//            DataPoint(9.0, 20.0),
+//            DataPoint(10.0, 15.0),
+//            DataPoint(11.0, 19.0)
+//        ))
+//
+//        // Styling 2025
+//        series2025.color = ContextCompat.getColor(requireContext(), R.color.lily)
+//        series2025.thickness = 4
+//
+//        // Styling 2024
+//        series2024.color = ContextCompat.getColor(requireContext(), R.color.white_72)
+//        series2024.thickness = 4
+//
+//        // Tambahkan ke graph
+//        graphView.addSeries(series2025)
+//        graphView.addSeries(series2024)
+//
+//        // Styling graph
+//        graphView.title = ""
+//        graphView.titleTextSize = 0f
+//        graphView.legendRenderer.isVisible = false
+//
+//        // X-axis labels
+//        val monthLabels = arrayOf("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
+//        val staticLabelsFormatter = StaticLabelsFormatter(graphView)
+//        staticLabelsFormatter.setHorizontalLabels(monthLabels)
+//        graphView.gridLabelRenderer.labelFormatter = staticLabelsFormatter
+//        // Viewport setting
+//        graphView.viewport.isXAxisBoundsManual = true
+//        graphView.viewport.setMinX(0.0)
+//        graphView.viewport.setMaxX(11.0)
+//
+//        // Grid styling
+//        graphView.gridLabelRenderer.gridColor = Color.LTGRAY
+//        graphView.gridLabelRenderer.isHighlightZeroLines = false
+//    }
 
     override fun onDestroyView() {
         Timber.tag("AdminFragment").d("onDestroyView called")
