@@ -32,6 +32,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.io.File
@@ -423,12 +424,78 @@ class BookReaderFragment : Fragment(R.layout.fragment_book_reader) {
     }
 
     // Fungsi untuk mengunduh buku dalam format PDF
+//    private fun downloadBookAsPdf() {
+//        CoroutineScope(Dispatchers.IO).launch {
+//            try {
+//                // Nama file PDF akan dibuat berdasarkan judul buku
+//                val fileName = "${currentBook.title.replace(" ", "_")}.pdf"
+//                // Tentukan lokasi penyimpanan file PDF di penyimpanan eksternal
+//                val file = File(
+//                    requireContext().getExternalFilesDir(null),
+//                    fileName
+//                )
+//
+//                // Membuat PDF
+//                PdfWriter(file).use { pdfWriter ->
+//                    val pdfDocument = com.itextpdf.kernel.pdf.PdfDocument(pdfWriter)
+//                    val document = Document(pdfDocument)
+//
+//                    // Menambahkan Judul pada hasil pdf
+//                    val titleText = Text(currentBook.title).setFontSize(20f)
+//                    document.add(Paragraph(titleText).setMarginBottom(20f))
+//
+//                    // Menambahkan Bab
+//                    currentChapters.forEach { chapter ->
+//                        // Bab dan Judul
+//                        val chapterTitleText = Text("Bab ${chapter.number}: ${chapter.title}")
+//                            .setFontSize(16f)
+//                            .setBold()
+//                        document.add(Paragraph(chapterTitleText).setMarginTop(15f))
+//
+//                        // Isi dari Bab
+//                        val chapterContentText = Text(chapter.content).setFontSize(12f)
+//                        document.add(Paragraph(chapterContentText))
+//                    }
+//
+//                    document.close()
+//                }
+//
+//                withContext(Dispatchers.Main) {
+//                    //Membuka file pdf setelah berhasil di download
+//                    openPdfFile(file)
+//
+//                    Toast.makeText(
+//                        requireContext(),
+////                        "Buku berhasil diunduh di ${file.absolutePath}",
+//                        "Buku berhasil diunduh",
+//                        Toast.LENGTH_LONG
+//                    ).show()
+//                }
+//            } catch (e: Exception) {
+//                withContext(Dispatchers.Main) {
+//                    Toast.makeText(
+//                        requireContext(),
+//                        "Gagal mengunduh buku: ${e.localizedMessage}",
+//                        Toast.LENGTH_LONG
+//                    ).show()
+//                    Timber.e(e, "PDF Download Error")
+//                }
+//            }
+//        }
+//    }
     private fun downloadBookAsPdf() {
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                // Nama file PDF akan dibuat berdasarkan judul buku
-                val fileName = "${currentBook.title.replace(" ", "_")}.pdf"
-                // Tentukan lokasi penyimpanan file PDF di penyimpanan eksternal
+                // Gunakan titleBook jika ada di Firestore
+                val bookDoc = FirebaseFirestore.getInstance()
+                    .collection("Books")
+                    .document(currentBook.id)
+                    .get()
+                    .await()
+
+                val bookTitle = bookDoc.getString("titleBook") ?: currentBook.title
+                val fileName = "${bookTitle.replace(" ", "_")}.pdf"
+
                 val file = File(
                     requireContext().getExternalFilesDir(null),
                     fileName
@@ -437,10 +504,18 @@ class BookReaderFragment : Fragment(R.layout.fragment_book_reader) {
                 // Membuat PDF
                 PdfWriter(file).use { pdfWriter ->
                     val pdfDocument = com.itextpdf.kernel.pdf.PdfDocument(pdfWriter)
+
+                    // Tambahkan metadata ke PDF
+                    val metadata = pdfDocument.documentInfo
+                    metadata.title = bookTitle
+                    metadata.author = currentBook.authorName ?: "Unknown"
+                    metadata.subject = "Novel"
+                    metadata.creator = "SeNov App"
+
                     val document = Document(pdfDocument)
 
-                    // Menambahkan Juduk pada hasil pdf
-                    val titleText = Text(currentBook.title).setFontSize(20f)
+                    // Menambahkan Judul pada hasil pdf
+                    val titleText = Text(bookTitle).setFontSize(20f)
                     document.add(Paragraph(titleText).setMarginBottom(20f))
 
                     // Menambahkan Bab
@@ -460,12 +535,10 @@ class BookReaderFragment : Fragment(R.layout.fragment_book_reader) {
                 }
 
                 withContext(Dispatchers.Main) {
-                    //Membuka file pdf setelah berhasil di download
                     openPdfFile(file)
-
                     Toast.makeText(
                         requireContext(),
-                        "Buku berhasil diunduh di ${file.absolutePath}",
+                        "Buku berhasil diunduh",
                         Toast.LENGTH_LONG
                     ).show()
                 }
