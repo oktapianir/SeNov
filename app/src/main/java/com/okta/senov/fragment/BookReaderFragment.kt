@@ -75,6 +75,14 @@ class BookReaderFragment : Fragment(R.layout.fragment_book_reader) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentBookReaderBinding.bind(view)
 
+        // Periksa status login
+        val auth = FirebaseAuth.getInstance()
+        if (auth.currentUser == null) {
+            // User not logged in, show login notification
+            showLoginRequiredView()
+            return
+        }
+
         // Mengambil data buku dari argumen yang dikirim ke fragment Book Reader
         val args = BookReaderFragmentArgs.fromBundle(requireArguments())
         val bookId = args.bookContentArg.bookId
@@ -499,6 +507,36 @@ class BookReaderFragment : Fragment(R.layout.fragment_book_reader) {
             ).show()
             Timber.e(e, "Open PDF Error")
         }
+    }
+
+    private fun showLoginRequiredView() {
+        // Sembunyikan komponen tampilan buku
+        binding.contentTextView.visibility = View.GONE
+        binding.chapterSpinner.visibility = View.GONE
+        binding.progressBar.visibility = View.GONE
+
+        // Tampilkan komponen login notification
+        binding.loginRequiredLayout.visibility = View.VISIBLE
+
+        // Setup tombol untuk navigasi ke halaman login
+        binding.loginButton.setOnClickListener {
+            navigateToLogin()
+        }
+
+        // Ubah judul toolbar
+        binding.toolbar.title = getString(R.string.login_announcement)
+
+        // Hapus menu download karena user belum login
+        binding.toolbar.menu.clear()
+
+        binding.backButton.setOnClickListener {
+            setupBackButton()
+        }
+    }
+
+    private fun navigateToLogin() {
+        // Navigasi ke halaman login
+        findNavController().navigate(R.id.action_bookReaderFragment_to_loginFragment)
     }
 
     //fungsi untuk mengatasi button kembali ke halaman sebelumnya

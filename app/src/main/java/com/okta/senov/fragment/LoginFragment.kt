@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -75,10 +76,11 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                 Timber.tag("LoginFragment").d("Google sign-in button clicked")
                 signInWithGoogle()
             }
-            icBack.setOnClickListener {
-                Timber.tag("LoginFragment").d("Back button clicked")
-                findNavController().navigate(R.id.action_loginFragment_to_fragmentProfile)
-            }
+//            icBack.setOnClickListener {
+//                Timber.tag("LoginFragment").d("Back button clicked")
+//                findNavController().navigate(R.id.action_loginFragment_to_fragmentProfile)
+//            }
+            setupBackButton()
             registerButton.setOnClickListener {
                 Timber.tag("LoginFragment").d("Register button clicked")
                 findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
@@ -361,4 +363,19 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                 Timber.tag("LoginFragment").e(e, "Error creating user data")
             }
     }
+    private fun setupBackButton() {
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    findNavController().popBackStack()
+                }
+            }
+        )
+
+        binding.icBack.setOnClickListener {
+            findNavController().popBackStack()
+        }
+    }
+
 }

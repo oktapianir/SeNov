@@ -185,6 +185,9 @@
         <action
             android:id="@+id/action_bookReaderFragment_to_ratingFragment"
             app:destination="@id/ratingFragment"/>
+        <action
+            android:id="@+id/action_bookReaderFragment_to_loginFragment"
+            app:destination="@id/loginfragment"/>
     </fragment>
 
     <fragment
