@@ -63,7 +63,7 @@
     <string name="monthly">Bulan</string>
     <string name="yearly">Tahun</string>
     <string name="user_activity">Grafik Seputar Novel</string>
-    <string name="app_usage_metrics">berikut data grafik berdasarkan...</string>
+    <string name="app_usage_metrics">berikut data grafik berdasarkan…</string>
     <string name="content_distribution">Content Distribution</string>
     <string name="top_categories_and_books">Top Categories and Books </string>
     <string name="fiction">Fiksi</string>
@@ -172,6 +172,8 @@
     <string name="login_success">Welcome %1$s</string>
     <string name="login_success_with_name">Login Succes</string>
     <string name="login_success_admin">Login Succes</string>
+    <string name="login_announcement">Announcement</string>
+    <string name="login_first">Please Login First</string>
 
     <string name="error_empty_fields">Please enter both email and password</string>
     <string name="error_authentication_failed">Authentication failed.</string>
