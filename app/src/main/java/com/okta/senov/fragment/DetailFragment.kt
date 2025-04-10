@@ -134,6 +134,9 @@ class DetailFragment : Fragment() {
                 .collection("bookmarks").document(bookId)
                 .get()
                 .addOnSuccessListener { document ->
+                    // Check if fragment is still attached to context before proceeding
+                    if (!isAdded || _binding == null) return@addOnSuccessListener
+
                     isBookmarked = document.exists()
                     updateBookmarkIcon()
                 }
@@ -258,6 +261,8 @@ class DetailFragment : Fragment() {
 
     // Update bookmark icon based on current state
     private fun updateBookmarkIcon() {
+        if (_binding == null) return
+
         val iconResource = if (isBookmarked) {
             R.drawable.ic_bookmark_filled
         } else {
