@@ -16,60 +16,59 @@ import androidx.navigation.fragment.findNavController
 import com.google.firebase.firestore.FirebaseFirestore
 import com.okta.senov.R
 import com.okta.senov.databinding.FragmentAddBookBinding
-import okhttp3.Call
-import okhttp3.Callback
-import okhttp3.MultipartBody
-import okhttp3.Request
-import okhttp3.RequestBody
-import okhttp3.Response
+import okhttp3.*
 import org.json.JSONObject
 import timber.log.Timber
 import java.io.ByteArrayOutputStream
 import java.io.IOException
-import okhttp3.OkHttpClient
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
-
-
 
 class AddBookFragment : Fragment(R.layout.fragment_add_book) {
 
     private var _binding: FragmentAddBookBinding? = null
     private val binding get() = _binding!!
 
+    // URI gambar yang dipilih
     private var imageUri: Uri? = null
+
+    // Instance Firebase dan OkHttp client
     private val db = FirebaseFirestore.getInstance()
     private val client = OkHttpClient()
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         Timber.tag("AddBookFragment").d("onCreateView called")
+
         _binding = FragmentAddBookBinding.inflate(inflater, container, false)
-        binding.etBookId.setOnClickListener { saveBook() }
+
+        // Set click listener pada elemen input dan tombol
         binding.btnPilihCover.setOnClickListener { openGallery() }
-        binding.etBookTitle.setOnClickListener { saveBook() }
-        binding.etBookDescription.setOnClickListener { saveBook() }
-        binding.etBookContent.setOnClickListener { saveBook() }
         binding.btnSimpanBook.setOnClickListener { saveBook() }
+
+        // Tombol kembali
         setupBackButton()
+
         return binding.root
     }
 
+    // Buka galeri untuk memilih gambar
     private fun openGallery() {
         val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         startActivityForResult(intent, PICK_IMAGE_REQUEST)
     }
 
+    // Mendapatkan hasil dari galeri
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == AddBookFragment.PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
             imageUri = data.data
             binding.ivBookCover.setImageURI(imageUri)
         }
     }
 
+    // Validasi data dan proses penyimpanan
     private fun saveBook() {
         val idBook = binding.etBookId.text.toString().trim()
         val titleBook = binding.etBookTitle.text.toString().trim()
@@ -78,33 +77,22 @@ class AddBookFragment : Fragment(R.layout.fragment_add_book) {
         val nameCategory = binding.etNameCategory.text.toString().trim()
         val bookContent = binding.etBookContent.text.toString().trim()
 
+        // Validasi input wajib
         if (idBook.isEmpty() || titleBook.isEmpty() || nameAuthor.isEmpty() || bookDescription.isEmpty() || bookContent.isEmpty() || nameCategory.isEmpty()) {
             Toast.makeText(requireContext(), "Data wajib diisi!", Toast.LENGTH_SHORT).show()
             return
         }
 
+        // Jika ada gambar, upload ke Imgur dulu
         if (imageUri != null) {
-            uploadImageToImgur(
-                idBook,
-                titleBook,
-                nameAuthor,
-                bookDescription,
-                bookContent,
-                nameCategory
-            )
+            uploadImageToImgur(idBook, titleBook, nameAuthor, bookDescription, bookContent, nameCategory)
         } else {
-            saveBookToFirestore(
-                idBook,
-                titleBook,
-                nameAuthor,
-                bookDescription,
-                bookContent,
-                nameCategory,
-                null
-            )
+            // Simpan langsung ke Firestore jika tanpa gambar
+            saveBookToFirestore(idBook, titleBook, nameAuthor, bookDescription, bookContent, nameCategory, null)
         }
     }
 
+    // Upload gambar ke Imgur
     private fun uploadImageToImgur(
         idBook: String,
         titleBook: String,
@@ -114,26 +102,22 @@ class AddBookFragment : Fragment(R.layout.fragment_add_book) {
         nameCategory: String
     ) {
         try {
-            // Konversi Uri ke ByteArray
+            // Ubah gambar menjadi byte array
             val bitmap = MediaStore.Images.Media.getBitmap(requireContext().contentResolver, imageUri)
             val stream = ByteArrayOutputStream()
             bitmap.compress(Bitmap.CompressFormat.JPEG, 90, stream)
             val byteArray = stream.toByteArray()
 
-            // Buat request body dengan gambar
+            // Buat request multipart
             val requestBody = MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
-                .addFormDataPart(
-                    "image",
-                    "image.jpg",
-                    RequestBody.create("image/jpeg".toMediaTypeOrNull(), byteArray)
-                )
+                .addFormDataPart("image", "image.jpg",
+                    RequestBody.create("image/jpeg".toMediaTypeOrNull(), byteArray))
                 .build()
 
-            // Buat request untuk Imgur API
             val request = Request.Builder()
                 .url("https://api.imgur.com/3/image")
-                .header("Authorization","Client-ID 79b90818f6bc407")
+                .header("Authorization", "Client-ID 79b90818f6bc407")
                 .post(requestBody)
                 .build()
 
@@ -142,11 +126,7 @@ class AddBookFragment : Fragment(R.layout.fragment_add_book) {
                 override fun onFailure(call: Call, e: IOException) {
                     activity?.runOnUiThread {
                         showLoading(false)
-                        Toast.makeText(
-                            requireContext(),
-                            "Gagal mengunggah gambar ke Imgur: ${e.message}",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        Toast.makeText(requireContext(), "Gagal mengunggah gambar ke Imgur: ${e.message}", Toast.LENGTH_SHORT).show()
                     }
                 }
 
@@ -158,37 +138,23 @@ class AddBookFragment : Fragment(R.layout.fragment_add_book) {
                         val imageUrl = data.getString("link")
 
                         activity?.runOnUiThread {
-                            saveBookToFirestore(
-                                idBook,
-                                titleBook,
-                                nameAuthor,
-                                bookDescription,
-                                bookContent,
-                                nameCategory,
-                                imageUrl
-                            )
+                            saveBookToFirestore(idBook, titleBook, nameAuthor, bookDescription, bookContent, nameCategory, imageUrl)
                         }
                     } else {
                         activity?.runOnUiThread {
                             showLoading(false)
-                            Toast.makeText(
-                                requireContext(),
-                                "Gagal mengunggah gambar ke Imgur: ${response.message}",
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            Toast.makeText(requireContext(), "Gagal mengunggah gambar ke Imgur: ${response.message}", Toast.LENGTH_SHORT).show()
                         }
                     }
                 }
             })
         } catch (e: Exception) {
             showLoading(false)
-            Toast.makeText(
-                requireContext(),
-                "Error: ${e.message}",
-                Toast.LENGTH_SHORT
-            ).show()
+            Toast.makeText(requireContext(), "Error: ${e.message}", Toast.LENGTH_SHORT).show()
         }
     }
+
+    // Simpan data buku ke Firestore
     private fun saveBookToFirestore(
         idBook: String,
         titleBook: String,
@@ -212,25 +178,21 @@ class AddBookFragment : Fragment(R.layout.fragment_add_book) {
             .document(idBook)
             .set(bookData)
             .addOnSuccessListener {
-                Toast.makeText(
-                    requireContext(),
-                    "Data Buku berhasil ditambahkan!",
-                    Toast.LENGTH_SHORT
-                ).show()
+                Toast.makeText(requireContext(), "Data Buku berhasil ditambahkan!", Toast.LENGTH_SHORT).show()
                 clearFields()
             }
             .addOnFailureListener {
-                Toast.makeText(requireContext(), "Gagal menambahkan data buku!", Toast.LENGTH_SHORT)
-                    .show()
+                Toast.makeText(requireContext(), "Gagal menambahkan data buku!", Toast.LENGTH_SHORT).show()
             }
     }
 
+    // Menampilkan loading state
     private fun showLoading(isLoading: Boolean) {
-        // Anda perlu menambahkan ProgressBar di layout Anda
-        // binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+        // Implementasi jika ingin menambahkan ProgressBar
         binding.btnSimpanBook.isEnabled = !isLoading
     }
 
+    // Reset semua input
     private fun clearFields() {
         binding.etBookId.text?.clear()
         binding.etBookTitle.text?.clear()
@@ -242,6 +204,7 @@ class AddBookFragment : Fragment(R.layout.fragment_add_book) {
         binding.ivBookCover.setImageDrawable(null)
     }
 
+    // Tombol kembali menggunakan NavController
     private fun setupBackButton() {
         requireActivity().onBackPressedDispatcher.addCallback(
             viewLifecycleOwner,
@@ -267,5 +230,3 @@ class AddBookFragment : Fragment(R.layout.fragment_add_book) {
         private const val PICK_IMAGE_REQUEST = 1
     }
 }
-
-
