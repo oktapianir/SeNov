@@ -20,14 +20,13 @@ class AllBooksAdapter(
     private val onItemClick: (Book) -> Unit
 ) : RecyclerView.Adapter<AllBooksAdapter.AllBooksViewHolder>() {
 
+    // 🔹 Inisialisasi Firestore dan list untuk konten buku serta jumlah rekomendasi
     private val db = FirebaseFirestore.getInstance()
     private var bookContentList: List<BookContent> = emptyList()
-
-    // Map untuk menyimpan hitungan rekomendasi per bookId
     private val recommendationCountMap = mutableMapOf<String, Int>()
 
     init {
-        // Mengambil data rekomendasi saat adapter dibuat
+        // 🔹 Ambil data rekomendasi saat adapter dibuat
         fetchAllRecommendationCounts()
     }
 
@@ -38,37 +37,38 @@ class AllBooksAdapter(
         @SuppressLint("SetTextI18n")
         fun bind(book: Book) {
             binding.apply {
+                // 🔹 Tampilkan judul dan genre
                 bookTitleTextView.text = book.title
                 genreChip.text = book.category
-                // Display author name
+
+                // 🔹 Tampilkan nama penulis jika tersedia, jika tidak ambil dari Firestore
                 if (book.authorName.isNotEmpty()) {
                     bookAuthorTextView.text = book.authorName
                     bookAuthorTextView.visibility = View.VISIBLE
                 } else {
-                    // Only fetch from Firestore if we don't have author data
                     fetchBookAuthor(book.id)
                 }
 
-                // Make sure Glide is loading the image properly
+                // 🔹 Tampilkan cover buku dengan Glide
                 if (book.image.isNotEmpty()) {
                     Glide.with(binding.root.context)
                         .load(book.image)
                         .error(R.drawable.ic_book)
                         .into(bookCoverImageView)
 
-                    // Log image URL for debugging
                     Timber.tag("IMAGE_LOADING").d("Loading image from URL: ${book.image}")
                 } else {
                     Timber.tag("IMAGE_LOADING").e("Empty image URL for book: ${book.title}")
                 }
 
-
-                // Tampilkan jumlah rekomendasi
+                // 🔹 Tampilkan jumlah rekomendasi
                 val recommendCount = recommendationCountMap[book.id] ?: 0
                 recommendCountTextView.text = "$recommendCount Rekomendasi"
 
+                // 🔹 Listener item
                 root.setOnClickListener { onItemClick(book) }
 
+                // 🔹 Navigasi ke detail saat tombol diklik
                 buttonGoToDetail.setOnClickListener {
                     val navController = binding.root.findNavController()
                     val action = HomeFragmentDirections.actionHomeToDetail(book)
@@ -77,6 +77,7 @@ class AllBooksAdapter(
             }
         }
 
+        // 🔹 Ambil data penulis dari Firestore jika tidak tersedia
         private fun fetchBookAuthor(bookId: String) {
             db.collection("authors").document(bookId)
                 .get()
@@ -96,25 +97,22 @@ class AllBooksAdapter(
                 }
         }
     }
-    // Metode untuk mengambil jumlah rekomendasi untuk semua buku
+
+    // 🔹 Ambil jumlah rekomendasi untuk semua buku
     private fun fetchAllRecommendationCounts() {
         db.collection("ratings")
             .whereEqualTo("recommended", true)
             .get()
             .addOnSuccessListener { documents ->
-                // Reset map
                 recommendationCountMap.clear()
 
-                // Hitung jumlah rekomendasi untuk setiap bookId
                 for (document in documents) {
                     val bookId = document.getString("bookId") ?: continue
                     val currentCount = recommendationCountMap[bookId] ?: 0
                     recommendationCountMap[bookId] = currentCount + 1
                 }
 
-                // Refresh tampilan setelah data diperbarui
                 notifyDataSetChanged()
-
                 Timber.tag("RECOMMENDATIONS").d("Fetched recommendation counts: $recommendationCountMap")
             }
             .addOnFailureListener { e ->
@@ -122,7 +120,7 @@ class AllBooksAdapter(
             }
     }
 
-    // Metode untuk mengambil jumlah rekomendasi untuk satu buku tertentu
+    // 🔹 Ambil jumlah rekomendasi untuk satu buku (opsional, tidak digunakan)
     private fun fetchRecommendationCount(bookId: String, onComplete: (Int) -> Unit) {
         db.collection("ratings")
             .whereEqualTo("bookId", bookId)
@@ -138,18 +136,19 @@ class AllBooksAdapter(
             }
     }
 
-
+    // 🔹 Hitung jumlah chapter dari bookContentList
     private fun getChapterCount(bookId: String): Int {
-        // Assuming you have access to bookContentList
         val bookContent = bookContentList.find { it.bookId == bookId }
         return bookContent?.chapters?.size ?: 0
     }
 
+    // 🔹 Set konten buku dari luar adapter
     fun setBookContentList(content: List<BookContent>) {
         bookContentList = content
         notifyDataSetChanged()
     }
 
+    // 🔹 Buat ViewHolder dari layout XML
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AllBooksViewHolder {
         val binding = ItemBookAllbooksBinding.inflate(
             LayoutInflater.from(parent.context),
@@ -159,27 +158,28 @@ class AllBooksAdapter(
         return AllBooksViewHolder(binding, onItemClick)
     }
 
+    // 🔹 Tampilkan data ke ViewHolder
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: AllBooksViewHolder, position: Int) {
         val book = books[position]
         holder.bind(book)
 
-        // Set chapter count using binding
+        // 🔹 Tampilkan jumlah chapter
         val chapterCount = getChapterCount(book.id)
         holder.binding.chaptersTextView.text = "$chapterCount Chapters"
     }
 
+    // 🔹 Jumlah item
     override fun getItemCount() = books.size
 
-    // Tambahkan metode untuk memperbarui daftar buku
+    // 🔹 Perbarui list buku dan rekomendasi
     fun setBooks(newBooks: List<Book>) {
         books = newBooks
-        // Refresh rekomendasi saat data buku diperbarui
         fetchAllRecommendationCounts()
         notifyDataSetChanged()
     }
 
-    // Metode untuk memaksa refresh data rekomendasi
+    // 🔹 Memaksa refresh data rekomendasi
     fun refreshRecommendations() {
         fetchAllRecommendationCounts()
     }
