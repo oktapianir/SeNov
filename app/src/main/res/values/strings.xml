@@ -34,7 +34,7 @@
     <string name="ramdhanioktapiani_gmail_com">ramdhanioktapiani@gmail.com</string>
     <string name="genre">Fantasi Petulangan</string>
     <string name="find_your_next_favorite_book">Temukan Buku Terbaru Anda</string>
-    <string name="search_books_authors_genres">Cari judul, author, kategori...</string>
+    <string name="search_books_authors_genres">Cari berdasarkan judul atau kategori...</string>
     <string name="popular_search">Pencarian Terbanyak</string>
     <string name="discover">Discover</string>
     <string name="karya">Karya</string>
@@ -122,6 +122,8 @@
     <string name="book_chapters">2 chapter</string>
     <string name="book_id">Book ID</string>
     <string name="book_content_id">Book Content ID</string>
+    <string name="book_list_title">Data Buku</string>
+    <string name="book_search">Cari Buku</string>
 
     <string name="title_feature_add_author">Tambah Author</string>
     <string name="title_feature_add_content_book">Tambah Cerita</string>
@@ -167,6 +169,10 @@
     <string name="author_wording">Author</string>
     <string name="author_image">Author Image</string>
     <string name="author">J.K Rowling</string>
+    <string name="author_title">Data Author</string>
+    <string name="author_search">Cari Author</string>
+    <string name="author_empty">Tidak ada data author"</string>
+    <string name="author_desc_empty">Coba cari yang lain</string>
 
 
     <string name="register">Register</string>
@@ -206,4 +212,5 @@
     <string name="support_category_problem">Kategori Masalah</string>
     <string name="support_category_problem_desc">Jelaskan Masalah Anda</string>
     <string name="support_solution">Kirim Permintaan Bantuan</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
