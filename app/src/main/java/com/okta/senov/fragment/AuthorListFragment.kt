@@ -45,7 +45,11 @@ class AuthorListFragment : Fragment() {
         authorAdapter = AuthorAdapter(
             onAuthorClick = { author ->
                 // Handle author click - navigate to author detail or books by author
-                Toast.makeText(requireContext(), "Selected: ${author.nameAuthor}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    requireContext(),
+                    "Selected: ${author.nameAuthor}",
+                    Toast.LENGTH_SHORT
+                ).show()
                 // You can navigate to another fragment to show author details here
             },
             onDeleteClick = { author ->
@@ -75,6 +79,7 @@ class AuthorListFragment : Fragment() {
         })
     }
 
+
     private fun loadAuthors() {
         showLoading(true)
 
@@ -84,22 +89,23 @@ class AuthorListFragment : Fragment() {
                 authorList.clear()
 
                 for (document in documents) {
-                    try {
-                        val id = document.id
-                        val name = document.getString("nameAuthor") ?: ""
-                        val imageUrl = document.getString("imageUrl") ?: ""
-                        val bio = document.getString("bioAuthor") ?: ""
-                        val socialMedia = document.getString("socialMedia") ?: ""
-//                        val bookCount = document.getLong("bookCount")?.toInt() ?: 0
+                    val id = document.id
+                    val nameAuthor = document.getString("nameAuthor") ?: ""
+                    val imageUrl = document.getString("imageUrl") ?: ""
+                    val socialMedia = document.getString("socialMedia") ?: ""
+                    val bioAuthor = document.getString("bioAuthor") ?: ""
 
-                        val author = Author(id, name, imageUrl, bio, socialMedia)
-                        authorList.add(author)
-                    } catch (e: Exception) {
-                        Timber.e("Error parsing author: ${e.message}")
-                    }
+                    val author = Author(
+                        id = id,
+                        nameAuthor = nameAuthor,
+                        socialMedia = socialMedia,
+                        bioAuthor = bioAuthor,
+                        imageUrl = imageUrl
+                    )
+
+                    authorList.add(author)
                 }
 
-                // Update UI with the data
                 updateUI()
                 showLoading(false)
             }
@@ -114,6 +120,7 @@ class AuthorListFragment : Fragment() {
                 ).show()
             }
     }
+
 
     private fun filterAuthors(query: String) {
         filteredList.clear()
