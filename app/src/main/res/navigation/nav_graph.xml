@@ -164,6 +164,9 @@
         <action
             android:id="@+id/action_addauthorFragment_to_adminFragment"
             app:destination="@id/adminFragment" />
+        <action
+            android:id="@+id/action_addauthorFragment_to_authorListFragment"
+            app:destination="@id/authorListFragment"/>
     </fragment>
 
     <fragment
@@ -214,6 +217,13 @@
             android:name="BOOK_ID"
             app:argType="string"
             app:nullable="false" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/authorListFragment"
+        android:name="com.okta.senov.fragment.AuthorListFragment"
+        android:label="Author List"
+        tools:layout="@layout/fragment_author_list">
     </fragment>
 
 </navigation>
