@@ -124,6 +124,8 @@
     <string name="book_content_id">Book Content ID</string>
     <string name="book_list_title">Data Buku</string>
     <string name="book_search">Cari Buku</string>
+    <string name="book_empty">Tidak ada data buku</string>
+    <string name="book_empty_desc">Coba cari buku yang lain</string>
 
     <string name="title_feature_add_author">Tambah Author</string>
     <string name="title_feature_add_content_book">Tambah Cerita</string>
