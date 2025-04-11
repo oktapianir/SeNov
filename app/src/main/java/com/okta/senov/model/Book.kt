@@ -13,6 +13,7 @@ data class Book(
     val authorName: String = "",
     val category: String = "",
     val description: String = "",
-      val image: String = ""
-    ) : Parcelable
+    val image: String = "",
+    val rating: Float = 0f
+) : Parcelable
 
