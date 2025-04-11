@@ -61,6 +61,11 @@ class AddAuthorFragment : Fragment() {
         // Tombol untuk memilih gambar dari galeri
         binding.btnPilihFoto.setOnClickListener { openGallery() }
 
+        binding.btnNext.setOnClickListener {
+            findNavController().navigate(R.id.authorListFragment)
+        }
+
+
         // Menangani tombol back
         setupBackButton()
 
