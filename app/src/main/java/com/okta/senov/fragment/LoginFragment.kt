@@ -319,11 +319,15 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                     if (role == "admin") {
                         Timber.tag("LoginFragment").i("Admin login detected")
                         showSimpleToastMessage(R.string.login_success_admin)
-                        findNavController().navigate(R.id.action_loginFragment_to_adminFragment)
+//                        findNavController().navigate(R.id.action_loginFragment_to_adminFragment)
+                        findNavController().navigate(R.id.adminFragment)
+
                     } else {
                         Timber.tag("LoginFragment").i("User login detected")
                         showSimpleToastMessage(R.string.login_success_with_name)
-                        findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
+//                        findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
+                        findNavController().navigate(R.id.homeFragment)
+
                     }
                 } else {
                     Timber.tag("LoginFragment").w("No user document found, defaulting to user")
