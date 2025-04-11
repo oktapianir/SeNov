@@ -47,6 +47,10 @@ class AddBookFragment : Fragment(R.layout.fragment_add_book) {
         binding.btnPilihCover.setOnClickListener { openGallery() }
         binding.btnSimpanBook.setOnClickListener { saveBook() }
 
+        binding.btnNext.setOnClickListener {
+            findNavController().navigate(R.id.bookListFragment)
+        }
+
         // Tombol kembali
         setupBackButton()
 
