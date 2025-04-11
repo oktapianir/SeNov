@@ -142,7 +142,9 @@
         <action
             android:id="@+id/action_adminFragment_to_addauthorFragment"
             app:destination="@id/addAuthorFragment" />
-
+        <action
+            android:id="@+id/action_adminFragment_to_loginFragmentt"
+            app:destination="@id/loginfragment" />
         <action
             android:id="@+id/action_adminFragment_to_addBookFragment"
             app:destination="@id/addBookFragment" />
@@ -153,7 +155,7 @@
             android:id="@+id/action_adminFragment_to_loginFragment"
             app:destination="@+id/loginfragment"
             app:popUpTo="@id/adminFragment"
-            app:popUpToInclusive="true"/>
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment
@@ -166,7 +168,7 @@
             app:destination="@id/adminFragment" />
         <action
             android:id="@+id/action_addauthorFragment_to_authorListFragment"
-            app:destination="@id/authorListFragment"/>
+            app:destination="@id/authorListFragment" />
     </fragment>
 
     <fragment
@@ -177,6 +179,9 @@
         <action
             android:id="@+id/action_addBookFragment_to_adminFragment"
             app:destination="@id/adminFragment" />
+        <action
+            android:id="@+id/action_addBookFragment_to_bookListFragment"
+            app:destination="@id/bookListFragment" />
     </fragment>
 
     <fragment
@@ -224,6 +229,14 @@
         android:name="com.okta.senov.fragment.AuthorListFragment"
         android:label="Author List"
         tools:layout="@layout/fragment_author_list">
+
+    </fragment>
+    <fragment
+        android:id="@+id/bookListFragment"
+        android:name="com.okta.senov.fragment.BookListFragment"
+        android:label="Book List"
+        tools:layout="@layout/fragment_book_list">
+
     </fragment>
 
 </navigation>
