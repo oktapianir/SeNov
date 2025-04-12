@@ -12,7 +12,8 @@ import com.okta.senov.model.Author
 
 class AuthorAdapter(
     private val onAuthorClick: (Author) -> Unit,
-    private val onDeleteClick: (Author) -> Unit
+    private val onDeleteClick: (Author) -> Unit,
+    private val onEditClick: (Author) -> Unit
 ) : ListAdapter<Author, AuthorAdapter.AuthorViewHolder>(AuthorDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AuthorViewHolder {
@@ -30,7 +31,7 @@ class AuthorAdapter(
         fun bind(author: Author) {
             binding.apply {
                 authorNameTextView.text = author.nameAuthor
-//                bookCountTextView.text = "${author.bookCount} books"
+                authorIdTextView.text = author.id
 
                 // Load author image with Glide
                 Glide.with(authorImageView.context)
@@ -45,6 +46,9 @@ class AuthorAdapter(
                 }
                 binding.deleteButton.setOnClickListener {
                     onDeleteClick(author) // Panggil callback-nya
+                }
+                binding.editButton.setOnClickListener{
+                    onEditClick(author)
                 }
             }
         }
