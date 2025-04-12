@@ -2,7 +2,7 @@
     <string name="app_name">SeNov</string>
     <string name="all_books">Semua Buku</string>
     <string name="profile_image">profile image</string>
-    <string name="category">Category</string>
+    <string name="category">Genre Buku</string>
     <string name="_19_99">$19.99</string>
     <string name="_12_99">$12.99</string>
     <string name="buy_now">Buy Now</string>
@@ -129,6 +129,7 @@
     <string name="book_empty_desc">Coba cari buku yang lain</string>
     <string name="book_content_list_title">Data Isi Cerita</string>
     <string name="book_title_exp">Harry Potter dan Tawanan Azkaban</string>
+    <string name="book_description_title">Deskripsi Buku</string>
 
     <string name="title_feature_add_author">Tambah Author</string>
     <string name="title_feature_add_content_book">Tambah Cerita</string>
