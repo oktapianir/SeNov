@@ -51,6 +51,7 @@
     <string name="notif">Notifikasi</string>
     <string name="filter">Filter</string>
     <string name="content">Isi Chapter</string>
+    <string name="search_chapter">Search Chapters</string>
     <string name="see_all">Lihat Semua</string>
     <string name="account_forgot_pass">Lupa Kata Sandi?</string>
     <string name="account_google_sign_in">Atau Login dengan</string>
@@ -126,6 +127,8 @@
     <string name="book_search">Cari Buku</string>
     <string name="book_empty">Tidak ada data buku</string>
     <string name="book_empty_desc">Coba cari buku yang lain</string>
+    <string name="book_content_list_title">Data Isi Cerita</string>
+    <string name="book_title_exp">Harry Potter dan Tawanan Azkaban</string>
 
     <string name="title_feature_add_author">Tambah Author</string>
     <string name="title_feature_add_content_book">Tambah Cerita</string>
@@ -141,7 +144,7 @@
     <string name="title_motnly_avarage">Rata-rata Pembaca Bulanan</string>
     <string name="title_daily_avarage">Rata-rata pembaca harian</string>
 
-    <string name="add_content">Tambahkan isi cerita</string>
+    <string name="add_content">Tambah isi cerita</string>
     <string name="add_rating">Tambah Penilaian buku</string>
     <string name="add_rating_wording">Berikan Rating:</string>
     <string name="add_rating_number">0.0/5.0</string>
