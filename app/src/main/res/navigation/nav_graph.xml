@@ -211,6 +211,9 @@
         <action
             android:id="@+id/action_addContentBookFragment_to_adminFragment"
             app:destination="@id/adminFragment" />
+        <action
+            android:id="@+id/action_addContentBookFragment_to_bookContentListFragment"
+            app:destination="@id/bookContentListFragment" />
     </fragment>
 
     <fragment
@@ -236,6 +239,32 @@
         android:name="com.okta.senov.fragment.BookListFragment"
         android:label="Book List"
         tools:layout="@layout/fragment_book_list">
+
+    </fragment>
+    <fragment
+        android:id="@+id/bookContentListFragment"
+        android:name="com.okta.senov.fragment.BookContentListFragment"
+        android:label="Book List for Content"
+        tools:layout="@layout/fragment_book_content_list">
+        <action
+            android:id="@+id/action_bookContentListFragment_to_chapterListFragment"
+            app:destination="@id/chapterListFragment"/>
+    </fragment>
+    <fragment
+        android:id="@+id/chapterListFragment"
+        android:name="com.okta.senov.fragment.ChapterListFragment"
+        android:label="Chapter list"
+        tools:layout="@layout/fragment_book_content_list">
+        <action
+            android:id="@+id/action_chapterListFragment_to_chapterReadingFragment"
+            app:destination="@id/chapterReadingFragment"/>
+
+    </fragment>
+    <fragment
+        android:id="@+id/chapterReadingFragment"
+        android:name="com.okta.senov.fragment.ChapterReadingFragment"
+        android:label="Chapter"
+        tools:layout="@layout/fragment_chapter_reading">
 
     </fragment>
 
