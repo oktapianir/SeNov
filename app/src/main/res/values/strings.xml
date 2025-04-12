@@ -143,6 +143,8 @@
     <string name="title_avarage_grafik">Rata-rata Buku Dibaca</string>
     <string name="title_motnly_avarage">Rata-rata Pembaca Bulanan</string>
     <string name="title_daily_avarage">Rata-rata pembaca harian</string>
+    <string name="title_edit_chapter">Edit Chapter</string>
+    <string name="title_chapter_content">Isi Cerita</string>
 
     <string name="add_content">Tambah isi cerita</string>
     <string name="add_rating">Tambah Penilaian buku</string>
