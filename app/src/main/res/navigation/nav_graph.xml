@@ -248,7 +248,7 @@
         tools:layout="@layout/fragment_book_content_list">
         <action
             android:id="@+id/action_bookContentListFragment_to_chapterListFragment"
-            app:destination="@id/chapterListFragment"/>
+            app:destination="@id/chapterListFragment" />
     </fragment>
     <fragment
         android:id="@+id/chapterListFragment"
@@ -257,7 +257,10 @@
         tools:layout="@layout/fragment_book_content_list">
         <action
             android:id="@+id/action_chapterListFragment_to_chapterReadingFragment"
-            app:destination="@id/chapterReadingFragment"/>
+            app:destination="@id/chapterReadingFragment" />
+        <action
+            android:id="@+id/action_chapterListFragment_to_editChapterFragment"
+            app:destination="@id/editChapterFragment" />
 
     </fragment>
     <fragment
@@ -267,5 +270,25 @@
         tools:layout="@layout/fragment_chapter_reading">
 
     </fragment>
-
+    <fragment
+        android:id="@+id/editChapterFragment"
+        android:name="com.okta.senov.fragment.EditChapterFragment"
+        android:label="Edit Chapter"
+        tools:layout="@layout/fragment_edit_chapter">
+        <argument
+            android:name="bookId"
+            app:argType="string" />
+        <argument
+            android:name="bookTitle"
+            app:argType="string" />
+        <argument
+            android:name="chapterNumber"
+            app:argType="integer" />
+        <argument
+            android:name="chapterTitle"
+            app:argType="string" />
+        <argument
+            android:name="chapterContent"
+            app:argType="string" />
+    </fragment>
 </navigation>

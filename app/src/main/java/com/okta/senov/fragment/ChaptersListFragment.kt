@@ -84,6 +84,9 @@ class ChapterListFragment : Fragment() {
         chapterAdapter = ChapterAdapter(
             onChapterClick = { chapter ->
                 navigateToChapterDetail(chapter)
+            },
+            onEditClick = { chapter ->
+                navigateToEditChapter(chapter)
             }
         )
 
@@ -105,6 +108,22 @@ class ChapterListFragment : Fragment() {
         // Navigate to chapter reading fragment
         findNavController().navigate(
             R.id.action_chapterListFragment_to_chapterReadingFragment,
+            bundle
+        )
+    }
+    // Add method to navigate to edit screen
+    private fun navigateToEditChapter(chapter: Chapter) {
+        val bundle = Bundle().apply {
+            putString("bookId", bookId)
+            putString("bookTitle", bookTitle)
+            putInt("chapterNumber", chapter.number)
+            putString("chapterTitle", chapter.title)
+            putString("chapterContent", chapter.content)
+        }
+
+        // Navigate to edit chapter fragment
+        findNavController().navigate(
+            R.id.action_chapterListFragment_to_editChapterFragment,
             bundle
         )
     }

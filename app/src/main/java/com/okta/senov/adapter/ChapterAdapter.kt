@@ -9,7 +9,8 @@ import com.okta.senov.databinding.ItemBookContentListBinding
 import com.okta.senov.model.Chapter
 
 class ChapterAdapter(
-    private val onChapterClick: (Chapter) -> Unit
+    private val onChapterClick: (Chapter) -> Unit,
+    private val onEditClick: (Chapter) -> Unit
 ) : ListAdapter<Chapter, ChapterAdapter.ChapterViewHolder>(ChapterDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChapterViewHolder {
@@ -35,6 +36,12 @@ class ChapterAdapter(
 
                 // Hide delete button for chapters
                 deleteButton.visibility = ViewGroup.VISIBLE
+
+                // Add visibility and click listener for edit button
+                editButton.visibility = ViewGroup.VISIBLE
+                editButton.setOnClickListener {
+                    onEditClick(chapter)
+                }
 
                 // Set click listener
                 root.setOnClickListener {
