@@ -49,7 +49,7 @@
             tools:text="John Doe" />
 
         <TextView
-            android:id="@+id/bookCountTextView"
+            android:id="@+id/authorIdTextView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
@@ -61,7 +61,18 @@
             app:layout_constraintEnd_toStartOf="@id/deleteButton"
             app:layout_constraintStart_toEndOf="@id/authorImageCard"
             app:layout_constraintTop_toBottomOf="@id/authorNameTextView"
-            tools:text="5 books" />
+            tools:text="AUNOV01" />
+
+        <ImageButton
+            android:id="@+id/editButton"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_edit"
+            app:layout_constraintEnd_toStartOf="@id/deleteButton"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
 
         <ImageButton
             android:id="@+id/deleteButton"

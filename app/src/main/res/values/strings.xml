@@ -180,6 +180,11 @@
     <string name="author_search">Cari Author</string>
     <string name="author_empty">Tidak ada data author"</string>
     <string name="author_desc_empty">Coba cari yang lain</string>
+    <string name="author_title_edit">Edit data author</string>
+    <string name="author_name_edit">Nama Author</string>
+    <string name="author_sosmed_edit">Social Media</string>
+    <string name="author_bio_edit">Biografi Author</string>
+    <string name="author_profile_edit">Foto penulis</string>
 
 
     <string name="register">Register</string>

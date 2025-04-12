@@ -11,6 +11,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.firestore.FirebaseFirestore
+import com.okta.senov.R
 import com.okta.senov.adapter.AuthorAdapter
 import com.okta.senov.databinding.FragmentAuthorListBinding
 import com.okta.senov.model.Author
@@ -44,16 +45,26 @@ class AuthorListFragment : Fragment() {
     private fun setupAdapter() {
         authorAdapter = AuthorAdapter(
             onAuthorClick = { author ->
-                // Handle author click - navigate to author detail or books by author
-                Toast.makeText(
-                    requireContext(),
-                    "Selected: ${author.nameAuthor}",
-                    Toast.LENGTH_SHORT
-                ).show()
-                // You can navigate to another fragment to show author details here
+                // Navigate to author detail fragment
+                val bundle = Bundle().apply {
+                    putString("idAuthor", author.id)
+                    putString("nameAuthor", author.nameAuthor)
+                    putString("socialMedia", author.socialMedia)
+                    putString("bioAuthor", author.bioAuthor)
+                    putString("imageUrl", author.imageUrl)
+                }
+
+                // Navigasi ke fragment detail author
+                findNavController().navigate(
+                    R.id.action_authorListFragment_to_detailDataAuthorFragment,
+                    bundle
+                )
             },
             onDeleteClick = { author ->
                 showDeleteConfirmationDialog(author)
+            },
+            onEditClick = { author ->
+                navigateToEditAuthor(author)
             }
         )
 
@@ -77,6 +88,22 @@ class AuthorListFragment : Fragment() {
 
             override fun afterTextChanged(s: Editable?) {}
         })
+    }
+    // Add method to navigate to edit screen
+    private fun navigateToEditAuthor(author: Author) {
+        val bundle = Bundle().apply {
+            putString("idAuthor", author.id)
+            putString("nameAuthor", author.nameAuthor)
+            putString("socialMedia", author.socialMedia)
+            putString("bioAuthor", author.bioAuthor)
+            putString("imageUrl", author.imageUrl)
+        }
+
+        // Navigate to edit chapter fragment
+        findNavController().navigate(
+            R.id.action_authorListFragment_to_editAuthorFragment,
+            bundle
+        )
     }
 
 

@@ -232,6 +232,12 @@
         android:name="com.okta.senov.fragment.AuthorListFragment"
         android:label="Author List"
         tools:layout="@layout/fragment_author_list">
+        <action
+            android:id="@+id/action_authorListFragment_to_editAuthorFragment"
+            app:destination="@id/editAuthorFragment"/>
+        <action
+            android:id="@+id/action_authorListFragment_to_detailDataAuthorFragment"
+            app:destination="@id/detailDataAuthorFragment" />
 
     </fragment>
     <fragment
@@ -239,6 +245,9 @@
         android:name="com.okta.senov.fragment.BookListFragment"
         android:label="Book List"
         tools:layout="@layout/fragment_book_list">
+        <action
+            android:id="@+id/action_bookListFragment_to_editBookFragment"
+            app:destination="@id/editBookFragment" />
 
     </fragment>
     <fragment
@@ -290,5 +299,71 @@
         <argument
             android:name="chapterContent"
             app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/editBookFragment"
+        android:name="com.okta.senov.fragment.EditBookFragment"
+        android:label="Edit Books"
+        tools:layout="@layout/fragment_edit_book">
+        <argument
+            android:name="bookId"
+            app:argType="string" />
+        <argument
+            android:name="bookTitle"
+            app:argType="string" />
+        <argument
+            android:name="bookAuthor"
+            app:argType="string" />
+        <argument
+            android:name="bookCategory"
+            app:argType="string" />
+        <argument
+            android:name="bookDescription"
+            app:argType="string" />
+        <argument
+            android:name="bookCover"
+            app:argType="string"/>
+    </fragment>
+    <fragment
+        android:id="@+id/editAuthorFragment"
+        android:name="com.okta.senov.fragment.EditAuthorFragment"
+        android:label="Edit Author"
+        tools:layout="@layout/fragment_edit_author">
+    <argument
+        android:name="authorId"
+        app:argType="string" />
+    <argument
+        android:name="nameAuthorTitle"
+        app:argType="string" />
+    <argument
+        android:name="socialMediaAuthor"
+        app:argType="string" />
+    <argument
+        android:name="bioAuthor"
+        app:argType="string" />
+    <argument
+        android:name="coverAuthor"
+        app:argType="string"/>
+    </fragment>
+    <fragment
+        android:id="@+id/detailDataAuthorFragment"
+        android:name="com.okta.senov.fragment.DetailDataAuthorFragment"
+        android:label="Detail data author"
+        tools:layout="@layout/fragment_detail_data_author">
+    <argument
+        android:name="authorId"
+        app:argType="string" />
+    <argument
+        android:name="nameAuthor"
+        app:argType="string" />
+    <argument
+        android:name="socialMedia"
+        app:argType="string" />
+    <argument
+        android:name="bioAuthor"
+        app:argType="string" />
+    <argument
+        android:name="imageUrl"
+        app:argType="string" />
     </fragment>
 </navigation>
