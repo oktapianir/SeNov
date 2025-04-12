@@ -11,6 +11,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.firestore.FirebaseFirestore
+import com.okta.senov.R
 import com.okta.senov.databinding.FragmentAddContentBookBinding
 import com.okta.senov.model.Book
 import com.okta.senov.model.BookContent
@@ -80,6 +81,9 @@ class AddContentBookFragment : Fragment() {
         binding.actvBookId.setOnClickListener {
             binding.actvBookId.showDropDown()
         }
+        binding.btnNext.setOnClickListener {
+            findNavController().navigate(R.id.bookContentListFragment)
+        }
     }
 
     private fun setupBookDropdown() {
@@ -106,11 +110,6 @@ class AddContentBookFragment : Fragment() {
             val selectedBookDisplay = bookDisplayList[position]
             bookIdDropdown.setText(selectedBookDisplay, false)
         }
-
-//        // For debugging, add some test items directly first
-//        bookDisplayList.add("TEST - Book Title 1")
-//        bookDisplayList.add("TEST - Book Title 2")
-//        bookAdapter.notifyDataSetChanged()
 
         // Then fetch the real books firestore
         fetchBooks()
