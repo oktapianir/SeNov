@@ -248,6 +248,9 @@
         <action
             android:id="@+id/action_bookListFragment_to_editBookFragment"
             app:destination="@id/editBookFragment" />
+        <action
+            android:id="@+id/action_bookListFragment_to_detailDataBookFragment"
+            app:destination="@id/detailDataBookFragment" />
 
     </fragment>
     <fragment
@@ -365,5 +368,29 @@
     <argument
         android:name="imageUrl"
         app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailDataBookFragment"
+        android:name="com.okta.senov.fragment.DetailDataBookFragment"
+        android:label="Detail data buku"
+        tools:layout="@layout/fragment_detail_data_book">
+        <argument
+            android:name="idBook"
+            app:argType="string" />
+        <argument
+            android:name="bookName"
+            app:argType="string" />
+        <argument
+            android:name="bookAuthor"
+            app:argType="string" />
+        <argument
+            android:name="bookCategory"
+            app:argType="string" />
+        <argument
+            android:name="bookDescription"
+            app:argType="string" />
+        <argument
+            android:name="imageUrl"
+            app:argType="string" />
     </fragment>
 </navigation>

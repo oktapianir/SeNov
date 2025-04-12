@@ -12,7 +12,8 @@ import com.okta.senov.model.Book
 
 class BookListAdapter(
     private val onBookClick: (Book) -> Unit,
-    private val onDeleteClick: (Book) -> Unit
+    private val onDeleteClick: (Book) -> Unit,
+    private val onEditClick: (Book) -> Unit
 ) : ListAdapter<Book, BookListAdapter.BookViewHolder>(BookDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookViewHolder {
@@ -30,7 +31,7 @@ class BookListAdapter(
         fun bind(book: Book) {
             binding.apply {
                 bookNameTextView.text = book.title
-                categoryTextView.text = book.category
+                bookIdTextView.text = book.id
 
                 // Load book cover image with Glide
                 Glide.with(bookImageView.context)
@@ -38,6 +39,12 @@ class BookListAdapter(
                     .placeholder(R.drawable.ic_profile_placeholder)
                     .error(R.drawable.ic_profile_placeholder)
                     .into(bookImageView)
+
+                // Add visibility and click listener for edit button
+                editButton.visibility = ViewGroup.VISIBLE
+                editButton.setOnClickListener {
+                    onEditClick(book)
+                }
 
                 // Item click listener
                 root.setOnClickListener {

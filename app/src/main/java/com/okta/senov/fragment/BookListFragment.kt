@@ -11,6 +11,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.firestore.FirebaseFirestore
+import com.okta.senov.R
 import com.okta.senov.adapter.BookListAdapter
 import com.okta.senov.databinding.FragmentBookListBinding
 import com.okta.senov.model.Book
@@ -44,12 +45,26 @@ class BookListFragment : Fragment() {
     private fun setupAdapter() {
         bookAdapter = BookListAdapter(
             onBookClick = { book ->
-                // Handle book click - navigate to book detail
-                Toast.makeText(requireContext(), "Selected: ${book.title}", Toast.LENGTH_SHORT).show()
-                // You can navigate to another fragment to show book details here
+                // Navigate to book detail fragment
+                val bundle = Bundle().apply {
+                    putString("idBook", book.id)
+                    putString("titleBook", book.title)
+                    putString("nameAuthor", book.authorName)
+                    putString("nameCategory", book.category)
+                    putString("bookDescription", book.description)
+                    putString("fotoUrl", book.image)
+                }
+                // Navigasi ke fragment detail buku
+                findNavController().navigate(
+                    R.id.action_bookListFragment_to_detailDataBookFragment,
+                    bundle
+                )
             },
             onDeleteClick = { book ->
                 showDeleteConfirmationDialog(book)
+            },
+            onEditClick = { book ->
+                navigateToEditBook(book)
             }
         )
 
@@ -73,6 +88,23 @@ class BookListFragment : Fragment() {
             override fun afterTextChanged(s: Editable?) {}
         })
     }
+    private fun navigateToEditBook(book: Book) {
+        val bundle = Bundle().apply {
+            putString("idBook", book.id)
+            putString("titleBook", book.title )
+            putString("nameAuthor", book.authorName)
+            putString("nameCategory", book.category)
+            putString("bookDescription", book.description)
+            putString("fotoUrl",book.image)
+        }
+
+        // Navigate to edit chapter fragment
+        findNavController().navigate(
+            R.id.action_bookListFragment_to_editBookFragment,
+            bundle
+        )
+    }
+
 
 //    private fun loadBooks() {
 //        showLoading(true)
@@ -161,7 +193,8 @@ class BookListFragment : Fragment() {
                         }
                         .addOnFailureListener {
                             Timber.e("Failed to load rating for book $id")
-                            val book = Book(id, title, authorName, category, description, coverUrl, 0f)
+                            val book =
+                                Book(id, title, authorName, category, description, coverUrl, 0f)
                             bookList.add(book)
                             updateUI()
                             showLoading(false)
