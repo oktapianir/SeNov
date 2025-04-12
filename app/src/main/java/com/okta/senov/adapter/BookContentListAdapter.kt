@@ -1,6 +1,7 @@
 package com.okta.senov.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -42,6 +43,8 @@ class BookContentListAdapter(
                     .placeholder(R.drawable.ic_profile_placeholder)
                     .error(R.drawable.ic_profile_placeholder)
                     .into(bookImageView)
+
+                editButton.visibility = View.GONE
 
                 // Item click listener - will navigate to chapters
                 root.setOnClickListener {
