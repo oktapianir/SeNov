@@ -106,7 +106,7 @@
     <string name="book_author">Book Author</string>
     <string name="book_total">Total Book</string>
     <string name="book_collection">Book Collection</string>
-    <string name="book_cover">Book Cover</string>
+    <string name="book_cover">Cover Buku</string>
     <string name="book_information">Book Information</string>
     <string name="book_chapter_information">Book Chapter Information</string>
     <string name="book_enter_title">Enter Book Title</string>
@@ -146,6 +146,8 @@
     <string name="title_daily_avarage">Rata-rata pembaca harian</string>
     <string name="title_edit_chapter">Edit Chapter</string>
     <string name="title_chapter_content">Isi Cerita</string>
+    <string name="title_edit_book">Edit Data Buku</string>
+    <string name="title_book">Judul Buku</string>
 
     <string name="add_content">Tambah isi cerita</string>
     <string name="add_rating">Tambah Penilaian buku</string>
