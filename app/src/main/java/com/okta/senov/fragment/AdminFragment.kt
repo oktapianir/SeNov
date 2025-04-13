@@ -43,6 +43,10 @@ class AdminFragment : Fragment(R.layout.fragment_admin) {
             binding.btnAddBookContent.findNavController()
                 .navigate(R.id.action_adminFragment_to_addContentBookFragment)
         }
+        binding.btnDataRating.setOnClickListener {
+            binding.btnDataRating.findNavController()
+                .navigate(R.id.action_adminFragment_to_dataRatingFragment)
+        }
         binding.cardLogout.setOnClickListener {
             logout()
         }
