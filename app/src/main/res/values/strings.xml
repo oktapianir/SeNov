@@ -148,6 +148,8 @@
     <string name="title_chapter_content">Isi Cerita</string>
     <string name="title_edit_book">Edit Data Buku</string>
     <string name="title_book">Judul Buku</string>
+    <string name="title_admin_rating">Data Penilaian Buku</string>
+    <string name="title_rating">Penilaian Buku</string>
 
     <string name="add_content">Tambah isi cerita</string>
     <string name="add_rating">Tambah Penilaian buku</string>
@@ -228,4 +230,12 @@
     <string name="support_category_problem_desc">Jelaskan Masalah Anda</string>
     <string name="support_solution">Kirim Permintaan Bantuan</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="rating_sort">Urutkan Penilaian Berdasarkan..</string>
+    <string name="rating_highest">Rating Tertinggi</string>
+    <string name="rating_lowest">Rating Terendah</string>
+    <string name="rating_newest">Rating Terbaru</string>
+    <string name="rating_oldest">Rating Terlama</string>
+    <string name="rating_empty">Tidak ada Penilaian Buku</string>
+    <string name="rating_label">Review:</string>
 </resources>

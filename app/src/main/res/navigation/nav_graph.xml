@@ -91,7 +91,7 @@
             app:destination="@id/loginfragment" />
         <action
             android:id="@+id/action_profileFragment_to_registerFragment"
-            app:destination="@id/registerfragment" />
+            app:destination="@+id/registerfragment" />
     </fragment>
 
     <fragment
@@ -156,6 +156,9 @@
             app:destination="@+id/loginfragment"
             app:popUpTo="@id/adminFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_adminFragment_to_dataRatingFragment"
+            app:destination="@id/dataRatingfragment"/>
     </fragment>
 
     <fragment
@@ -392,5 +395,13 @@
         <argument
             android:name="imageUrl"
             app:argType="string" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/dataRatingfragment"
+        android:name="com.okta.senov.fragment.DataRatingFragment"
+        android:label="Data Rating"
+        tools:layout="@layout/fragment_data_rating">
+
     </fragment>
 </navigation>
