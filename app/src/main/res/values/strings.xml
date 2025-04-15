@@ -109,6 +109,7 @@
     <string name="highest_rating">Rating Tertinggi - Terendah</string>
     <string name="lowest_rating">Rating Terendah - Tertinggi</string>
     <string name="apply">Terapkan</string>
+    <string name="sort">Sort: Semua</string>
 
     <string name="book_title">Book Title</string>F
     <string name="book_author">Book Author</string>
@@ -163,6 +164,7 @@
     <string name="title_email">Email: </string>
     <string name="title_name">Name: </string>
     <string name="title_timestamp">Timestamp: </string>
+
     <string name="add_content">Tambah isi cerita</string>
     <string name="add_rating">Tambah Penilaian buku</string>
     <string name="add_rating_wording">Berikan Rating:</string>
@@ -249,7 +251,7 @@
     <string name="rating_newest">Rating Terbaru</string>
     <string name="rating_oldest">Rating Terlama</string>
     <string name="rating_empty">Tidak ada Penilaian Buku</string>
-    <string name="help_label">Review:</string>
+    <string name="rating_label">Review:</string>
     <string name="help_title">Data Bantuan dan Dukungan</string>
     <string name="help_status_sort">Urutkan Status: </string>
     <string name="help_empty_desc">Tidak ada bantuan dan dukungan yang masuk</string>

@@ -6,6 +6,7 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
@@ -26,6 +27,18 @@ class BookListFragment : Fragment() {
     private val bookList = mutableListOf<Book>()
     private val filteredList = mutableListOf<Book>()
 
+    // Keep track of read counts separately
+    private val bookReadCountMap = mutableMapOf<String, Int>()
+
+    // Sort options
+    private enum class SortOption {
+        SEMUA,
+        PALING_BANYAK_DIBACA,
+        PALING_SEDIKIT_DIBACA
+    }
+
+    private var currentSortOption = SortOption.SEMUA
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -39,7 +52,7 @@ class BookListFragment : Fragment() {
 
         setupAdapter()
         setupUI()
-        loadBooks()
+        fetchReadCountData()
     }
 
     private fun setupAdapter() {
@@ -54,7 +67,7 @@ class BookListFragment : Fragment() {
                     putString("bookDescription", book.description)
                     putString("fotoUrl", book.image)
                 }
-                // Navigasi ke fragment detail buku
+                // Navigate to book detail fragment
                 findNavController().navigate(
                     R.id.action_bookListFragment_to_detailDataBookFragment,
                     bundle
@@ -87,67 +100,64 @@ class BookListFragment : Fragment() {
 
             override fun afterTextChanged(s: Editable?) {}
         })
-    }
-    private fun navigateToEditBook(book: Book) {
-        val bundle = Bundle().apply {
-            putString("idBook", book.id)
-            putString("titleBook", book.title )
-            putString("nameAuthor", book.authorName)
-            putString("nameCategory", book.category)
-            putString("bookDescription", book.description)
-            putString("fotoUrl",book.image)
+
+        // Setup sort button
+        binding.sortButton.setOnClickListener { view ->
+            showSortOptions(view)
         }
-
-        // Navigate to edit chapter fragment
-        findNavController().navigate(
-            R.id.action_bookListFragment_to_editBookFragment,
-            bundle
-        )
     }
 
+    private fun showSortOptions(view: View) {
+        val popupMenu = PopupMenu(requireContext(), view)
+        popupMenu.menu.add("Default").setOnMenuItemClickListener {
+            currentSortOption = SortOption.SEMUA
+            binding.activeSortTextView.text = "Sort: SEMUA"
+            sortAndDisplayBooks()
+            true
+        }
+        popupMenu.menu.add("Banyak dibaca").setOnMenuItemClickListener {
+            currentSortOption = SortOption.PALING_BANYAK_DIBACA
+            binding.activeSortTextView.text = "Sort: Paling Banyak dibaca"
+            sortAndDisplayBooks()
+            true
+        }
+        popupMenu.menu.add("Sedikit dibaca").setOnMenuItemClickListener {
+            currentSortOption = SortOption.PALING_SEDIKIT_DIBACA
+            binding.activeSortTextView.text = "Sort: Paling Sedikit dibaca"
+            sortAndDisplayBooks()
+            true
+        }
+        popupMenu.show()
+    }
 
-//    private fun loadBooks() {
-//        showLoading(true)
-//
-//        db.collection("Books")
-//            .get()
-//            .addOnSuccessListener { documents ->
-//                bookList.clear()
-//
-//                for (document in documents) {
-//                    try {
-//                        val id = document.id
-//                        val title = document.getString("titleBook") ?: ""
-//                        val coverUrl = document.getString("fotoUrl") ?: ""
-//                        val authorName = document.getString("nameAuthor") ?: ""
-//                        val description = document.getString("bookDescription") ?: ""
-//                        val category = document.getString("nameCategory") ?: ""
-//                        val book = Book(id, title, coverUrl, authorName, description, category)
-//                        bookList.add(book)
-//                    } catch (e: Exception) {
-//                        Timber.e("Error parsing book: ${e.message}")
-//                    }
-//                }
-//
-//                // Update UI with the data
-//                updateUI()
-//                showLoading(false)
-//            }
-//            .addOnFailureListener { e ->
-//                Timber.e("Error loading books: ${e.message}")
-//                showLoading(false)
-//                showEmptyState(true)
-//                Toast.makeText(
-//                    requireContext(),
-//                    "Failed to load books: ${e.message}",
-//                    Toast.LENGTH_SHORT
-//                ).show()
-//            }
-//    }
-
-    private fun loadBooks() {
+    private fun fetchReadCountData() {
         showLoading(true)
 
+        db.collection("data_read_listened")
+            .get()
+            .addOnSuccessListener { documents ->
+                bookReadCountMap.clear()
+
+                // Aggregate read count by bookId
+                for (document in documents) {
+                    val bookId = document.getString("bookId") ?: continue
+                    val readCount = document.getLong("readCount")?.toInt() ?: 0
+
+                    // Update the map with the new read count
+                    bookReadCountMap[bookId] = (bookReadCountMap[bookId] ?: 0) + readCount
+                }
+
+                // Now load the books with the read count data
+                loadBooks()
+            }
+            .addOnFailureListener { e ->
+                Timber.e("Error loading read data: ${e.message}")
+                // Continue loading books even if read data fails
+                loadBooks()
+            }
+    }
+
+    private fun loadBooks() {
         db.collection("Books")
             .get()
             .addOnSuccessListener { documents ->
@@ -161,7 +171,7 @@ class BookListFragment : Fragment() {
                     val description = document.getString("bookDescription") ?: ""
                     val category = document.getString("nameCategory") ?: ""
 
-                    // Ambil rating dari collection Ratings berdasarkan bookId
+                    // Fetch ratings for each book
                     db.collection("ratings")
                         .whereEqualTo("bookId", id)
                         .get()
@@ -188,17 +198,39 @@ class BookListFragment : Fragment() {
                             )
 
                             bookList.add(book)
-                            updateUI()
-                            showLoading(false)
+
+                            // If this is the last book, update UI
+                            if (bookList.size == documents.size()) {
+                                sortAndDisplayBooks()
+                                showLoading(false)
+                            }
                         }
                         .addOnFailureListener {
                             Timber.e("Failed to load rating for book $id")
-                            val book =
-                                Book(id, title, authorName, category, description, coverUrl, 0f)
+                            val book = Book(
+                                id = id,
+                                title = title,
+                                authorName = authorName,
+                                category = category,
+                                description = description,
+                                image = coverUrl,
+                                rating = 0f
+                            )
+
                             bookList.add(book)
-                            updateUI()
-                            showLoading(false)
+
+                            // If this is the last book, update UI
+                            if (bookList.size == documents.size()) {
+                                sortAndDisplayBooks()
+                                showLoading(false)
+                            }
                         }
+                }
+
+                // Handle empty case
+                if (documents.isEmpty) {
+                    showLoading(false)
+                    showEmptyState(true)
                 }
             }
             .addOnFailureListener { e ->
@@ -213,6 +245,48 @@ class BookListFragment : Fragment() {
             }
     }
 
+    private fun sortAndDisplayBooks() {
+        when (currentSortOption) {
+            SortOption.PALING_BANYAK_DIBACA -> {
+                // Sort using the separate read count map
+                bookList.sortWith { book1, book2 ->
+                    val readCount1 = bookReadCountMap[book1.id] ?: 0
+                    val readCount2 = bookReadCountMap[book2.id] ?: 0
+                    readCount2.compareTo(readCount1) // Descending order
+                }
+            }
+            SortOption.PALING_SEDIKIT_DIBACA -> {
+                // Sort using the separate read count map
+                bookList.sortWith { book1, book2 ->
+                    val readCount1 = bookReadCountMap[book1.id] ?: 0
+                    val readCount2 = bookReadCountMap[book2.id] ?: 0
+                    readCount1.compareTo(readCount2) // Ascending order
+                }
+            }
+            SortOption.SEMUA -> {
+                // Default order, do nothing
+            }
+        }
+
+        updateUI()
+    }
+
+    private fun navigateToEditBook(book: Book) {
+        val bundle = Bundle().apply {
+            putString("idBook", book.id)
+            putString("titleBook", book.title)
+            putString("nameAuthor", book.authorName)
+            putString("nameCategory", book.category)
+            putString("bookDescription", book.description)
+            putString("fotoUrl", book.image)
+        }
+
+        // Navigate to edit chapter fragment
+        findNavController().navigate(
+            R.id.action_bookListFragment_to_editBookFragment,
+            bundle
+        )
+    }
 
     private fun filterBooks(query: String) {
         filteredList.clear()
