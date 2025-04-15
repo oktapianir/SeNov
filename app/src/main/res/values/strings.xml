@@ -47,6 +47,14 @@
     <string name="exp_number">0</string>
     <string name="exp_number_grafik_year">2025</string>
     <string name="exp_number_grafik_another_year">2024</string>
+    <string name="exp_timestamp_full">27 March 2025 at 17:33:32 UTC+7</string>
+    <string name="exp_status">Status:</string>
+    <string name="exp_name_full">Jhon</string>
+    <string name="exp_email_full">Jhon@gmail.com</string>
+    <string name="exp_description_full">Cerita Kosong</string>
+    <string name="exp_id">Id: </string>
+    <string name="exp_id_full">6awY7KTmVV2C2c5NDdNR</string>
+    <string name="exp_category_full">14</string>
     <string name="recent">Pencarian</string>
     <string name="notif">Notifikasi</string>
     <string name="filter">Filter</string>
@@ -148,9 +156,13 @@
     <string name="title_chapter_content">Isi Cerita</string>
     <string name="title_edit_book">Edit Data Buku</string>
     <string name="title_book">Judul Buku</string>
-    <string name="title_admin_rating">Data Penilaian Buku</string>
+    <string name="title_admin_rating">Data Rating Buku</string>
     <string name="title_rating">Penilaian Buku</string>
-
+    <string name="title_category">Category: </string>
+    <string name="title_description">Description: </string>
+    <string name="title_email">Email: </string>
+    <string name="title_name">Name: </string>
+    <string name="title_timestamp">Timestamp: </string>
     <string name="add_content">Tambah isi cerita</string>
     <string name="add_rating">Tambah Penilaian buku</string>
     <string name="add_rating_wording">Berikan Rating:</string>
@@ -237,5 +249,15 @@
     <string name="rating_newest">Rating Terbaru</string>
     <string name="rating_oldest">Rating Terlama</string>
     <string name="rating_empty">Tidak ada Penilaian Buku</string>
-    <string name="rating_label">Review:</string>
+    <string name="help_label">Review:</string>
+    <string name="help_title">Data Bantuan dan Dukungan</string>
+    <string name="help_status_sort">Urutkan Status: </string>
+    <string name="help_empty_desc">Tidak ada bantuan dan dukungan yang masuk</string>
+    <string name="help_edit">Edit Status Bantuan</string>
+
+    <string-array name="status_options">
+        <item>Menunggu</item>
+        <item>Diproses</item>
+        <item>Selesai</item>
+    </string-array>
 </resources>

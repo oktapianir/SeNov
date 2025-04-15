@@ -158,7 +158,10 @@
             app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_adminFragment_to_dataRatingFragment"
-            app:destination="@id/dataRatingfragment"/>
+            app:destination="@id/dataRatingfragment" />
+        <action
+            android:id="@+id/action_adminFragment_to_dataBantuanPenggunaFragment"
+            app:destination="@id/dataBantuanPenggunafragment"/>
     </fragment>
 
     <fragment
@@ -237,7 +240,7 @@
         tools:layout="@layout/fragment_author_list">
         <action
             android:id="@+id/action_authorListFragment_to_editAuthorFragment"
-            app:destination="@id/editAuthorFragment"/>
+            app:destination="@id/editAuthorFragment" />
         <action
             android:id="@+id/action_authorListFragment_to_detailDataAuthorFragment"
             app:destination="@id/detailDataAuthorFragment" />
@@ -328,49 +331,49 @@
             app:argType="string" />
         <argument
             android:name="bookCover"
-            app:argType="string"/>
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/editAuthorFragment"
         android:name="com.okta.senov.fragment.EditAuthorFragment"
         android:label="Edit Author"
         tools:layout="@layout/fragment_edit_author">
-    <argument
-        android:name="authorId"
-        app:argType="string" />
-    <argument
-        android:name="nameAuthorTitle"
-        app:argType="string" />
-    <argument
-        android:name="socialMediaAuthor"
-        app:argType="string" />
-    <argument
-        android:name="bioAuthor"
-        app:argType="string" />
-    <argument
-        android:name="coverAuthor"
-        app:argType="string"/>
+        <argument
+            android:name="authorId"
+            app:argType="string" />
+        <argument
+            android:name="nameAuthorTitle"
+            app:argType="string" />
+        <argument
+            android:name="socialMediaAuthor"
+            app:argType="string" />
+        <argument
+            android:name="bioAuthor"
+            app:argType="string" />
+        <argument
+            android:name="coverAuthor"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/detailDataAuthorFragment"
         android:name="com.okta.senov.fragment.DetailDataAuthorFragment"
         android:label="Detail data author"
         tools:layout="@layout/fragment_detail_data_author">
-    <argument
-        android:name="authorId"
-        app:argType="string" />
-    <argument
-        android:name="nameAuthor"
-        app:argType="string" />
-    <argument
-        android:name="socialMedia"
-        app:argType="string" />
-    <argument
-        android:name="bioAuthor"
-        app:argType="string" />
-    <argument
-        android:name="imageUrl"
-        app:argType="string" />
+        <argument
+            android:name="authorId"
+            app:argType="string" />
+        <argument
+            android:name="nameAuthor"
+            app:argType="string" />
+        <argument
+            android:name="socialMedia"
+            app:argType="string" />
+        <argument
+            android:name="bioAuthor"
+            app:argType="string" />
+        <argument
+            android:name="imageUrl"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/detailDataBookFragment"
@@ -404,4 +407,19 @@
         tools:layout="@layout/fragment_data_rating">
 
     </fragment>
+    <fragment
+        android:id="@+id/dataBantuanPenggunafragment"
+        android:name="com.okta.senov.fragment.DataBantuanPenggunaFragment"
+        android:label="Data Bantuan dan Dukungan Pengguna"
+        tools:layout="@layout/fragment_data_bantuan_pengguna">
+        <action
+            android:id="@+id/action_dataBantuanPenggunaFragment_to_editDataBantuanPenggunaFragment"
+            app:destination="@id/editDataBantuanPenggunaFragment"/>
+
+    </fragment>
+    <fragment
+        android:id="@+id/editDataBantuanPenggunaFragment"
+        android:name="com.okta.senov.fragment.EditDataBantuanPenggunaFragment"
+        android:label="Edit Data Bantuan Pengguna"
+        tools:layout="@layout/fragment_edit_data_bantuan_pengguna"/>
 </navigation>
