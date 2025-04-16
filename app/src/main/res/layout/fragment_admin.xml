@@ -427,7 +427,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="12dp"
-                                android:text="Data Bantuan Pengguna"
+                                android:text="@string/title_action_bantuan"
                                 android:textAlignment="center"
                                 android:textColor="@color/black"
                                 android:textSize="14sp" />
@@ -497,15 +497,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/layoutActions" />
 
-            <TextView
-                android:id="@+id/tvReadingStatsSubtitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/title_avarage_grafik"
-                android:textColor="@color/black"
-                android:textSize="14sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvReadingStatsTitle" />
 
             <!-- Graph Card -->
             <com.google.android.material.card.MaterialCardView
@@ -516,7 +507,7 @@
                 app:cardBackgroundColor="@color/white"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="2dp"
-                app:layout_constraintTop_toBottomOf="@id/tvReadingStatsSubtitle">
+                app:layout_constraintTop_toBottomOf="@id/tvReadingStatsTitle">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -534,7 +525,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="@string/title_motnly_avarage"
+                            android:text="@string/title_daily_avarage"
                             android:textColor="@color/black"
                             android:textSize="16sp"
                             android:textStyle="bold" />
@@ -549,11 +540,11 @@
                             android:textStyle="bold" />
                     </LinearLayout>
 
-                    <FrameLayout
-                        android:id="@+id/chartContainer"
+                    <com.github.mikephil.charting.charts.LineChart
+                        android:id="@+id/lineChart"
                         android:layout_width="match_parent"
-                        android:layout_height="240dp"
-                        android:layout_marginTop="16dp" />
+                        android:layout_height="250dp"
+                        tools:ignore="MissingClass" />
 
                     <!-- Legend Row -->
                     <LinearLayout
@@ -585,26 +576,6 @@
                                 android:textSize="12sp" />
                         </LinearLayout>
 
-                        <!-- Previous Year Legend -->
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal">
-
-                            <View
-                                android:layout_width="12dp"
-                                android:layout_height="12dp"
-                                android:background="@color/white_72" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="8dp"
-                                android:text="@string/exp_number_grafik_another_year"
-                                android:textColor="@color/black"
-                                android:textSize="12sp" />
-                        </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>

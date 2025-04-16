@@ -112,4 +112,6 @@ dependencies {
     //pdf
     implementation (libs.itext7.core)
 
+    implementation (libs.mpandroidchart)
+
 }

@@ -1,23 +1,41 @@
 package com.okta.senov.fragment
 
+import android.animation.ValueAnimator
 import android.content.Context
+import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.ColorUtils
 import androidx.fragment.app.Fragment
+import com.github.mikephil.charting.animation.Easing
 import com.okta.senov.R
 import com.okta.senov.databinding.FragmentAdminBinding
 import com.okta.senov.extensions.findNavController
 import timber.log.Timber
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-
-//import com.jjoe64.graphview.GraphView
-//import com.jjoe64.graphview.helper.StaticLabelsFormatter
-//import com.jjoe64.graphview.series.DataPoint
-//import com.jjoe64.graphview.series.LineGraphSeries
+import com.github.mikephil.charting.charts.LineChart
+import com.github.mikephil.charting.components.Legend
+import com.github.mikephil.charting.components.XAxis
+import com.github.mikephil.charting.data.Entry
+import com.github.mikephil.charting.data.LineData
+import com.github.mikephil.charting.data.LineDataSet
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
+import com.github.mikephil.charting.highlight.Highlight
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.firestore
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class AdminFragment : Fragment(R.layout.fragment_admin) {
 
@@ -59,6 +77,8 @@ class AdminFragment : Fragment(R.layout.fragment_admin) {
 
         //fungsi untuk mengambil jumlah keseluran data buku
         fetchBooksCount()
+        setupChart()
+        updateAverageValues()
         return binding.root
     }
 
@@ -190,75 +210,270 @@ class AdminFragment : Fragment(R.layout.fragment_admin) {
                 ).show()
             }
     }
-//    private fun setupChart() {
-//        // Buat GraphView
-//        val graphView = GraphView(requireContext())
-//        binding.chartContainer.removeAllViews()
-//        binding.chartContainer.addView(graphView)
-//
-//        // Series untuk 2025
-//        val series2025 = LineGraphSeries(arrayOf(
-//            DataPoint(0.0, 10.0),
-//            DataPoint(1.0, 15.0),
-//            DataPoint(2.0, 12.0),
-//            DataPoint(3.0, 18.0),
-//            DataPoint(4.0, 22.0),
-//            DataPoint(5.0, 17.0),
-//            DataPoint(6.0, 19.0),
-//            DataPoint(7.0, 23.0),
-//            DataPoint(8.0, 20.0),
-//            DataPoint(9.0, 25.0),
-//            DataPoint(10.0, 19.0),
-//            DataPoint(11.0, 24.0)
-//        ))
-//
-//        // Series untuk 2024
-//        val series2024 = LineGraphSeries(arrayOf(
-//            DataPoint(0.0, 8.0),
-//            DataPoint(1.0, 10.0),
-//            DataPoint(2.0, 9.0),
-//            DataPoint(3.0, 14.0),
-//            DataPoint(4.0, 15.0),
-//            DataPoint(5.0, 13.0),
-//            DataPoint(6.0, 16.0),
-//            DataPoint(7.0, 18.0),
-//            DataPoint(8.0, 17.0),
-//            DataPoint(9.0, 20.0),
-//            DataPoint(10.0, 15.0),
-//            DataPoint(11.0, 19.0)
-//        ))
-//
-//        // Styling 2025
-//        series2025.color = ContextCompat.getColor(requireContext(), R.color.lily)
-//        series2025.thickness = 4
-//
-//        // Styling 2024
-//        series2024.color = ContextCompat.getColor(requireContext(), R.color.white_72)
-//        series2024.thickness = 4
-//
-//        // Tambahkan ke graph
-//        graphView.addSeries(series2025)
-//        graphView.addSeries(series2024)
-//
-//        // Styling graph
-//        graphView.title = ""
-//        graphView.titleTextSize = 0f
-//        graphView.legendRenderer.isVisible = false
-//
-//        // X-axis labels
-//        val monthLabels = arrayOf("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
-//        val staticLabelsFormatter = StaticLabelsFormatter(graphView)
-//        staticLabelsFormatter.setHorizontalLabels(monthLabels)
-//        graphView.gridLabelRenderer.labelFormatter = staticLabelsFormatter
-//        // Viewport setting
-//        graphView.viewport.isXAxisBoundsManual = true
-//        graphView.viewport.setMinX(0.0)
-//        graphView.viewport.setMaxX(11.0)
-//
-//        // Grid styling
-//        graphView.gridLabelRenderer.gridColor = Color.LTGRAY
-//        graphView.gridLabelRenderer.isHighlightZeroLines = false
-//    }
+
+    private fun setupChart() {
+        val db = Firebase.firestore
+        val chart: LineChart = binding.lineChart
+
+        // Konfigurasi dasar chart sebelum data dimuat
+        configureChartAppearance(chart)
+
+        db.collection("reading_history")
+            .get()
+            .addOnSuccessListener { result ->
+                val dateCountMap = mutableMapOf<String, Int>()
+                val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                val displaySdf =
+                    SimpleDateFormat("dd MMM", Locale.getDefault()) // Format pendek untuk label
+
+                for (doc in result) {
+                    val lastReadMillis = doc.getLong("last_read") ?: continue
+                    val date = Date(lastReadMillis)
+                    val formattedDate = sdf.format(date)
+                    dateCountMap[formattedDate] = dateCountMap.getOrDefault(formattedDate, 0) + 1
+                }
+
+                // Urutkan tanggal dan batasi jumlah entri yang ditampilkan jika terlalu banyak
+                val sortedDates = dateCountMap.keys.sorted()
+                val displayDates = if (sortedDates.size > 7) {
+                    // Jika data terlalu banyak, cukup tampilkan 7 hari terakhir
+                    sortedDates.takeLast(7)
+                } else {
+                    sortedDates
+                }
+
+                val entries = displayDates.mapIndexed { index, tanggal ->
+                    Entry(index.toFloat(), dateCountMap[tanggal]?.toFloat() ?: 0f)
+                }
+
+                // Format tanggal menjadi lebih pendek untuk label
+                val labels = displayDates.map {
+                    displaySdf.format(sdf.parse(it) ?: Date())
+                }
+
+                // Buat dataset dengan styling menarik
+                val dataSet = createBeautifulDataSet(entries)
+
+                val lineData = LineData(dataSet)
+                chart.data = lineData
+
+                // Format X-Axis dengan label yang lebih pendek
+                configureXAxis(chart.xAxis, labels)
+
+                // Tambahkan highlight ke titik data saat disentuh
+                chart.setOnChartValueSelectedListener(createChartValueListener())
+
+                // Animasi saat memuat data
+                chart.animateY(1200, Easing.EaseOutCubic)
+                chart.invalidate()
+            }
+            .addOnFailureListener {
+                Toast.makeText(requireContext(), "Gagal memuat data", Toast.LENGTH_SHORT).show()
+            }
+    }
+
+    private fun configureChartAppearance(chart: LineChart) {
+        // Warna background dan styling dasar
+        chart.setBackgroundColor(Color.WHITE)
+        chart.description.isEnabled = false
+        chart.setDrawGridBackground(false)
+        chart.setDrawBorders(false)
+
+        // Konfigurasi legend
+        chart.legend.apply {
+            textSize = 12f
+            textColor = ContextCompat.getColor(requireContext(), R.color.black)
+            form = Legend.LegendForm.CIRCLE
+            formSize = 10f
+            formLineWidth = 2f
+            xEntrySpace = 10f
+            isEnabled = true
+        }
+
+        // Konfigurasi interaksi
+        chart.setTouchEnabled(true)
+        chart.isDragEnabled = true
+        chart.setScaleEnabled(true)
+        chart.setPinchZoom(true)
+
+        // Konfigurasi axis Y kiri (utama)
+        chart.axisLeft.apply {
+            setDrawGridLines(true)
+            gridColor = ContextCompat.getColor(requireContext(), R.color.white_72)
+            textColor = ContextCompat.getColor(requireContext(), R.color.black)
+            textSize = 12f
+            axisLineColor = Color.TRANSPARENT
+            setDrawAxisLine(false)
+            granularity = 1f  // Hanya nilai bulat
+        }
+
+        // Nonaktifkan axis Y kanan
+        chart.axisRight.isEnabled = false
+
+        // Hapus padding kiri/kanan agar grafik menggunakan seluruh ruang
+        chart.setExtraOffsets(10f, 10f, 10f, 20f)
+    }
+
+    private fun configureXAxis(xAxis: XAxis, labels: List<String>) {
+        xAxis.apply {
+            valueFormatter = IndexAxisValueFormatter(labels)
+            position = XAxis.XAxisPosition.BOTTOM
+            granularity = 1f
+            labelRotationAngle = 0f  // Horizontal labels
+            setDrawGridLines(false)
+            textSize = 12f
+            textColor = ContextCompat.getColor(requireContext(), R.color.black)
+            axisLineColor = Color.TRANSPARENT
+            setDrawAxisLine(false)
+
+            // Pastikan semua label terlihat
+            labelCount = labels.size
+
+            // Jika masih tumpang tindih, gunakan spacing
+            if (labels.size > 5) {
+                spaceMin = 0.5f
+                spaceMax = 0.5f
+            }
+        }
+    }
+
+    private fun createBeautifulDataSet(entries: List<Entry>): LineDataSet {
+        return LineDataSet(entries, "Jumlah Pembaca").apply {
+            // Warna utama dengan color gradient effect
+            val startColor = ContextCompat.getColor(requireContext(), R.color.lily)
+            val endColor = ContextCompat.getColor(requireContext(), R.color.lily)
+
+            // Line styling
+            color = startColor
+            lineWidth = 3f
+
+            // Gradient fill
+            setDrawFilled(true)
+            fillDrawable = GradientDrawable(
+                GradientDrawable.Orientation.TOP_BOTTOM,
+                intArrayOf(ColorUtils.setAlphaComponent(startColor, 150), Color.TRANSPARENT)
+            )
+
+            // Circle styling
+            setCircleColor(startColor)
+            circleRadius = 5f
+            circleHoleRadius = 2.5f
+            setCircleHoleColor(Color.WHITE)
+
+            // Value text styling
+            setDrawValues(false) // Hide values initially, show on selection
+            valueTextSize = 12f
+            valueTextColor = ContextCompat.getColor(requireContext(), R.color.black)
+
+            // Highlight styling
+            highLightColor = ContextCompat.getColor(requireContext(), R.color.lily)
+            setDrawHighlightIndicators(true)
+            highlightLineWidth = 1.5f
+            enableDashedHighlightLine(10f, 5f, 0f)
+
+            // Smoothness
+            mode = LineDataSet.Mode.CUBIC_BEZIER
+            cubicIntensity = 0.2f // Less curvy
+        }
+    }
+
+    private fun createChartValueListener(): OnChartValueSelectedListener {
+        return object : OnChartValueSelectedListener {
+            override fun onValueSelected(e: Entry?, h: Highlight?) {
+                e?.let {
+                    val dataSet = binding.lineChart.data.getDataSetByIndex(
+                        h?.dataSetIndex ?: 0
+                    ) as LineDataSet
+
+                    // Temporarily show the value for the selected point
+                    dataSet.setDrawValues(true)
+                    binding.lineChart.invalidate()
+
+                    // Display additional info in a tooltip or text view
+                    val value = it.y.toInt()
+                    val dateIndex = it.x.toInt()
+                    val dateLabel = binding.lineChart.xAxis.valueFormatter
+                        .getFormattedValue(it.x, binding.lineChart.xAxis)
+
+                    Toast.makeText(
+                        requireContext(),
+                        "$dateLabel: $value pembaca",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+
+            override fun onNothingSelected() {
+                // Hide values again when no point is selected
+                val dataSet = binding.lineChart.data.getDataSetByIndex(0) as LineDataSet
+                dataSet.setDrawValues(false)
+                binding.lineChart.invalidate()
+            }
+        }
+    }
+
+
+    private val handler = Handler(Looper.getMainLooper())
+
+    override fun onDestroy() {
+        super.onDestroy()
+        handler.removeCallbacksAndMessages(null) // Bersihkan handler
+    }
+
+
+    private fun updateAverageValues() {
+        val db = Firebase.firestore
+        val sdfDay = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val sdfMonth = SimpleDateFormat("yyyy-MM", Locale.getDefault())
+
+        db.collection("reading_history")
+            .get()
+            .addOnSuccessListener { result ->
+                val dailyMap = mutableMapOf<String, Int>()
+                val monthlyMap = mutableMapOf<String, Int>()
+
+                for (doc in result) {
+                    val lastRead = doc.getLong("last_read") ?: continue
+                    val date = Date(lastRead)
+                    val dayKey = sdfDay.format(date)
+                    val monthKey = sdfMonth.format(date)
+
+                    // Hitung pembaca harian
+                    dailyMap[dayKey] = dailyMap.getOrDefault(dayKey, 0) + 1
+
+                    // Hitung pembaca bulanan
+                    monthlyMap[monthKey] = monthlyMap.getOrDefault(monthKey, 0) + 1
+                }
+
+                val dailyTotal = dailyMap.values.sum()
+                val monthlyTotal = monthlyMap.values.sum()
+
+                val dailyAverage =
+                    if (dailyMap.isNotEmpty()) dailyTotal.toFloat() / dailyMap.size else 0f
+                val monthlyAverage =
+                    if (monthlyMap.isNotEmpty()) monthlyTotal.toFloat() / monthlyMap.size else 0f
+
+                // Tambahkan efek angka berjalan saat menampilkan rata-rata
+                animateTextView(0f, dailyAverage, binding.tvDailyAvg)
+                animateTextView(0f, monthlyAverage, binding.tvMonthlyAvg)
+            }
+            .addOnFailureListener {
+                Toast.makeText(requireContext(), "Gagal menghitung rata-rata", Toast.LENGTH_SHORT)
+                    .show()
+            }
+
+    }
+
+    private fun animateTextView(initialValue: Float, finalValue: Float, textView: TextView) {
+        val valueAnimator = ValueAnimator.ofFloat(initialValue, finalValue)
+        valueAnimator.duration = 1500
+        valueAnimator.addUpdateListener { animation ->
+            val animatedValue = animation.animatedValue as Float
+            textView.text = String.format("%.1f", animatedValue)
+        }
+        valueAnimator.start()
+    }
+
 
     override fun onDestroyView() {
         Timber.tag("AdminFragment").d("onDestroyView called")

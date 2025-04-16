@@ -8,7 +8,7 @@ plugins {
     alias(libs.plugins.google.firebase.crashlytics) apply false
 }
 buildscript {
-        dependencies {
-            classpath(libs.androidx.navigation.safe.args.gradle.plugin)
-        }
+    dependencies {
+        classpath(libs.androidx.navigation.safe.args.gradle.plugin)
     }
+}
