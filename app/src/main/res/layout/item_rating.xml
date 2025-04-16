@@ -74,6 +74,19 @@
             android:background="#EEEEEE"
             app:layout_constraintTop_toBottomOf="@id/iv_user_avatar" />
 
+        <TextView
+            android:id="@+id/tv_id_rating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/exp_id_full"
+            android:textColor="#666666"
+            android:layout_marginTop="8dp"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@id/rating_bar"
+            app:layout_constraintTop_toBottomOf="@id/rating_bar" />
+
+
         <!-- Rating Section -->
         <RatingBar
             android:id="@+id/rating_bar"
@@ -117,7 +130,7 @@
             android:id="@+id/tv_review_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="24dp"
             android:text="@string/rating_label"
             android:textColor="#333333"
             android:textSize="14sp"

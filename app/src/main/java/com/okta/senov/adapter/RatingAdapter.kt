@@ -29,10 +29,11 @@ class RatingAdapter(private val ratingsList: List<Rating>) :
         val rating = ratingsList[position]
 
         with(holder.binding) {
+            tvIdRating.text = "Id Rating: ${rating.id_rating}"
             tvBookId.text = "Book ID: ${rating.bookId}"
             tvRatingValue.text = "${rating.rating}"
             chipRecommended.text = "Recommended: ${if (rating.recommended) "Yes" else "No"}"
-            tvReview.text = "Review: ${rating.review}"
+            tvReview.text = "${rating.review}"
 
             try {
                 // Periksa tipe data timestamp
