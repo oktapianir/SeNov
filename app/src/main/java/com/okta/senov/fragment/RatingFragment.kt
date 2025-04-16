@@ -121,7 +121,7 @@ class RatingFragment : Fragment() {
 
         // Buat map data rating
         val ratingData = hashMapOf(
-            "id" to ratingId,
+            "id_rating" to ratingId,
             "bookId" to bookId,
             "userEmail" to userEmail,
             "rating" to rating,
