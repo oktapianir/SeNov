@@ -1,5 +1,6 @@
 package com.okta.senov.fragment
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -26,14 +27,15 @@ class EditDataBantuanPenggunaFragment : Fragment() {
     private lateinit var firestore: FirebaseFirestore
 
     // Data
-    private var documentId: String? = null
+    private var firestoreDocId: String? = null  // ID dokumen di Firestore
+    private var customDocId: String? = null     // ID kustom (id_support_request)
     private var originalStatus: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            documentId = it.getString(ARG_DOCUMENT_ID)
-            Timber.tag(TAG).d("Received document ID: $documentId")
+            customDocId = it.getString(ARG_DOCUMENT_ID)
+            Timber.tag(TAG).d("Received custom document ID: $customDocId")
         }
 
         // Initialize Firebase
@@ -57,8 +59,8 @@ class EditDataBantuanPenggunaFragment : Fragment() {
             saveStatusChanges()
         }
 
-        // Load data if documentId is available
-        documentId?.let {
+        // Load data if customDocId is available
+        customDocId?.let {
             if (it.isNotEmpty()) {
                 loadUserAssistanceData(it)
             } else {
@@ -69,47 +71,6 @@ class EditDataBantuanPenggunaFragment : Fragment() {
         }
 
         return binding.root
-    }
-    private fun migrateExistingDocumentsToCustomId() {
-        val collectionName = "support_requests"
-
-        firestore.collection(collectionName)
-            .get()
-            .addOnSuccessListener { querySnapshot ->
-                for (document in querySnapshot.documents) {
-                    val oldId = document.id
-                    val data = document.data ?: continue
-
-                    // Buat ID baru dengan format yang diinginkan
-                    val newId = "idSupport_Request_${System.currentTimeMillis()}"
-
-                    // Salin data ke dokumen baru dengan ID kustom
-                    firestore.collection(collectionName).document(newId)
-                        .set(data)
-                        .addOnSuccessListener {
-                            Timber.tag(TAG).d("Document successfully copied to new ID: $newId")
-
-                            // Hapus dokumen lama setelah berhasil menyalin
-                            firestore.collection(collectionName).document(oldId)
-                                .delete()
-                                .addOnSuccessListener {
-                                    Timber.tag(TAG).d("Old document successfully deleted: $oldId")
-                                }
-                                .addOnFailureListener { e ->
-                                    Timber.tag(TAG).e(e, "Error deleting old document")
-                                }
-                        }
-                        .addOnFailureListener { e ->
-                            Timber.tag(TAG).e(e, "Error copying document")
-                        }
-
-                    // Tambahkan delay untuk menghindari collision timestamp
-                    Thread.sleep(5)
-                }
-            }
-            .addOnFailureListener { e ->
-                Timber.tag(TAG).e(e, "Error getting documents")
-            }
     }
 
     override fun onDestroyView() {
@@ -129,22 +90,29 @@ class EditDataBantuanPenggunaFragment : Fragment() {
         binding.statusSpinner.adapter = adapter
     }
 
-    private fun loadUserAssistanceData(docId: String) {
+    private fun loadUserAssistanceData(customId: String) {
         showLoading(true)
-        Timber.tag(TAG).d("Loading data for document: $docId")
+        Timber.tag(TAG).d("Loading data for custom ID: $customId")
 
         // Verify the collection name - make sure this matches your Firestore structure
         val collectionName = "support_requests" // Change this if your collection has a different name
 
-        firestore.collection(collectionName).document(docId)
+        // Menggunakan query untuk menemukan dokumen berdasarkan field id_support_request
+        firestore.collection(collectionName)
+            .whereEqualTo("id_support_request", customId)
+            .limit(1)  // Hanya ambil 1 dokumen pertama yang cocok
             .get()
-            .addOnSuccessListener { document ->
-                if (document != null && document.exists()) {
+            .addOnSuccessListener { querySnapshot ->
+                if (!querySnapshot.isEmpty) {
+                    val document = querySnapshot.documents[0]
+                    // Simpan ID dokumen Firestore yang sebenarnya
+                    firestoreDocId = document.id
+
+                    Timber.tag(TAG).d("Document found with Firestore ID: $firestoreDocId")
                     Timber.tag(TAG).d("Document data: ${document.data}")
 
                     // Populate fields with data
-                    binding.requestId.text = docId
-                    binding.categoryValue.text = document.getString("category") ?: ""
+                    binding.requestId.text = document.getString("id_support_request") ?: ""
                     binding.descriptionValue.text = document.getString("description") ?: ""
                     binding.emailValue.text = document.getString("email") ?: ""
                     binding.nameValue.text = document.getString("name") ?: ""
@@ -157,8 +125,9 @@ class EditDataBantuanPenggunaFragment : Fragment() {
 
                     showLoading(false)
                 } else {
-                    Timber.tag(TAG).e("Document doesn't exist")
+                    Timber.tag(TAG).e("Document doesn't exist with custom ID: $customId")
                     showError("Dokumen tidak ditemukan")
+                    showLoading(false)
                 }
             }
             .addOnFailureListener { e ->
@@ -180,9 +149,9 @@ class EditDataBantuanPenggunaFragment : Fragment() {
     }
 
     private fun saveStatusChanges() {
-        val docId = documentId
+        val docId = firestoreDocId  // Gunakan ID Firestore yang sudah disimpan
         if (docId.isNullOrEmpty()) {
-            Timber.tag(TAG).e("Cannot save: document ID is null or empty")
+            Timber.tag(TAG).e("Cannot save: Firestore document ID is null or empty")
             showError("ID dokumen tidak valid")
             return
         }
@@ -195,52 +164,35 @@ class EditDataBantuanPenggunaFragment : Fragment() {
             else -> "Menunggu"
         }
 
+        Timber.tag(TAG).d("Updating document with Firestore ID: $docId")
         Timber.tag(TAG).d("Original status: $originalStatus, New status: $newStatus")
-
-        // Remove this condition to allow saving even if status appears the same
-        // Sometimes the formatting differences might cause comparison issues
-        /*
-        if (convertStatusFormat(originalStatus) == newStatus) {
-            Toast.makeText(requireContext(), "Status tidak berubah", Toast.LENGTH_SHORT).show()
-            return
-        }
-        */
 
         showLoading(true)
 
-        // Verify the collection name - make sure this matches your Firestore structure
-        val collectionName = "support_requests" // Change this if your collection has a different name
+        val collectionName = "support_requests"
 
-        Timber.tag(TAG)
-            .d("Saving status '$newStatus' to document '$docId' in collection '$collectionName'")
-
-        // Update only the status field
+        // Update document menggunakan ID dokumen Firestore
         firestore.collection(collectionName).document(docId)
             .update("status", newStatus)
             .addOnSuccessListener {
                 Timber.tag(TAG).d("Status successfully updated")
                 showLoading(false)
                 Toast.makeText(requireContext(), "Status berhasil diperbarui", Toast.LENGTH_SHORT).show()
-                // Refresh the data to verify the update
-                loadUserAssistanceData(docId)
-                // Don't navigate back immediately so user can see the change
-                // requireActivity().onBackPressed()
+
+                // Update original status variable setelah update berhasil
+                originalStatus = newStatus
+
+                // Tidak perlu reload karena kita sudah memperbarui status lokal
+                // Jika ingin memverifikasi dari server, uncomment baris di bawah
+                // loadUserAssistanceData(binding.requestId.text.toString())
             }
             .addOnFailureListener { e ->
                 Timber.tag(TAG).e(e, "Error updating status")
                 showLoading(false)
                 showError("Gagal memperbarui status: ${e.message}")
             }
-    }
+        statusUpdateCallback?.onStatusUpdated()
 
-    // Helper function to convert between status formats
-    private fun convertStatusFormat(status: String): String {
-        return when (status) {
-            "Pending" -> "Menunggu"
-            "Processing" -> "Diproses"
-            "Completed" -> "Selesai"
-            else -> status // Keep as is if already in Indonesian
-        }
     }
 
     private fun formatTimestamp(timestamp: Timestamp?): String {
@@ -249,6 +201,21 @@ class EditDataBantuanPenggunaFragment : Fragment() {
         val date = timestamp.toDate()
         val formatter = SimpleDateFormat("dd MMMM yyyy 'at' HH:mm:ss 'UTC'Z", Locale("id"))
         return formatter.format(date)
+    }
+    interface StatusUpdateCallback {
+        fun onStatusUpdated()
+    }
+
+    private var statusUpdateCallback: StatusUpdateCallback? = null
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        // Coba dapatkan callback dari parent fragment
+        parentFragment?.let {
+            if (it is StatusUpdateCallback) {
+                statusUpdateCallback = it
+            }
+        }
     }
 
     private fun showLoading(isLoading: Boolean) {
@@ -261,7 +228,7 @@ class EditDataBantuanPenggunaFragment : Fragment() {
     }
 
     companion object {
-        private const val ARG_DOCUMENT_ID = "document_id"
+        private const val ARG_DOCUMENT_ID = "id_support_request"
 
         @JvmStatic
         fun newInstance(documentId: String) =

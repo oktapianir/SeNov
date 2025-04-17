@@ -29,9 +29,10 @@ class SupportRequestAdapter(
         val currentItem = supportRequests[position]
         val b = holder.binding
 
+        b.idSupportTextView.text = currentItem.id_support_request
         b.textViewName.text = currentItem.name
         b.textViewEmail.text = currentItem.email
-        b.textViewCategory.text = "Kategori: ${currentItem.category}"
+//        b.textViewCategory.text = "Kategori: ${currentItem.category}"
         b.textViewDescription.text = currentItem.description
         b.textViewTimestamp.text = currentItem.timestamp.toString()
         b.textViewStatus.text = currentItem.status
@@ -39,7 +40,7 @@ class SupportRequestAdapter(
         // Set warna status
         val statusColor = when (currentItem.status.lowercase()) {
             "pending" -> "#808080"
-            "proses" -> "#FFA500"
+            "diproses" -> "#FFC107"
             "selesai" -> "#4CAF50"
             else -> "#808080" // Gray
         }
@@ -47,7 +48,6 @@ class SupportRequestAdapter(
 
         b.editButton.setOnClickListener {
             onEditClick(currentItem)
-            createNewSupportRequest(supportRequest = currentItem)
         }
     }
 
@@ -70,10 +70,10 @@ class SupportRequestAdapter(
 
 // 2. Buat data
         val supportRequestData = hashMapOf(
-            "idSupport_request" to generatedId,
+            "id_support_request" to supportRequest.id_support_request,
             "name" to supportRequest.name,
             "email" to supportRequest.email,
-            "category" to supportRequest.category,
+//            "category" to supportRequest.category,
             "description" to supportRequest.description,
             "status" to "Pending",
             "timestamp" to Timestamp.now()

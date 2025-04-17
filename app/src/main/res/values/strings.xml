@@ -164,6 +164,8 @@
     <string name="title_email">Email: </string>
     <string name="title_name">Name: </string>
     <string name="title_timestamp">Timestamp: </string>
+    <string name="title_action_bantuan">Data Bantuan Pengguna</string>
+    <string name="title_request_details">Informasi Bantuan</string>
 
     <string name="add_content">Tambah isi cerita</string>
     <string name="add_rating">Tambah Penilaian buku</string>
