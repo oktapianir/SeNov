@@ -79,20 +79,19 @@ class AddBookFragment : Fragment(R.layout.fragment_add_book) {
         val nameAuthor = binding.etNameAuthor.text.toString().trim()
         val bookDescription = binding.etBookDescription.text.toString().trim()
         val nameCategory = binding.etNameCategory.text.toString().trim()
-        val bookContent = binding.etBookContent.text.toString().trim()
 
         // Validasi input wajib
-        if (idBook.isEmpty() || titleBook.isEmpty() || nameAuthor.isEmpty() || bookDescription.isEmpty() || bookContent.isEmpty() || nameCategory.isEmpty()) {
+        if (idBook.isEmpty() || titleBook.isEmpty() || nameAuthor.isEmpty() || bookDescription.isEmpty() || nameCategory.isEmpty()) {
             Toast.makeText(requireContext(), "Data wajib diisi!", Toast.LENGTH_SHORT).show()
             return
         }
 
         // Jika ada gambar, upload ke Imgur dulu
         if (imageUri != null) {
-            uploadImageToImgur(idBook, titleBook, nameAuthor, bookDescription, bookContent, nameCategory)
+            uploadImageToImgur(idBook, titleBook, nameAuthor, bookDescription, nameCategory)
         } else {
             // Simpan langsung ke Firestore jika tanpa gambar
-            saveBookToFirestore(idBook, titleBook, nameAuthor, bookDescription, bookContent, nameCategory, null)
+            saveBookToFirestore(idBook, titleBook, nameAuthor, bookDescription, nameCategory, null)
         }
     }
 
@@ -102,12 +101,12 @@ class AddBookFragment : Fragment(R.layout.fragment_add_book) {
         titleBook: String,
         nameAuthor: String,
         bookDescription: String,
-        bookContent: String,
         nameCategory: String
     ) {
         try {
             // Ubah gambar menjadi byte array
-            val bitmap = MediaStore.Images.Media.getBitmap(requireContext().contentResolver, imageUri)
+            val bitmap =
+                MediaStore.Images.Media.getBitmap(requireContext().contentResolver, imageUri)
             val stream = ByteArrayOutputStream()
             bitmap.compress(Bitmap.CompressFormat.JPEG, 90, stream)
             val byteArray = stream.toByteArray()
@@ -115,8 +114,10 @@ class AddBookFragment : Fragment(R.layout.fragment_add_book) {
             // Buat request multipart
             val requestBody = MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
-                .addFormDataPart("image", "image.jpg",
-                    RequestBody.create("image/jpeg".toMediaTypeOrNull(), byteArray))
+                .addFormDataPart(
+                    "image", "image.jpg",
+                    RequestBody.create("image/jpeg".toMediaTypeOrNull(), byteArray)
+                )
                 .build()
 
             val request = Request.Builder()
@@ -130,7 +131,11 @@ class AddBookFragment : Fragment(R.layout.fragment_add_book) {
                 override fun onFailure(call: Call, e: IOException) {
                     activity?.runOnUiThread {
                         showLoading(false)
-                        Toast.makeText(requireContext(), "Gagal mengunggah gambar ke Imgur: ${e.message}", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            requireContext(),
+                            "Gagal mengunggah gambar ke Imgur: ${e.message}",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
 
@@ -142,12 +147,23 @@ class AddBookFragment : Fragment(R.layout.fragment_add_book) {
                         val imageUrl = data.getString("link")
 
                         activity?.runOnUiThread {
-                            saveBookToFirestore(idBook, titleBook, nameAuthor, bookDescription, bookContent, nameCategory, imageUrl)
+                            saveBookToFirestore(
+                                idBook,
+                                titleBook,
+                                nameAuthor,
+                                bookDescription,
+                                nameCategory,
+                                imageUrl
+                            )
                         }
                     } else {
                         activity?.runOnUiThread {
                             showLoading(false)
-                            Toast.makeText(requireContext(), "Gagal mengunggah gambar ke Imgur: ${response.message}", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                requireContext(),
+                                "Gagal mengunggah gambar ke Imgur: ${response.message}",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                     }
                 }
@@ -164,7 +180,7 @@ class AddBookFragment : Fragment(R.layout.fragment_add_book) {
         titleBook: String,
         nameAuthor: String,
         bookDescription: String,
-        bookContent: String,
+//        bookContent: String,
         nameCategory: String,
         fotoUrl: String?
     ) {
@@ -173,7 +189,6 @@ class AddBookFragment : Fragment(R.layout.fragment_add_book) {
             "titleBook" to titleBook,
             "nameAuthor" to nameAuthor,
             "bookDescription" to bookDescription,
-            "bookContent" to bookContent,
             "nameCategory" to nameCategory,
             "fotoUrl" to (fotoUrl ?: "")
         )
@@ -182,11 +197,16 @@ class AddBookFragment : Fragment(R.layout.fragment_add_book) {
             .document(idBook)
             .set(bookData)
             .addOnSuccessListener {
-                Toast.makeText(requireContext(), "Data Buku berhasil ditambahkan!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    requireContext(),
+                    "Data Buku berhasil ditambahkan!",
+                    Toast.LENGTH_SHORT
+                ).show()
                 clearFields()
             }
             .addOnFailureListener {
-                Toast.makeText(requireContext(), "Gagal menambahkan data buku!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Gagal menambahkan data buku!", Toast.LENGTH_SHORT)
+                    .show()
             }
     }
 
@@ -202,7 +222,6 @@ class AddBookFragment : Fragment(R.layout.fragment_add_book) {
         binding.etBookTitle.text?.clear()
         binding.etNameAuthor.text?.clear()
         binding.etBookDescription.text?.clear()
-        binding.etBookContent.text?.clear()
         binding.etNameCategory.text?.clear()
         imageUri = null
         binding.ivBookCover.setImageDrawable(null)
