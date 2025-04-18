@@ -162,6 +162,9 @@
         <action
             android:id="@+id/action_adminFragment_to_dataBantuanPenggunaFragment"
             app:destination="@id/dataBantuanPenggunafragment"/>
+        <action
+            android:id="@+id/action_adminFragment_to_laporanFragment"
+            app:destination="@id/laporanFragment"/>
     </fragment>
 
     <fragment
@@ -422,4 +425,10 @@
         android:name="com.okta.senov.fragment.EditDataBantuanPenggunaFragment"
         android:label="Edit Data Bantuan Pengguna"
         tools:layout="@layout/fragment_edit_data_bantuan_pengguna"/>
+
+    <fragment
+        android:id="@+id/laporanFragment"
+        android:name="com.okta.senov.fragment.LaporanFragment"
+        android:label="Laporan"
+        tools:layout="@layout/fragment_laporan"/>
 </navigation>

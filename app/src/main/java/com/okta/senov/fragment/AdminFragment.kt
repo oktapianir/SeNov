@@ -69,6 +69,10 @@ class AdminFragment : Fragment(R.layout.fragment_admin) {
             binding.btnDataBantuanPengguna.findNavController()
                 .navigate(R.id.action_adminFragment_to_dataBantuanPenggunaFragment)
         }
+        binding.btnLaporan.setOnClickListener {
+            binding.btnLaporan.findNavController()
+                .navigate(R.id.action_adminFragment_to_laporanFragment )
+        }
         binding.cardLogout.setOnClickListener {
             logout()
         }

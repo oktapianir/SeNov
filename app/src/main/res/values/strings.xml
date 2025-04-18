@@ -7,6 +7,7 @@
     <string name="_12_99">$12.99</string>
     <string name="buy_now">Buy Now</string>
     <string name="nov24">Nov 2024</string>
+    <string name="load_data">Memuat data...</string>
     <string name="senov">Seputar Novel</string>
     <string name="search_global">Search</string>
     <string name="search">Cari judul buku</string>
@@ -55,6 +56,8 @@
     <string name="exp_id">Id: </string>
     <string name="exp_id_full">6awY7KTmVV2C2c5NDdNR</string>
     <string name="exp_category_full">14</string>
+    <string name="exp_read_book">"Dibaca: 10 kali</string>
+    <string name="exp_book_syn">Sebuah kisah cinta yang menyentuh hati tentang kenangan, kehilangan, dan harapan.</string>
     <string name="recent">Pencarian</string>
     <string name="notif">Notifikasi</string>
     <string name="filter">Filter</string>
@@ -63,6 +66,7 @@
     <string name="see_all">Lihat Semua</string>
     <string name="account_forgot_pass">Lupa Kata Sandi?</string>
     <string name="account_google_sign_in">Atau Login dengan</string>
+    <string name="category_laporan">Kategori</string>
 
     <string name="recent_search">Recent Search</string>
     <string name="close_button">Close</string>
@@ -113,7 +117,7 @@
 
     <string name="book_title">Book Title</string>F
     <string name="book_author">Book Author</string>
-    <string name="book_total">Total Book</string>
+    <string name="book_total">Total Buku</string>
     <string name="book_collection">Book Collection</string>
     <string name="book_cover">Cover Buku</string>
     <string name="book_information">Book Information</string>
@@ -149,6 +153,7 @@
     <string name="title_support_section">Pusat Bantuan</string>
     <string name="title_download_pdf">Download</string>
     <string name="title_sort">Urutkan berdasarkan Rating</string>
+    <string name="title_laporan_sorting">Urutkan berdasarkan:</string>
     <string name="title_chapter">Judul Chapter</string>
     <string name="title_grafik">Statistik</string>
     <string name="title_avarage_grafik">Rata-rata Buku Dibaca</string>
@@ -167,6 +172,9 @@
     <string name="title_timestamp">Timestamp: </string>
     <string name="title_action_bantuan">Data Bantuan Pengguna</string>
     <string name="title_request_details">Informasi Bantuan</string>
+    <string name="title_laporan">Laporan Data Buku</string>
+    <string name="title_content_sorting_laporan">Pilih urutan</string>
+    <string name="title_laporan_admin">Laporan</string>
 
     <string name="add_content">Tambah isi cerita</string>
     <string name="add_rating">Tambah Penilaian buku</string>
@@ -207,6 +215,7 @@
     <string name="author_sosmed_edit">Social Media</string>
     <string name="author_bio_edit">Biografi Author</string>
     <string name="author_profile_edit">Foto penulis</string>
+    <string name="author_laporan">Penulis</string>
     <string name="author_all">All Authors</string>
 
 
