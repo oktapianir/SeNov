@@ -1,5 +1,6 @@
 package com.okta.senov.fragment
 
+import android.app.Activity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -7,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -26,6 +28,16 @@ class AuthorListFragment : Fragment() {
     private val authorList = mutableListOf<Author>()
     private val filteredList = mutableListOf<Author>()
 
+    // Launcher untuk memantau hasil dari edit author
+    private val editAuthorLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            Timber.d("Hasil edit OK, memuat ulang data penulis")
+            loadAuthors()
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -42,12 +54,20 @@ class AuthorListFragment : Fragment() {
         loadAuthors()
     }
 
+    // Refresh data penulis setiap kali fragment ini menjadi aktif
+    override fun onResume() {
+        super.onResume()
+        forceRefreshData()
+        Timber.d("AuthorListFragment onResume - memuat ulang data")
+
+    }
+
     private fun setupAdapter() {
         authorAdapter = AuthorAdapter(
             onAuthorClick = { author ->
                 // Navigate to author detail fragment
                 val bundle = Bundle().apply {
-                    putString("idAuthor", author.id)
+                    putString("idAuthor", author.idAuthor)
                     putString("nameAuthor", author.nameAuthor)
                     putString("socialMedia", author.socialMedia)
                     putString("bioAuthor", author.bioAuthor)
@@ -92,29 +112,40 @@ class AuthorListFragment : Fragment() {
     // Add method to navigate to edit screen
     private fun navigateToEditAuthor(author: Author) {
         val bundle = Bundle().apply {
-            putString("idAuthor", author.id)
+            putString("idAuthor", author.idAuthor)
             putString("nameAuthor", author.nameAuthor)
             putString("socialMedia", author.socialMedia)
             putString("bioAuthor", author.bioAuthor)
             putString("imageUrl", author.imageUrl)
         }
 
-        // Navigate to edit chapter fragment
-        findNavController().navigate(
-            R.id.action_authorListFragment_to_editAuthorFragment,
-            bundle
-        )
-    }
+        // Menggunakan ActivityResultLauncher untuk mendeteksi hasil edit
+        val navController = findNavController()
+        val currentDestination = navController.currentDestination
+        val actionId = R.id.action_authorListFragment_to_editAuthorFragment
 
+        // Cek apakah tujuan dan aksi valid untuk navigasi
+        if (currentDestination?.id == R.id.authorListFragment &&
+            currentDestination.getAction(actionId) != null) {
+
+            // Gunakan launcher untuk navigasi
+            navController.navigate(actionId, bundle)
+        } else {
+            Timber.e("Navigasi ke EditAuthorFragment tidak valid")
+            Toast.makeText(requireContext(), "Gagal navigasi ke edit author", Toast.LENGTH_SHORT).show()
+        }
+    }
 
     private fun loadAuthors() {
         showLoading(true)
 
+        // Gunakan opsi Source.SERVER untuk memastikan data diambil dari server, bukan cache
         db.collection("authors")
-            .get()
+            .get(com.google.firebase.firestore.Source.SERVER)
             .addOnSuccessListener { documents ->
-                authorList.clear()
+                Timber.d("Berhasil mendapatkan ${documents.size()} dokumen dari Firestore")
 
+                authorList.clear()
                 for (document in documents) {
                     val id = document.id
                     val nameAuthor = document.getString("nameAuthor") ?: ""
@@ -123,7 +154,7 @@ class AuthorListFragment : Fragment() {
                     val bioAuthor = document.getString("bioAuthor") ?: ""
 
                     val author = Author(
-                        id = id,
+                        idAuthor = id,
                         nameAuthor = nameAuthor,
                         socialMedia = socialMedia,
                         bioAuthor = bioAuthor,
@@ -131,23 +162,32 @@ class AuthorListFragment : Fragment() {
                     )
 
                     authorList.add(author)
+                    Timber.d("Loaded author: $nameAuthor with image: $imageUrl")
                 }
 
                 updateUI()
                 showLoading(false)
             }
             .addOnFailureListener { e ->
-                Timber.e("Error loading authors: ${e.message}")
+                Timber.e(e, "Error loading authors: ${e.message}")
                 showLoading(false)
                 showEmptyState(true)
                 Toast.makeText(
                     requireContext(),
-                    "Failed to load authors: ${e.message}",
+                    "Gagal memuat data penulis: ${e.message}",
                     Toast.LENGTH_SHORT
                 ).show()
             }
     }
+    private fun forceRefreshData() {
+        Timber.d("Memaksa refresh data")
+        // Kosongkan list saat ini
+        authorList.clear()
+        updateUI()
 
+        // Muat ulang dari server
+        loadAuthors()
+    }
 
     private fun filterAuthors(query: String) {
         filteredList.clear()
@@ -170,6 +210,9 @@ class AuthorListFragment : Fragment() {
         filteredList.clear()
         filteredList.addAll(authorList)
         authorAdapter.submitList(filteredList.toList())
+
+        // Pastikan adapter di-refresh setelah diperbarui
+        authorAdapter.notifyDataSetChanged()
 
         // Show empty state if needed
         showEmptyState(authorList.isEmpty())
@@ -206,11 +249,11 @@ class AuthorListFragment : Fragment() {
     }
 
     private fun deleteAuthor(author: Author) {
-        db.collection("authors").document(author.id)
+        db.collection("authors").document(author.idAuthor)
             .delete()
             .addOnSuccessListener {
                 // Remove from our list and update UI
-                val position = authorList.indexOfFirst { it.id == author.id }
+                val position = authorList.indexOfFirst { it.idAuthor == author.idAuthor }
                 if (position != -1) {
                     authorList.removeAt(position)
                     updateUI()

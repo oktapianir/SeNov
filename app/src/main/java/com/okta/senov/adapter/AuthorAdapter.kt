@@ -31,7 +31,7 @@ class AuthorAdapter(
         fun bind(author: Author) {
             binding.apply {
                 authorNameTextView.text = author.nameAuthor
-                authorIdTextView.text = author.id
+                authorIdTextView.text = author.idAuthor
 
                 // Load author image with Glide
                 Glide.with(authorImageView.context)
@@ -57,7 +57,7 @@ class AuthorAdapter(
 
 class AuthorDiffCallback : DiffUtil.ItemCallback<Author>() {
     override fun areItemsTheSame(oldItem: Author, newItem: Author): Boolean {
-        return oldItem.id == newItem.id
+        return oldItem.idAuthor == newItem.idAuthor
     }
 
     override fun areContentsTheSame(oldItem: Author, newItem: Author): Boolean {

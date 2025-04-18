@@ -8,7 +8,7 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 @Entity(tableName = "authors")
 data class Author(
-    val id : String ="",
+    val idAuthor : String ="",
     val nameAuthor: String ="",
     val socialMedia: String ="",
     val imageUrl: String ="",
