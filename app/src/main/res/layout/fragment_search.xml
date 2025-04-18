@@ -104,7 +104,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:text="@string/author_top"
+                android:text="@string/author_all"
                 android:textStyle="bold"
                 android:textColor="@color/black"
                 android:textSize="18sp"
