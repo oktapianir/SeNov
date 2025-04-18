@@ -135,6 +135,132 @@ class BookViewModel @Inject constructor(
         }
     }
 
+    fun fetchPopularBooksFromFirestore() {
+        Timber.d("Fetching most read books from Firestore")
+
+        // Step 1: Query data_read_listened collection to count books by read frequency
+        firestore.collection("data_read_listened")
+            .get()
+            .addOnSuccessListener { readSnapshot ->
+                // Count the frequency of each book being read
+                val bookReadCounts = mutableMapOf<String, Int>()
+
+                for (document in readSnapshot.documents) {
+                    val bookId = document.getString("bookId") ?: continue
+                    bookReadCounts[bookId] = (bookReadCounts[bookId] ?: 0) + 1
+                }
+
+                Timber.d("Counted read frequencies for ${bookReadCounts.size} books")
+
+                // Get the top 6 most read book IDs (limit to exactly 6)
+                val topBookIds = bookReadCounts.entries
+                    .sortedByDescending { it.value }
+                    .take(6)  // Ensure we only get 6 books
+                    .map { it.key }
+
+                if (topBookIds.isEmpty()) {
+                    Timber.d("No read data found, falling back to default book listing")
+                    fetchDefaultPopularBooks()
+                    return@addOnSuccessListener
+                }
+
+                // Step 2: Get book details for the top 6 most read books
+                firestore.collection("Books")
+                    .get()
+                    .addOnSuccessListener { booksSnapshot ->
+                        val topBooks = mutableListOf<BookData>()
+
+                        // For each top book ID, find its document and convert to BookData
+                        for (bookId in topBookIds) {
+                            val bookDoc = booksSnapshot.documents.find { it.id == bookId }
+
+                            bookDoc?.let { document ->
+                                try {
+                                    val title = document.getString("titleBook") ?: ""
+                                    val author = document.getString("authorName") ?: ""
+                                    val coverUrl = document.getString("fotoUrl") ?: ""
+                                    val description = document.getString("bookDescription") ?: ""
+                                    val category = document.getString("nameCategory") ?: ""
+                                    val readCount = bookReadCounts[bookId] ?: 0
+
+                                    // Convert to BookData
+                                    val bookData = BookData(
+                                        id = document.id,
+                                        title = title,
+                                        authorName = author,
+                                        category = category,
+                                        description = description,
+                                        image = coverUrl
+                                    )
+
+                                    topBooks.add(bookData)
+                                    Timber.d("Added book '${bookData.title}' with read count: $readCount")
+                                } catch (e: Exception) {
+                                    Timber.e(e, "Error parsing book document")
+                                }
+                            }
+                        }
+
+                        // Ensure books are still ordered by read count
+                        val sortedTopBooks = topBooks.sortedBy { book ->
+                            // Sort based on the position in topBookIds (which is already sorted by read count)
+                            topBookIds.indexOf(book.id)
+                        }
+
+                        Timber.d("Fetched ${sortedTopBooks.size} most read books from Firestore")
+                        _popularBooks.postValue(sortedTopBooks)
+                    }
+                    .addOnFailureListener { e ->
+                        Timber.e(e, "Error fetching book details for most read books")
+                        fetchDefaultPopularBooks()
+                    }
+            }
+            .addOnFailureListener { e ->
+                Timber.e(e, "Error fetching read data from Firestore")
+                fetchDefaultPopularBooks()
+            }
+    }
+
+
+    // Fallback method to fetch books if read data can't be retrieved
+    private fun fetchDefaultPopularBooks() {
+        firestore.collection("Books")
+            .limit(6)
+            .get()
+            .addOnSuccessListener { snapshot ->
+                val booksList = snapshot.documents.mapNotNull { document ->
+                    try {
+                        val id = document.id
+                        val title = document.getString("titleBook") ?: ""
+                        val author = document.getString("nameAuthor") ?: ""
+                        val coverUrl = document.getString("fotoUrl") ?: ""
+                        val description = document.getString("bookDescription") ?: ""
+                        val category = document.getString("nameCategory") ?: ""
+
+                        // Convert to BookData
+                        BookData(
+                            id = id,
+                            title = title,
+                            authorName = author,
+                            category = category,
+                            description = description,
+                            image = coverUrl
+                        )
+                    } catch (e: Exception) {
+                        Timber.e(e, "Error parsing book document")
+                        null
+                    }
+                }
+
+                Timber.d("Fetched ${booksList.size} default books from Firestore")
+                _popularBooks.postValue(booksList)
+            }
+            .addOnFailureListener { e ->
+                Timber.e(e, "Error fetching default books from Firestore")
+                _popularBooks.postValue(emptyList())
+            }
+    }
+
     fun loadBookContent(bookId: String) {
         _loading.value = true
         Timber.d("Fetching book content for ID: $bookId")
@@ -212,32 +338,68 @@ class BookViewModel @Inject constructor(
     }
 
     fun searchBooks(query: String) {
+        _loading.value = true
         Timber.d("Search initiated with query: '$query'")
 
-        // Enhanced logging and matching
+        if (query.isBlank()) {
+            _searchResults.value = emptyList()
+            _loading.value = false
+            return
+        }
+
         firestore.collection("Books")
             .get()
             .addOnSuccessListener { snapshot ->
                 Timber.d("Total books for search: ${snapshot.size()}")
 
-                // More detailed logging of book details
-                snapshot.documents.forEach { document ->
-                    val book = document.toObject(Book::class.java)
-                    Timber.d("Book Details - Title: ${book?.title}, Author: ${book?.authorName}")
+                val lowercaseQuery = query.lowercase().trim()
+                val results = snapshot.documents.mapNotNull { document ->
+                    try {
+                        val id = document.id
+                        val title = document.getString("titleBook") ?: ""
+                        val author =
+                            document.getString("authorName") ?: document.getString("nameAuthor")
+                            ?: ""
+                        val category =
+                            document.getString("nameCategory") ?: document.getString("category")
+                            ?: ""
+                        val coverUrl =
+                            document.getString("fotoUrl") ?: document.getString("image") ?: ""
+                        val description = document.getString("bookDescription") ?: ""
+
+                        // Check if the book matches the search criteria
+                        val matchesTitle = title.lowercase().contains(lowercaseQuery)
+                        val matchesAuthor = author.lowercase().contains(lowercaseQuery)
+                        val matchesCategory = category.lowercase().contains(lowercaseQuery)
+
+                        if (matchesTitle || matchesAuthor || matchesCategory) {
+                            Timber.d("Match found - Title: $title, Author: $author, Category: $category")
+                            Book(
+                                id = id,
+                                title = title,
+                                authorName = author,
+                                category = category,
+                                description = description,
+                                image = coverUrl
+                            )
+                        } else {
+                            null
+                        }
+                    } catch (e: Exception) {
+                        Timber.e(e, "Error parsing book document during search")
+                        null
+                    }
                 }
 
-                // More flexible search matching
-                val lowercaseQuery = query.lowercase()
-                val searchResults = snapshot.documents.filter { document ->
-                    val book = document.toObject(Book::class.java)
-                    book?.let {
-                        it.title.lowercase().contains(lowercaseQuery) ||
-                                it.authorName.lowercase().contains(lowercaseQuery) ||
-                                it.category.lowercase().contains(lowercaseQuery)
-                    } ?: false
-                }
-
-                // Rest of the search implementation...
+                Timber.d("Search completed. Found ${results.size} matching books")
+                _searchResults.value = results
+                _loading.value = false
+            }
+            .addOnFailureListener { exception ->
+                Timber.e(exception, "Search failed")
+                _errorMessage.value = "Error searching books: ${exception.message}"
+                _searchResults.value = emptyList()
+                _loading.value = false
             }
     }
 

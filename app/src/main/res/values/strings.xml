@@ -139,6 +139,7 @@
     <string name="book_content_list_title">Data Isi Cerita</string>
     <string name="book_title_exp">Harry Potter dan Tawanan Azkaban</string>
     <string name="book_description_title">Deskripsi Buku</string>
+    <string name="book_top">Top Books</string>
 
     <string name="title_feature_add_author">Tambah Author</string>
     <string name="title_feature_add_content_book">Tambah Cerita</string>
@@ -206,6 +207,7 @@
     <string name="author_sosmed_edit">Social Media</string>
     <string name="author_bio_edit">Biografi Author</string>
     <string name="author_profile_edit">Foto penulis</string>
+    <string name="author_top">Top Authors</string>
 
 
     <string name="register">Register</string>
@@ -226,8 +228,10 @@
     <string name="desc_empty">Deskripsi tidak tersedia</string>
     <string name="desc_admin">Berikut data yang kami sajikan untuk anda sebagai admin Seputar Novel</string>
     <string name="error">Error: %1$s</string>
+
     <string name="empty_chapter">Tidak ada bab yang tersedia.</string>
     <string name="empty_book">Tidak ada konten buku yang ditemukan.</string>
+    <string name="empty_book_search">Tidak ada data buku yang sesuai.</string>
     <string name="empty_search_illustration">Ilustrasi Pencarian Kosong</string>
     <string name="empty_no_search">Tidak ada buku yang ditemukan</string>
     <string name="empty_no_search_desc">Coba cari menggunakan kata lain yaa!</string>

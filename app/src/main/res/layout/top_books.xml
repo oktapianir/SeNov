@@ -1,60 +1,66 @@
-<androidx.cardview.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="12dp"
-    android:elevation="4dp"
-    android:radius="8dp">
+    android:layout_height="match_parent">
 
-    <LinearLayout
+    <GridLayout
+        android:id="@+id/book_grid"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:columnCount="2"
+        android:padding="16dp"
         android:orientation="horizontal"
-        android:padding="16dp">
+        android:rowCount="4">
 
-        <ImageView
-            android:id="@+id/book_cover"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_gravity="center_vertical"
-            android:importantForAccessibility="no"
-            android:src="@drawable/img_book_cover1"
-            android:scaleType="centerCrop"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="4dp" />
-
-        <LinearLayout
+        <!-- Ulangi CardView ini untuk setiap buku -->
+        <androidx.cardview.widget.CardView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_weight="1">
+            android:layout_margin="8dp"
+            android:layout_columnWeight="1"
+            android:elevation="4dp"
+            android:radius="8dp">
 
-            <TextView
-                android:id="@+id/book_title"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/name_book"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                android:orientation="horizontal"
+                android:padding="8dp">
 
-            <TextView
-                android:id="@+id/book_author"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/author_name"
-                android:textSize="14sp"
-                android:textColor="@color/grey"
-                android:layout_marginTop="4dp" />
-        </LinearLayout>
+                <ImageView
+                    android:id="@+id/book_cover"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/img_book_cover1"
+                    android:scaleType="centerCrop"
+                    android:layout_marginEnd="8dp" />
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/go_to_detail"
-            android:textColor="@color/white"
-            android:background="@drawable/bg_gradient_card"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="8dp" />
-    </LinearLayout>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
 
-</androidx.cardview.widget.CardView>
+                    <TextView
+                        android:id="@+id/book_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/book_title_exp"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/book_author"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/author"
+                        android:textSize="12sp"
+                        android:textColor="#888888"
+                        android:layout_marginTop="2dp" />
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Tambahkan CardView lainnya seperti di atas -->
+
+    </GridLayout>
+</ScrollView>

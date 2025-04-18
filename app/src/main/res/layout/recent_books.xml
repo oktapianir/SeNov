@@ -1,67 +1,101 @@
-<androidx.cardview.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
-    android:radius="8dp"
+    android:layout_marginVertical="8dp"
+    android:layout_marginHorizontal="12dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="4dp"
+    android:foreground="?attr/selectableItemBackground"
     app:cardBackgroundColor="@color/white">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="8dp">
+        android:padding="12dp">
 
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/book_cover"
-            android:layout_width="80dp"
-            android:layout_height="120dp"
-            android:src="@drawable/img_book_cover1"
-            android:layout_marginEnd="12dp"
+            android:layout_width="90dp"
+            android:layout_height="135dp"
             android:scaleType="centerCrop"
-            android:contentDescription="@string/book_cover" />
+            android:src="@drawable/ic_book"
+            android:contentDescription="@string/book_cover"
+            app:shapeAppearanceOverlay="@style/RoundedImageStyle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/book_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_weight="1">
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="4dp"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/book_cover"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="The Great Gatsby" />
 
-            <TextView
-                android:id="@+id/book_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/name_book"
-                android:textSize="16sp"
-                android:textColor="@color/black"
-                android:textStyle="bold" />
+        <TextView
+            android:id="@+id/book_author_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="12dp"
+            android:text="@string/author_name"
+            android:textSize="12sp"
+            android:textColor="@color/grey"
+            app:layout_constraintStart_toEndOf="@+id/book_cover"
+            app:layout_constraintTop_toBottomOf="@+id/book_title" />
 
-            <TextView
-                android:id="@+id/book_genre"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/genre"
-                android:textSize="14sp"
-                android:textColor="@color/grey" />
+        <TextView
+            android:id="@+id/book_author"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="2dp"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:maxLines="1"
+            android:ellipsize="end"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/book_cover"
+            app:layout_constraintTop_toBottomOf="@+id/book_author_label"
+            tools:text="F. Scott Fitzgerald" />
 
-            <!-- Rating Buku -->
-            <TextView
-                android:id="@+id/book_rating"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/rating"
-                android:textSize="14sp"
-                android:textColor="@color/grey" />
+        <TextView
+            android:id="@+id/book_genre_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="12dp"
+            android:text="@string/category"
+            android:textSize="12sp"
+            android:textColor="@color/grey"
+            app:layout_constraintStart_toEndOf="@+id/book_cover"
+            app:layout_constraintTop_toBottomOf="@+id/book_author" />
 
-            <!-- Harga Buku -->
-            <TextView
-                android:id="@+id/book_price"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/_12_99"
-                android:textSize="14sp"
-                android:textColor="@color/black" />
-        </LinearLayout>
-    </LinearLayout>
+        <TextView
+            android:id="@+id/book_genre"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="2dp"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:maxLines="1"
+            android:ellipsize="end"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/book_cover"
+            app:layout_constraintTop_toBottomOf="@+id/book_genre_label"
+            tools:text="Classic, Fiction" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>
