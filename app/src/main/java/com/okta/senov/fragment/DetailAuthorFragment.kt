@@ -17,16 +17,22 @@ class DetailAuthorFragment : Fragment(R.layout.fragment_detail_author) {
     private lateinit var binding: FragmentDetailAuthorBinding
     private val args: DetailAuthorFragmentArgs by navArgs()
     private val viewModel: BookViewModel by viewModels() // Shared ViewModel
-
+    private var isFavorite = false
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentDetailAuthorBinding.bind(view)
 
         // Get author ID from navigation arguments
-        val authorId = args.author.id
+        val authorId = args.author.idAuthor
 
         // Fetch author details from Firebase
         viewModel.fetchAuthorById(authorId)
+
+        // Check if author is already favorite
+        viewModel.isAuthorFavorite(authorId).observe(viewLifecycleOwner) { favorite ->
+            isFavorite = favorite
+            updateFavoriteButtonUI()
+        }
 
         // Set up observers
         viewModel.selectedAuthor.observe(viewLifecycleOwner) { author ->
@@ -50,5 +56,28 @@ class DetailAuthorFragment : Fragment(R.layout.fragment_detail_author) {
         binding.backButton.setOnClickListener {
             findNavController().navigateUp()
         }
+        // Set up favorite button
+        binding.favoriteButton.setOnClickListener {
+            val currentAuthor = viewModel.selectedAuthor.value
+            if (currentAuthor != null) {
+                if (isFavorite) {
+                    viewModel.removeAuthorFromFavorites(currentAuthor.idAuthor)
+                } else {
+                    viewModel.addAuthorToFavorites(currentAuthor)
+                }
+                // Toggle state (UI will update via observer)
+                isFavorite = !isFavorite
+                updateFavoriteButtonUI()
+            }
+        }
+    }
+    private fun updateFavoriteButtonUI() {
+        // Change drawable based on favorite status
+        val iconResource = if (isFavorite) {
+            R.drawable.ic_favorite_filled
+        } else {
+            R.drawable.ic_favorite
+        }
+        binding.favoriteButton.setImageResource(iconResource)
     }
 }

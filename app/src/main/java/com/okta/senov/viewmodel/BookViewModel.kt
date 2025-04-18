@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.okta.senov.model.Author
@@ -23,8 +24,13 @@ import javax.inject.Inject
 @HiltViewModel
 class BookViewModel @Inject constructor(
     private val bookRepository: BookRepository,
-    private val bookContentRepository: BookContentRepository
-) : ViewModel() {
+    private val bookContentRepository: BookContentRepository,
+
+    ) : ViewModel() {
+    // Ganti USER_ID statis dengan fungsi yang mendapatkan ID pengguna saat ini
+    private fun getCurrentUserId(): String {
+        return FirebaseAuth.getInstance().currentUser?.uid ?: "anonymous_user"
+    }
 
     private val _popularBooks = MutableLiveData<List<BookData>>(emptyList())
     val popularBooks: LiveData<List<BookData>> get() = _popularBooks
@@ -304,7 +310,7 @@ class BookViewModel @Inject constructor(
                 Timber.tag("BookViewModel").d("Berhasil mengambil ${documents.size()} authors")
                 val authorsList = mutableListOf<Author>()
                 for (document in documents) {
-                    val author = document.toObject(Author::class.java).copy(id = document.id)
+                    val author = document.toObject(Author::class.java).copy(idAuthor = document.id)
                     authorsList.add(author)
                     Timber.tag("BookViewModel").d("Author: ${author.nameAuthor}")
                 }
@@ -331,6 +337,113 @@ class BookViewModel @Inject constructor(
             .addOnFailureListener { exception ->
                 Timber.e("Error getting author: $exception")
             }
+    }
+
+    // Fungsi untuk menambahkan penulis ke favorit
+    fun addAuthorToFavorites(author: Author) {
+        // Membuat data favorit author
+        val favoriteAuthorData = hashMapOf(
+            "authorId" to author.idAuthor,
+            "nameAuthor" to author.nameAuthor,
+            "userId" to getCurrentUserId(),
+            "timestamp" to System.currentTimeMillis()
+        )
+
+        // Menyimpan di koleksi root "favoriteAuthors"
+        firestore.collection("favoriteAuthors")
+            .add(favoriteAuthorData)
+            .addOnSuccessListener {
+                Timber.d("Author successfully added to favorites with ID: ${it.id}")
+            }
+            .addOnFailureListener { e ->
+                Timber.e("Error adding author to favorites: ${e.message}")
+            }
+    }
+
+    // Fungsi untuk menghapus penulis dari favorit
+    fun removeAuthorFromFavorites(authorId: String) {
+        // Mencari dokumen favorit yang sesuai dengan authorId dan userId
+        firestore.collection("favoriteAuthors")
+            .whereEqualTo("authorId", authorId)
+            .whereEqualTo("userId", getCurrentUserId())
+            .get()
+            .addOnSuccessListener { documents ->
+                // Hapus semua dokumen yang cocok
+                for (document in documents) {
+                    document.reference.delete()
+                    Timber.d("Author successfully removed from favorites: ${document.id}")
+                }
+            }
+            .addOnFailureListener { e ->
+                Timber.e("Error removing author from favorites: ${e.message}")
+            }
+    }
+
+    // Fungsi untuk memeriksa apakah penulis sudah difavoritkan
+    fun isAuthorFavorite(authorId: String): LiveData<Boolean> {
+        val result = MutableLiveData<Boolean>()
+
+        firestore.collection("favoriteAuthors")
+            .whereEqualTo("authorId", authorId)
+            .whereEqualTo("userId", getCurrentUserId())
+            .get()
+            .addOnSuccessListener { documents ->
+                result.value = !documents.isEmpty
+            }
+            .addOnFailureListener { e ->
+                Timber.e("Error checking favorite status: ${e.message}")
+                result.value = false
+            }
+
+        return result
+    }
+
+    // Fungsi untuk mendapatkan semua penulis favorit
+    fun getFavoriteAuthors(): LiveData<List<Author>> {
+        val favoriteAuthors = MutableLiveData<List<Author>>()
+
+        firestore.collection("favoriteAuthors")
+            .whereEqualTo("userId", getCurrentUserId())
+            .addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    Timber.e("Error getting favorite authors: ${error.message}")
+                    favoriteAuthors.value = emptyList()
+                    return@addSnapshotListener
+                }
+
+                if (snapshot != null) {
+                    // Dapatkan ID penulis dari dokumen favorit
+                    val authorIds = snapshot.documents.mapNotNull { it.getString("authorId") }
+
+                    if (authorIds.isNotEmpty()) {
+                        // Ambil data penulis lengkap dari koleksi authors berdasarkan ID
+                        val authorsList = mutableListOf<Author>()
+                        var loadedCount = 0
+
+                        for (authorId in authorIds) {
+                            firestore.collection("authors")
+                                .document(authorId)
+                                .get()
+                                .addOnSuccessListener { authorDoc ->
+                                    val author = authorDoc.toObject(Author::class.java)?.copy(idAuthor = authorDoc.id)
+                                    if (author != null) {
+                                        authorsList.add(author)
+                                    }
+
+                                    loadedCount++
+                                    // Jika semua penulis sudah dimuat, perbarui LiveData
+                                    if (loadedCount == authorIds.size) {
+                                        favoriteAuthors.value = authorsList
+                                    }
+                                }
+                        }
+                    } else {
+                        favoriteAuthors.value = emptyList()
+                    }
+                }
+            }
+
+        return favoriteAuthors
     }
 
     fun selectAuthor(author: Author) {
