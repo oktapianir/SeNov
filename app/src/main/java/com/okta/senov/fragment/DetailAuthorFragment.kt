@@ -2,6 +2,7 @@ package com.okta.senov.fragment
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -62,8 +63,11 @@ class DetailAuthorFragment : Fragment(R.layout.fragment_detail_author) {
             if (currentAuthor != null) {
                 if (isFavorite) {
                     viewModel.removeAuthorFromFavorites(currentAuthor.idAuthor)
+                    Toast.makeText(requireContext(), "Berhasil menghapus favorite", Toast.LENGTH_SHORT).show()
+
                 } else {
                     viewModel.addAuthorToFavorites(currentAuthor)
+                    Toast.makeText(requireContext(), "Berhasil menambahkan favorite", Toast.LENGTH_SHORT).show()
                 }
                 // Toggle state (UI will update via observer)
                 isFavorite = !isFavorite
