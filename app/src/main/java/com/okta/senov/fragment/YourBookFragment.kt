@@ -31,23 +31,8 @@ class YourBookFragment : Fragment(R.layout.fragment_your_book) {
         setupClickListeners()
         observeViewModel()
 
-        refreshData()
-
         Timber.tag("YourBookFragment")
             .d("onViewCreated: Refreshed books count = ${yourBookViewModel.yourBooks.value?.size ?: 0}")
-    }
-    // Menambahkan method untuk memperbarui data
-    private fun refreshData() {
-        yourBookViewModel.fetchBookmarkedBooks()
-        observeViewModel()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        // Refresh data saat fragment kembali menjadi aktif
-        refreshData()
-        Timber.tag("YourBookFragment")
-            .d("onResume: Refreshing books data")
     }
 
     private fun setupClickListeners() {
@@ -70,13 +55,8 @@ class YourBookFragment : Fragment(R.layout.fragment_your_book) {
                 val action = YourBookFragmentDirections.actionYourbookToDetail(book)
                 findNavController().navigate(action)
             },
-//            onRemoveClick = { book ->
-//                yourBookViewModel.removeBook(book.id)
-//            }
             onRemoveClick = { book ->
                 yourBookViewModel.removeBook(book.id)
-                // Langsung refresh data setelah menghapus bookmark
-                refreshData()
             }
         )
 
@@ -93,6 +73,7 @@ class YourBookFragment : Fragment(R.layout.fragment_your_book) {
     }
 
     private fun observeViewModel() {
+        // Observe buku yang ditampilkan
         yourBookViewModel.yourBooks.observe(viewLifecycleOwner) { bookDataList ->
             // Submit list to adapter
             adapter.submitList(bookDataList)
@@ -106,6 +87,22 @@ class YourBookFragment : Fragment(R.layout.fragment_your_book) {
                 binding.emptyStateLayout.visibility = View.GONE
             }
         }
+
+        // Observe refresh trigger
+        yourBookViewModel.refreshTrigger.observe(viewLifecycleOwner) { shouldRefresh ->
+            if (shouldRefresh == true) {
+                Timber.tag("YourBookFragment").d("Refresh trigger diterima, memperbarui data")
+                yourBookViewModel.fetchAllUserBooks()
+            }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // Refresh data saat fragment kembali menjadi aktif
+        yourBookViewModel.fetchAllUserBooks()
+        Timber.tag("YourBookFragment")
+            .d("onResume: Refreshing books data")
     }
 
     override fun onDestroyView() {
