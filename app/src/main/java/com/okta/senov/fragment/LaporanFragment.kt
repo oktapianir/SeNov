@@ -350,7 +350,7 @@ class LaporanFragment : Fragment() {
                     if (!categoryMap.containsKey(categoryName)) {
                         categoryMap[categoryName] = CategoryReport(
                             idBook = categoryName, // Using category name as ID
-                            nameCategory = categoryName.capitalize(Locale.getDefault()), // Capitalize for display
+                            nameCategory = categoryName.capitalize(Locale.getDefault()),
                             bookCount = 0,
                             totalRead = 0
                         )
