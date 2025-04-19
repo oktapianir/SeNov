@@ -2,10 +2,12 @@ package com.okta.senov.fragment
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.provider.MediaStore
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,12 +16,16 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.google.firebase.FirebaseApp
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.storage.FirebaseStorage
 import com.okta.senov.R
 import com.okta.senov.databinding.FragmentEditAuthorBinding
+import okhttp3.*
+import org.json.JSONObject
 import timber.log.Timber
-import java.util.UUID
+import java.io.ByteArrayOutputStream
+import java.io.IOException
 
 class EditAuthorFragment : Fragment() {
     private var _binding: FragmentEditAuthorBinding? = null
@@ -35,7 +41,10 @@ class EditAuthorFragment : Fragment() {
     private var isImageChanged = false
 
     private val db = FirebaseFirestore.getInstance()
-    private val storage = FirebaseStorage.getInstance()
+    private val client = OkHttpClient()
+
+    // Client ID Imgur
+    private val IMGUR_CLIENT_ID = "79b90818f6bc407"
 
     private val galleryLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -67,6 +76,13 @@ class EditAuthorFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Memastikan Firebase terinisialisasi dengan benar
+        try {
+            FirebaseApp.initializeApp(requireContext())
+        } catch (e: Exception) {
+            Timber.e(e, "Firebase sudah terinisialisasi atau gagal inisialisasi")
+        }
+
         // Get arguments
         authorId = arguments?.getString("idAuthor")
         nameAuthorTitle = arguments?.getString("nameAuthor")
@@ -87,10 +103,14 @@ class EditAuthorFragment : Fragment() {
 
         // Menampilkan gambar cover yang ada dari URL
         if (imageCover?.isNotEmpty() == true) {
+            // Tambahkan parameter waktu untuk memaksa refresh
+            val imageUrlWithTimestamp = "$imageCover?t=${System.currentTimeMillis()}"
             Glide.with(requireContext())
-                .load(imageCover)
-                .placeholder(R.drawable.ic_profile_placeholder) // Ganti dengan placeholder yang sesuai
-                .error(R.drawable.ic_error) // Ganti dengan gambar error yang sesuai
+                .load(imageUrlWithTimestamp)
+                .skipMemoryCache(true)  // Skip cache memori
+                .diskCacheStrategy(DiskCacheStrategy.NONE)  // Skip cache disk
+                .placeholder(R.drawable.ic_profile_placeholder)
+                .error(R.drawable.ic_error)
                 .into(binding.coverImageView)
         }
     }
@@ -101,7 +121,7 @@ class EditAuthorFragment : Fragment() {
         }
 
         binding.saveButton.setOnClickListener {
-            saveBookChanges()
+            saveAuthorChanges()
         }
 
         binding.selectCoverButton.setOnClickListener {
@@ -114,105 +134,199 @@ class EditAuthorFragment : Fragment() {
         galleryLauncher.launch(intent)
     }
 
-    private fun saveBookChanges() {
+    private fun saveAuthorChanges() {
         val newNameTitle = binding.nameAuthorTitleEditText.text.toString().trim()
         val newSocialMedia = binding.socialMediaTitleEditText.text.toString().trim()
         val newBioAuthor = binding.bioAuthorTitleEditText.text.toString().trim()
-        val newImage = binding.coverAuthorTitleEditText.text.toString().trim()
+        val newImageUrl = binding.coverAuthorTitleEditText.text.toString().trim()
 
+        // Validasi input
         if (newNameTitle.isEmpty()) {
-            binding.nameAuthorTitleEditText.error = "Name author cannot be empty"
+            binding.nameAuthorTitleEditText.error = "Nama penulis tidak boleh kosong"
             return
         }
 
         if (newSocialMedia.isEmpty()) {
-            binding.socialMediaTitleEditText.error = "Social media author cannot be empty"
+            binding.socialMediaTitleEditText.error = "Media sosial penulis tidak boleh kosong"
             return
         }
+
         if (newBioAuthor.isEmpty()) {
-            binding.bioAuthorTitleEditText.error = "Biography author cannot be empty"
+            binding.bioAuthorTitleEditText.error = "Biografi penulis tidak boleh kosong"
             return
         }
-        if (newImage.isEmpty()) {
-            binding.coverAuthorTitleEditText.error = "Cover author cannot be empty"
+
+        // Jika gambar tidak dipilih dari galeri, URL gambar harus diisi
+        if (newImageUrl.isEmpty() && !isImageChanged) {
+            binding.coverAuthorTitleEditText.error = "Cover penulis tidak boleh kosong"
             return
         }
 
         showLoading(true)
 
-        // Jika gambar diubah, upload gambar terlebih dahulu
+        // Case 1: Image dipilih dari galeri - upload ke Imgur
         if (isImageChanged && imageUri != null) {
-            uploadImage(newNameTitle, newSocialMedia, newBioAuthor, newImage)
-        } else {
-            // Jika gambar tidak diubah, gunakan URL yang ada
-            updateAuthorData(
-                newNameTitle,
-                newSocialMedia,
-                newBioAuthor,
-                newImage
-            )
+            uploadImageToImgur(newNameTitle, newSocialMedia, newBioAuthor)
+        }
+        // Case 2: URL image diubah manual di EditText atau tidak ada perubahan
+        else {
+            // Gunakan URL yang ada di EditText (bisa URL baru atau URL lama)
+            updateAuthorData(newNameTitle, newSocialMedia, newBioAuthor, newImageUrl)
         }
     }
 
-    private fun uploadImage(nameAuthor: String, socialMediaAuthor: String, bioAuthor: String, imageAuthor: String) {
+    private fun uploadImageToImgur(
+        nameAuthor: String,
+        socialMediaAuthor: String,
+        bioAuthor: String
+    ) {
         try {
-            showLoading(true)
+            // Dapatkan bitmap dari Uri menggunakan ContentResolver
+            val bitmap =
+                MediaStore.Images.Media.getBitmap(requireActivity().contentResolver, imageUri)
 
-            // Create a unique filename
-            val fileName = "author_covers/${UUID.randomUUID()}.jpg"
-            val storageRef = FirebaseStorage.getInstance().reference.child(fileName)
+            // Kompres bitmap ke base64
+            val outputStream = ByteArrayOutputStream()
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 90, outputStream)
+            val byteArray = outputStream.toByteArray()
+            val base64Image =
+                android.util.Base64.encodeToString(byteArray, android.util.Base64.NO_WRAP)
 
-            imageUri?.let { uri ->
-                val inputStream = requireContext().contentResolver.openInputStream(uri)
-                val bytes = inputStream?.readBytes()
-                inputStream?.close()
+            // Buat request ke Imgur API
+            val requestBody = MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("image", base64Image)
+                .build()
 
-                if (bytes != null) {
-                    val uploadTask = storageRef.putBytes(bytes)
+            val request = Request.Builder()
+                .url("https://api.imgur.com/3/image")
+                .header("Authorization", "Client-ID $IMGUR_CLIENT_ID")
+                .post(requestBody)
+                .build()
 
-                    uploadTask.addOnProgressListener { taskSnapshot ->
-                        val progress =
-                            (100.0 * taskSnapshot.bytesTransferred / taskSnapshot.totalByteCount)
-                        Timber.tag("EditBookFragment").d("Upload progress: $progress%")
+            client.newCall(request).enqueue(object : Callback {
+                override fun onFailure(call: Call, e: IOException) {
+                    // UI thread callback
+                    activity?.runOnUiThread {
+                        Timber.e(e, "Upload ke Imgur gagal")
+                        showLoading(false)
+                        Toast.makeText(
+                            context,
+                            "Upload gambar gagal: ${e.message}",
+                            Toast.LENGTH_SHORT
+                        ).show()
+
+                        // Fallback ke URL yang ada
+                        val fallbackUrl = binding.coverAuthorTitleEditText.text.toString().trim()
+                        if (fallbackUrl.isNotEmpty()) {
+                            updateAuthorData(nameAuthor, socialMediaAuthor, bioAuthor, fallbackUrl)
+                        } else if (imageCover?.isNotEmpty() == true) {
+                            updateAuthorData(nameAuthor, socialMediaAuthor, bioAuthor, imageCover!!)
+                        }
                     }
+                }
 
-                    uploadTask.addOnSuccessListener {
-                        // Get the download URL once upload completes
-                        storageRef.downloadUrl.addOnSuccessListener { downloadUrl ->
-                            // Now update the book with the new image URL
-                            updateAuthorData(
-                                nameAuthor,
-                                socialMediaAuthor,
-                                bioAuthor,
-                                downloadUrl.toString()
-                            )
-                        }.addOnFailureListener { e ->
+                override fun onResponse(call: Call, response: Response) {
+                    val responseBody = response.body?.string()
+
+                    // UI thread callback
+                    activity?.runOnUiThread {
+                        if (!response.isSuccessful || responseBody == null) {
+                            Timber.e("Respons Imgur tidak berhasil: ${response.code}")
                             showLoading(false)
                             Toast.makeText(
                                 context,
-                                "Failed to get download URL: ${e.message}",
+                                "Upload gagal: ${response.message}",
                                 Toast.LENGTH_SHORT
                             ).show()
-                            Timber.tag("EditBookFragment").e(e, "Failed to get download URL: ${e.message}")
+
+                            // Fallback ke URL yang ada
+                            handleImgurUploadFailure(nameAuthor, socialMediaAuthor, bioAuthor)
+                            return@runOnUiThread
                         }
-                    }.addOnFailureListener { e ->
-                        showLoading(false)
-                        Toast.makeText(context, "Upload failed: ${e.message}", Toast.LENGTH_SHORT)
-                            .show()
-                        Timber.tag("EditBookFragment").e(e, "Failed to upload image: ${e.message}")
+
+                        try {
+                            // Parse response JSON
+                            val jsonResponse = JSONObject(responseBody)
+                            val success = jsonResponse.getBoolean("success")
+
+                            if (success) {
+                                val data = jsonResponse.getJSONObject("data")
+                                val imgurUrl = data.getString("link")
+
+                                Timber.d("Upload ke Imgur berhasil: $imgurUrl")
+
+                                // Update URL di EditText untuk referensi
+                                binding.coverAuthorTitleEditText.setText(imgurUrl)
+
+                                // Update data penulis dengan URL Imgur
+                                updateAuthorData(nameAuthor, socialMediaAuthor, bioAuthor, imgurUrl)
+                            } else {
+                                Timber.e("Upload ke Imgur gagal: ${jsonResponse.optString("status")}")
+                                showLoading(false)
+                                Toast.makeText(context, "Upload gambar gagal", Toast.LENGTH_SHORT)
+                                    .show()
+
+                                // Fallback ke URL yang ada
+                                handleImgurUploadFailure(nameAuthor, socialMediaAuthor, bioAuthor)
+                            }
+                        } catch (e: Exception) {
+                            Timber.e(e, "Error parsing JSON response")
+                            showLoading(false)
+                            Toast.makeText(
+                                context,
+                                "Error memproses respons: ${e.message}",
+                                Toast.LENGTH_SHORT
+                            ).show()
+
+                            // Fallback ke URL yang ada
+                            handleImgurUploadFailure(nameAuthor, socialMediaAuthor, bioAuthor)
+                        }
                     }
-                } else {
-                    showLoading(false)
-                    Toast.makeText(context, "Failed to read image", Toast.LENGTH_SHORT).show()
                 }
-            } ?: run {
-                showLoading(false)
-                Toast.makeText(context, "No image selected", Toast.LENGTH_SHORT).show()
-            }
+            })
         } catch (e: Exception) {
+            Timber.e(e, "Error dalam proses upload ke Imgur")
             showLoading(false)
-            Toast.makeText(context, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
-            Timber.tag("EditBookFragment").e(e, "Error during upload process: ${e.message}")
+            Toast.makeText(context, "Error memproses gambar: ${e.message}", Toast.LENGTH_SHORT)
+                .show()
+
+            // Fallback ke URL yang ada
+            handleImgurUploadFailure(nameAuthor, socialMediaAuthor, bioAuthor)
+        }
+    }
+
+    private fun handleImgurUploadFailure(
+        nameAuthor: String,
+        socialMediaAuthor: String,
+        bioAuthor: String
+    ) {
+        // Coba gunakan URL yang dimasukkan manual jika ada
+        val fallbackUrl = binding.coverAuthorTitleEditText.text.toString().trim()
+        if (fallbackUrl.isNotEmpty()) {
+            Timber.d("Menggunakan fallback URL dari EditText: $fallbackUrl")
+            updateAuthorData(nameAuthor, socialMediaAuthor, bioAuthor, fallbackUrl)
+            Toast.makeText(
+                context,
+                "Menggunakan URL manual karena upload gagal",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+        // Jika tidak ada, gunakan URL gambar yang lama jika ada
+        else if (imageCover != null && imageCover!!.isNotEmpty()) {
+            Timber.d("Menggunakan URL gambar lama: $imageCover")
+            updateAuthorData(nameAuthor, socialMediaAuthor, bioAuthor, imageCover!!)
+            Toast.makeText(
+                context,
+                "Menggunakan URL gambar lama karena upload gagal",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+        // Jika tidak ada opsi, tampilkan pesan error
+        else {
+            showLoading(false)
+            Toast.makeText(context, "Upload gagal dan tidak ada URL alternatif", Toast.LENGTH_LONG)
+                .show()
         }
     }
 
@@ -222,33 +336,63 @@ class EditAuthorFragment : Fragment() {
         bioAuthor: String,
         imageAuthor: String
     ) {
-        // Update author in Firebase
-        authorId?.let { id ->
-            // Create updated author data
-            val updatedAuthorData = hashMapOf(
-                "nameAuthor" to nameAuthor,
-                "socialMedia" to socialMediaAuthor,
-                "bioAuthor" to bioAuthor,
-                "imageUrl" to imageAuthor
-            )
+        Timber.tag("EditAuthorFragment")
+            .d("Memperbarui data penulis dengan URL gambar: $imageAuthor")
 
-            // Update the document directly using the document ID
-            db.collection("authors").document(id)
-                .update(updatedAuthorData as Map<String, Any>)
-                .addOnSuccessListener {
-                    showLoading(false)
-                    Toast.makeText(context, "Author updated successfully", Toast.LENGTH_SHORT).show()
-                    findNavController().popBackStack()
-                }
-                .addOnFailureListener { e ->
-                    showLoading(false)
-                    Toast.makeText(context, "Failed to update: ${e.message}", Toast.LENGTH_SHORT)
-                        .show()
-                }
-        } ?: run {
+        // Tambahkan validasi
+        if (authorId.isNullOrEmpty()) {
             showLoading(false)
-            Toast.makeText(context, "Author ID is missing", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "ID penulis tidak valid", Toast.LENGTH_SHORT).show()
+            return
         }
+
+        // Update author in Firebase
+        val updatedAuthorData = hashMapOf(
+            "nameAuthor" to nameAuthor,
+            "socialMedia" to socialMediaAuthor,
+            "bioAuthor" to bioAuthor,
+            "imageUrl" to imageAuthor
+        )
+
+        // Pastikan operasi update selesai dengan sukses
+        db.collection("authors").document(authorId!!)
+            .update(updatedAuthorData as Map<String, Any>)
+            .addOnSuccessListener {
+                showLoading(false)
+                // Refresh gambar dengan URL terbaru
+                Glide.with(requireContext())
+                    .load(imageAuthor)
+                    .skipMemoryCache(true)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .placeholder(R.drawable.ic_profile_placeholder)
+                    .error(R.drawable.ic_error)
+                    .into(binding.coverImageView)
+
+                Timber.tag("EditAuthorFragment").d("Data penulis berhasil diperbarui")
+                Toast.makeText(context, "Data penulis berhasil diperbarui", Toast.LENGTH_SHORT)
+                    .show()
+
+                // Tambahkan delay singkat untuk memastikan data disimpan
+                Handler(Looper.getMainLooper()).postDelayed({
+                    // Set result OK dengan data tambahan
+                    val intent = Intent()
+                    intent.putExtra("UPDATED_AUTHOR_ID", authorId)
+                    intent.putExtra("UPDATED_IMAGE_URL", imageAuthor)
+                    requireActivity().setResult(Activity.RESULT_OK, intent)
+
+                    // Tutup fragment
+                    findNavController().popBackStack()
+                }, 300) // Delay 300ms
+            }
+            .addOnFailureListener { e ->
+                showLoading(false)
+                Timber.tag("EditAuthorFragment").e(e, "Gagal memperbarui data penulis")
+                Toast.makeText(
+                    context,
+                    "Gagal memperbarui penulis: ${e.message}",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
     }
 
     private fun showLoading(isLoading: Boolean) {
